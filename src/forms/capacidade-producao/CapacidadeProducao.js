@@ -48,13 +48,14 @@ const CapacidadeProducao = (props) => {
             });
     };
 
+    const obterBody = (estagios) => {
+        setBody({
+            estagiosCapacidadeProducao: estagios
+        });
+    };
+    
     useEffect(() => {
-        const obterBody = () => {
-            setBody({
-                estagiosCapacidadeProducao: estagios
-            });
-        };
-        obterBody();
+        obterBody(estagios);
     }, [estagios]);
 
     useEffect(() => {

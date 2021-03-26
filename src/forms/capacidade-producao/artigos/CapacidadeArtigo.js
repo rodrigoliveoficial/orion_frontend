@@ -1,6 +1,6 @@
 /* eslint max-len: 0 */
 import React, { useEffect, useState } from 'react';
-import { Modal, Button, Container, Form, Row, Col, Tabs, Tab } from 'react-bootstrap';
+import { Modal, Button } from 'react-bootstrap';
 import Spinner from 'react-bootstrap/Spinner'
 import api from '../../../services/api';
 import PropTypes from 'prop-types';
@@ -12,7 +12,7 @@ const CapacidadeArtigo = (props) => {
     const [loading, setLoading] = useState(false);
     const [body, setBody] = useState([]);
     
-    const { currPage } = useState(1);
+    const { currPage } = useState(1);    
 
     const options = {
         sizePerPageList: [5, 10, 20, 40],
@@ -20,8 +20,8 @@ const CapacidadeArtigo = (props) => {
         page: currPage
     };
 
-    const load = () => {
-        api.get(`capacidade-producao/artigos/${props.estagioSelecionado}`).then((response) => {
+    const load = (estagio) => {
+        api.get(`capacidade-producao/artigos/${estagio}`).then((response) => {
             setArtigos(response.data);
         }).catch((e) => {
             console.log('ocorreu algum erro!');
@@ -29,7 +29,7 @@ const CapacidadeArtigo = (props) => {
             setArtigos([]);
         });
     };
-
+    
     useEffect(() => {
         const obterBody = () => {
             setBody({
@@ -38,11 +38,11 @@ const CapacidadeArtigo = (props) => {
             });
         };
         obterBody();
-    }, [artigos]);
+    }, [artigos, props]);
 
     useEffect(() => {
-        load();
-    }, []);
+        load(props.estagioSelecionado);
+    }, [props]);
 
     const onClickSalvar = async event => {
 
@@ -61,7 +61,7 @@ const CapacidadeArtigo = (props) => {
     };
 
     const onClickCancelar = () => {
-        load();
+        load(props.estagioSelecionado);
     };
 
     return (
@@ -106,11 +106,11 @@ const FormModal = (props) => {
                 <Modal.Title>{`Capacidade por Artigo do Estágio: ${props.descEstagioSelecionado}`}</Modal.Title>
                 <div>
                     <Button
-                        variant="danger"
+                        variant="secondary"
                         onClick={props.onClose}
                         style={{ marginLeft: '10px' }}
                     >
-                        Cancelar
+                        Voltar
                     </Button>
                 </div>
             </Modal.Header>

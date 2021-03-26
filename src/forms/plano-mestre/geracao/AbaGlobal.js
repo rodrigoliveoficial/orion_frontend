@@ -13,7 +13,7 @@ const optionsTipoDistribuicao = [
 
 const initialValues = {
     descricao: '',
-    tipoDistribuicao: 3,
+    tipoDistribuicao: 1,
     multiplicador: 0,
     periodoPadrao: 0
 }
@@ -23,13 +23,13 @@ const AbaGlobal = (props) => {
     const [tipoDistribuicaoParam, setTipoDistribuicaoParam] = useState([]);    
 
     const setParametrosGlobalDefault = () => {
-        props.setTipoDistribuicaoSelected(3);
+        props.setTipoDistribuicaoSelected(1);
         props.setMultiplicadorInfo(0);
         props.setPeriodoPadraoInfo(0);
     };
 
     useEffect(() => {
-        setTipoDistribuicaoParam(optionsTipoDistribuicao.find(o => o.value === 3));        
+        setTipoDistribuicaoParam(optionsTipoDistribuicao.find(o => o.value === 1)); 
         setParametrosGlobalDefault();
     }, []);
 

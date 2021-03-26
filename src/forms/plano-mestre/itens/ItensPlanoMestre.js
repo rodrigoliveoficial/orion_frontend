@@ -945,11 +945,11 @@ const FormModal = (props) => {
                 <Modal.Title>{`Plano Mestre de Produção: ${props.idPlanoMestre} - ${props.descPlanoMestre}`}</Modal.Title>
                 <div>
                     <Button
-                        variant="danger"
+                        variant="secondary"
                         onClick={props.onClose}
                         style={{ marginLeft: '10px' }}
                     >
-                        Cancelar
+                        Voltar
                     </Button>
                 </div>
             </Modal.Header>

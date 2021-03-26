@@ -285,12 +285,12 @@ const FormModal = (props) => {
                             Gerar Plano
                     </Button>
                     <Button
-                        variant="danger"
+                        variant="secondary"
                         onClick={props.onClose}
                         style={{ marginLeft: '10px' }}
                         disabled={loading}
                     >
-                        Cancelar
+                        Voltar
                     </Button>
                 </div>
             </Modal.Header>
