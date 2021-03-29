@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Form, Row, Col, Tabs, Tab } from 'react-bootstrap';
+import { Container, Form, Row, Col, Tabs, Tab, Button } from 'react-bootstrap';
 import Select from 'react-select';
 import api from '../../../services/api';
 import { Chart } from "react-google-charts";
@@ -70,10 +70,10 @@ const renderArtigos = (dado, index) => {
 
                     <Chart
                         chartType="Gauge"
-                        data={  [
-                                ['', ''],
-                                ['Ocupação', dado.percOcupacaoPecas]
-                            ]   }
+                        data={[
+                            ['', ''],
+                            ['Ocupação', dado.percOcupacaoPecas]
+                        ]}
                     />
                 </Form.Row>
 
@@ -131,11 +131,11 @@ const renderArtigos = (dado, index) => {
 
                     <Chart
                         chartType="Gauge"
-                        data={  [
+                        data={[
                             ['', ''],
                             ['Ocupação', dado.percOcupacaoMinutos]
-                        ]   }
-                />
+                        ]}
+                    />
                 </Form.Row>
 
             </Col>
@@ -225,6 +225,10 @@ const FormOcupacaoEstagios = (props) => {
         });
     };
 
+    const consultarOcupacaoEstagio = () => {
+        loadOcupacaoEstagio(estagio.value);
+    };
+
     return (
         <div>
             <br></br>
@@ -232,7 +236,7 @@ const FormOcupacaoEstagios = (props) => {
                 <Form.Group as={Col} md="4" controlId="cor">
                     <Form.Label>
                         Estagio
-                        </Form.Label>
+                    </Form.Label>
                     <Select className="basic-multi-select" classNamePrefix="select" placeholder="Selecione o Estagio."
                         name="estagio"
                         options={estagios}
@@ -244,6 +248,15 @@ const FormOcupacaoEstagios = (props) => {
                     />
                 </Form.Group>
             </Form.Row>
+
+            <Button
+                variant="primary"
+                onClick={consultarOcupacaoEstagio}
+            >
+                Consultar
+            </Button>
+
+            <br></br>
             <br></br>
 
             <Tabs defaultActiveKey="aba1" transition={false} id="abas-ocupacao">

@@ -8,6 +8,7 @@ import api from '../../../services/api';
 import Figure from 'react-bootstrap/Figure'
 import Accordion from 'react-bootstrap/Accordion';
 import OcupacaoEstagio from './OcupacaoEstagio';
+import PreOrdens from './PreOrdens';
 import ItensPlanoTable from './ItensPlanoTable';
 import TamanhosPlanoTable from './TamanhosPlanoTable';
 
@@ -352,11 +353,11 @@ const ItensPlanoMestre = (props) => {
 
     const loadRoteirosAlternativa = (nrAlternativa) => {
         api.get(`produtos/roteiros/${itemSelecionado}/${nrAlternativa}`).then((responseRot) => {
-            setRoteirosItem(normalizeRoteiros(responseRot.data));            
+            setRoteirosItem(normalizeRoteiros(responseRot.data));
         }).catch((e) => {
             console.log('ocorreu algum erro!');
             console.error(e);
-            setRoteirosItem([]);            
+            setRoteirosItem([]);
         });
     }
 
@@ -957,12 +958,17 @@ const FormModal = (props) => {
                 <Tabs defaultActiveKey="aba1" transition={false} id="abas-plano-mestre-gerado">
                     <Tab eventKey="aba1" title="Plano" >
                         <ItensPlanoMestre
-                            {...props}                            
+                            {...props}
                         />
                     </Tab>
                     <Tab eventKey="aba2" title="Ocupação" >
                         <OcupacaoEstagio
-                            {...props}                            
+                            {...props}
+                        />
+                    </Tab>
+                    <Tab eventKey="aba3" title="Pré-Ordens" >
+                        <PreOrdens
+                            {...props}
                         />
                     </Tab>
                 </Tabs>
