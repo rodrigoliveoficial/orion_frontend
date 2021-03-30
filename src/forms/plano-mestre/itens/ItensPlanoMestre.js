@@ -820,7 +820,7 @@ const ItensPlanoMestre = (props) => {
 
                             <Form id="param-programacao-item" noValidate>
                                 <Form.Row>
-                                    <Form.Group as={Col} md="10" controlId="alternativaItem">
+                                    <Form.Group as={Col} md="8" controlId="alternativaItem">
                                         <Form.Label>
                                             Alternativa
                                         </Form.Label>
@@ -848,9 +848,6 @@ const ItensPlanoMestre = (props) => {
                                             }}
                                         />
                                     </Form.Group>
-                                </Form.Row>
-
-                                <Form.Row>
 
                                     <Form.Group as={Col} md="2" controlId="periodoPadraoItem">
                                         <Form.Label>
@@ -867,6 +864,10 @@ const ItensPlanoMestre = (props) => {
                                             }}
                                         />
                                     </Form.Group>
+
+                                </Form.Row>
+
+                                <Form.Row>
 
                                     <Form.Group as={Col} md="2" controlId="multiplicadorItem">
                                         <Form.Label>
@@ -887,7 +888,7 @@ const ItensPlanoMestre = (props) => {
                                 </Form.Row>
 
                                 <Button
-                                    variant="primary"
+                                    variant="success"
                                     onClick={onCalcularMultiplicador}
                                     disabled={loadingAplicarMulti}
                                 >
@@ -900,9 +901,8 @@ const ItensPlanoMestre = (props) => {
                                             role="status"
                                             aria-hidden="true"
                                         /> : ''}
-                                    Calcular
+                                    Salvar
                                 </Button>
-
                             </Form>
                         </Col>
 

@@ -524,7 +524,7 @@ export default class ItensPlanoTable extends React.Component {
         };
 
         return (
-            <BootstrapTable ref='table' data={itens} pagination={true} options={options} striped={true} hover={true} footerData={footerData} footer cellEdit={cellEditProp} keyBoardNav={keyBoardNav}>
+            <BootstrapTable ref='itens-table' data={itens} pagination={true} options={options} striped={true} hover={true} footerData={footerData} footer cellEdit={cellEditProp} keyBoardNav={keyBoardNav}>
 
                 <TableHeaderColumn row='0' rowSpan='2' colSpan='6' headerAlign="center">Produtos</TableHeaderColumn>
                 <TableHeaderColumn row='0' colSpan='3' headerAlign="center">Plano 1</TableHeaderColumn>

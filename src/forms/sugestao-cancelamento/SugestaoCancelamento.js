@@ -240,7 +240,7 @@ const SugestaoCancelamento = (props) => {
         onSelect: onRowSelect,
         onSelectAll: onSelectAll,
         selected: itensSelected,
-        bgColor: 'rgb(238, 193, 213)'
+        bgColor: 'rgb(193, 219, 238)'
     };
 
     return (
