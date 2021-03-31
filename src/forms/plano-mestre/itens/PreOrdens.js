@@ -16,6 +16,7 @@ const initialValues = {
     qtdeMaximaOP: 0,
     qtdeMinimaOP: 0,
     periodoOP: 0,
+    depositoOP: 0,
     observacaoOP: ''
 }
 
@@ -26,8 +27,18 @@ const FormPreOrdens = (props) => {
     const [body, setBody] = useState([]);
     const [dadosPreOrdens, setDadosPreOrdens] = useState([]);
     const [itensSelected, setItensSelected] = useState([]);
+    
+    const [depositoOP, setDepositoOP] = useState([]);
+
+    const [agruparInfo, setAgruparInfo] = useState([]);
+    const [qtdeMaxInfo, setQtdeMaxInfo] = useState([]);
+    const [qtdeMinInfo, setQtdeMinInfo] = useState([]);
+    const [periodoInfo, setPeriodoInfo] = useState([]);
+    const [depositoInfo, setDepositoInfo] = useState([]);
+    const [observacaoInfo, setObservacaoInfo] = useState([]);
 
     const { idPlanoMestre } = props;
+    const { depositos } = props;
 
     const {
         handleChange,
@@ -40,28 +51,37 @@ const FormPreOrdens = (props) => {
     useEffect(() => {
 
         const loadParametros = () => {
+
             api.get(`plano-mestre/parametros/${idPlanoMestre}`).then((response) => {
 
                 setFieldValue('agrupaOpPorRefer', response.data.agrupaOpPorRefer);
                 setFieldValue('qtdeMaximaOP', response.data.qtdeMaximaOP);
                 setFieldValue('qtdeMinimaOP', response.data.qtdeMinimaOP);
                 setFieldValue('periodoOP', response.data.periodoOP);
+                setFieldValue('depositoOP', response.data.depositoOP);
                 setFieldValue('observacaoOP', response.data.observacaoOP);
-                setAgrupaOpPorRefer(optionsAgrupaOpPorRefer.find(o => o.value === response.data.agrupaOpPorRefer));
 
-                setBody({
-                    idPlanoMestre: idPlanoMestre,
-                    agrupaOpPorRefer: response.data.agrupaOpPorRefer,
-                    qtdeMaximaOP: response.data.qtdeMaximaOP,
-                    qtdeMinimaOP: response.data.qtdeMinimaOP,
-                    periodoOP: response.data.periodoOP,
-                    observacaoOP: response.data.observacaoOP
-                });
-                
+                setAgrupaOpPorRefer(optionsAgrupaOpPorRefer.find(o => o.value === response.data.agrupaOpPorRefer));
+                setDepositoOP(depositos.find(o => o.value === response.data.depositoOP));
+
+                setAgruparInfo(response.data.agrupaOpPorRefer);
+                setQtdeMaxInfo(response.data.qtdeMaximaOP);
+                setQtdeMinInfo(response.data.qtdeMinimaOP);
+                setPeriodoInfo(response.data.periodoOP);
+                setDepositoInfo(response.data.depositoOP);
+                setObservacaoInfo(response.data.observacaoOP);
+
             }).catch((e) => {
                 console.log('ocorreu algum erro!');
                 console.error(e);
                 setAgrupaOpPorRefer(optionsAgrupaOpPorRefer.find(o => o.value === 1));
+
+                setAgruparInfo(1);
+                setQtdeMaxInfo(0);
+                setQtdeMinInfo(0);
+                setPeriodoInfo(0);
+                setDepositoInfo(0);
+                setObservacaoInfo('');
             });
         };
 
@@ -74,30 +94,35 @@ const FormPreOrdens = (props) => {
                 setDadosPreOrdens([]);
             });
         };
-
+        
         loadParametros();
         loadPreOrdens();
 
-    }, [idPlanoMestre, setFieldValue]);
+    }, [idPlanoMestre, setFieldValue, depositos]);
 
-    const setBodyParametro = () => {
-        setBody({
-            idPlanoMestre: idPlanoMestre,
-            agrupaOpPorRefer: values.agrupaOpPorRefer,
-            qtdeMaximaOP: values.qtdeMaximaOP,
-            qtdeMinimaOP: values.qtdeMinimaOP,
-            periodoOP: values.periodoOP,
-            observacaoOP: values.observacaoOP
-        });
-    };
+    useEffect(() => {
+
+        const obterParametros = () => {
+            setBody({
+                idPlanoMestre: idPlanoMestre,
+                agrupaOpPorRefer: agruparInfo,
+                qtdeMaximaOP: qtdeMaxInfo,
+                qtdeMinimaOP: qtdeMinInfo,
+                periodoOP: periodoInfo,
+                depositoOP: depositoInfo,
+                observacaoOP: observacaoInfo
+            });
+
+        };
+
+        obterParametros();
+
+    }, [idPlanoMestre, agruparInfo, qtdeMaxInfo, qtdeMinInfo, periodoInfo, depositoInfo, observacaoInfo]);
 
     const gerarPreOrdens = async event => {
 
         setLoading(true);
         setItensSelected([]);
-
-        console.log("gerarPreOrdens");
-        console.log(body);
 
         try {
             const response = await api.post('plano-mestre/pre-ordens/gerar', body);
@@ -136,7 +161,7 @@ const FormPreOrdens = (props) => {
         onSelect: onRowSelect,
         onSelectAll: onSelectAll,
         selected: itensSelected,
-        bgColor: 'rgb(193, 219, 238)'        
+        bgColor: 'rgb(193, 219, 238)'
     };
 
     return (
@@ -154,7 +179,7 @@ const FormPreOrdens = (props) => {
                             value={agrupaOpPorRefer}
                             onChange={(selected) => {
                                 setAgrupaOpPorRefer(selected);
-                                setBodyParametro();
+                                setAgruparInfo(selected.value);
                             }}
                         />
                     </Form.Group>
@@ -171,7 +196,7 @@ const FormPreOrdens = (props) => {
                             value={values.qtdeMaximaOP}
                             onChange={handleChange}
                             onBlur={() => {
-                                setBodyParametro();
+                                setQtdeMaxInfo(values.qtdeMaximaOP);
                             }}
                         />
                     </Form.Group>
@@ -188,7 +213,7 @@ const FormPreOrdens = (props) => {
                             value={values.qtdeMinimaOP}
                             onChange={handleChange}
                             onBlur={() => {
-                                setBodyParametro();
+                                setQtdeMinInfo(values.qtdeMinimaOP);
                             }}
                         />
                     </Form.Group>
@@ -205,7 +230,23 @@ const FormPreOrdens = (props) => {
                             value={values.periodoOP}
                             onChange={handleChange}
                             onBlur={() => {
-                                setBodyParametro();
+                                setPeriodoInfo(values.periodoOP);
+                            }}
+                        />
+                    </Form.Group>
+
+                    <Form.Group as={Col} md="4" controlId="deposito">
+                        <Form.Label>
+                            Depósito de Entrada de Peças
+                        </Form.Label>
+
+                        <Select className="basic-select" classNamePrefix="select" placeholder="Informe o depósito de entrada de peças."
+                            name="deposito"
+                            value={depositoOP}
+                            options={depositos}
+                            onChange={(selected) => {
+                                setDepositoOP(selected);
+                                setDepositoInfo(selected.value);
                             }}
                         />
                     </Form.Group>
@@ -225,7 +266,7 @@ const FormPreOrdens = (props) => {
                             value={values.observacaoOP}
                             onChange={handleChange}
                             onBlur={() => {
-                                setBodyParametro();
+                                setObservacaoInfo(values.observacaoOP);
                             }}
                         />
                     </Form.Group>

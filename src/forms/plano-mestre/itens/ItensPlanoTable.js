@@ -520,7 +520,7 @@ export default class ItensPlanoTable extends React.Component {
         };
 
         const keyBoardNav = {
-            enterToEdit: true
+            enterToEdit: true            
         };
 
         return (

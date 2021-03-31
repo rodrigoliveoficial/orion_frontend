@@ -981,7 +981,7 @@ FormModal.propTypes = {
     show: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
     idPlanoMestre: PropTypes.number.isRequired,
-    descPlanoMestre: PropTypes.string
+    descPlanoMestre: PropTypes.string    
 };
 
 export default FormModal;

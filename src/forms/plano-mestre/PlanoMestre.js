@@ -12,6 +12,7 @@ import ItensPlanoMestre from './itens/ItensPlanoMestre';
 
 const formStyle = { marginLeft: '20px', marginTop: '20px', marginRight: '20px' };
 
+const loadDepositos = () => api.get('depositos');
 const loadPlanoMestre = () => api.get('plano-mestre');
 
 const normalizeDados = (dados) => {
@@ -21,6 +22,15 @@ const normalizeDados = (dados) => {
             descricao: c.descricao,
             data: format(parseISO(c.data), 'dd/MM/yyyy HH:mm:ss'),
             situacao: 'Em análise'
+        };
+    });
+};
+
+const normalizeDepositos = (dados) => {
+    return dados.map((c) => {
+        return {
+            value: c.id,
+            label: `${c.id} - ${c.descricao}`
         };
     });
 };
@@ -35,6 +45,8 @@ const columns = [
 const PlanoMestre = (props) => {
 
     const [planosMestre, setPlanosMestre] = useState([]);
+    const [depositos, setDepositos] = useState([]);
+
     const [showFormGerar, setShowFormGerar] = useState(false);
     const [showFormItens, setShowFormItens] = useState(false);
     const handleShowFormGerar = () => setShowFormGerar(true);
@@ -49,11 +61,14 @@ const PlanoMestre = (props) => {
     const load = () => {
 
         Promise.all([
+            loadDepositos(),
             loadPlanoMestre()
         ])
             .then(([
+                responseDepositos,
                 responsePlanoMestre
             ]) => {
+                setDepositos(normalizeDepositos(responseDepositos.data));
                 setPlanosMestre(normalizeDados(responsePlanoMestre.data));
             })
             .catch((e) => {
@@ -135,6 +150,7 @@ const PlanoMestre = (props) => {
                 show={showFormItens}
                 idPlanoMestre={idPlanoMestre}
                 descPlanoMestre={descPlanoMestre}
+                depositos={depositos}
                 onClose={() => {
                     setShowFormItens(false);
                 }}

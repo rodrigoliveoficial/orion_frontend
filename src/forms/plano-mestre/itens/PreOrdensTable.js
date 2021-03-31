@@ -23,11 +23,11 @@ export default class PreOrdensTable extends React.Component {
             [
                 {
                     label: 'Total',
-                    columnIndex: 4
+                    columnIndex: 6
                 },
                 {
                     label: 'Total value',
-                    columnIndex: 5,
+                    columnIndex: 7,
                     align: 'right',
                     formatter: (tableData) => {
                         let label = 0;
@@ -55,8 +55,9 @@ export default class PreOrdensTable extends React.Component {
                 <TableHeaderColumn dataField='periodo' dataSort width='140'>Período</TableHeaderColumn>
                 <TableHeaderColumn dataField='alternativa' dataSort>Alternativa</TableHeaderColumn>
                 <TableHeaderColumn dataField='roteiro' dataSort width='140'>Roteiro</TableHeaderColumn>
+                <TableHeaderColumn dataField='deposito' dataSort>Depósito de Entrada</TableHeaderColumn>
                 <TableHeaderColumn dataField='observacao' dataSort>Observação</TableHeaderColumn>
-                <TableHeaderColumn dataField='quantidade' dataSort width='140'>Quantidade</TableHeaderColumn>
+                <TableHeaderColumn dataField='quantidade' dataSort width='140' dataAlign="right">Quantidade</TableHeaderColumn>
             </BootstrapTable>
         );
     }
