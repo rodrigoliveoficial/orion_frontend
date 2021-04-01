@@ -194,8 +194,6 @@ const ItensPlanoMestre = (props) => {
 
         const loadParametros = () => {
             api.get(`plano-mestre/parametros/${idPlanoMestre}`).then((response) => {
-                console.log(response.data);
-
                 setTipoDistribuicaoParam(response.data.descTipoDistribuicao);
                 setMultiplicadorParam(response.data.multiplicador);
                 setPeriodoPadraoParam(response.data.periodoPadrao);

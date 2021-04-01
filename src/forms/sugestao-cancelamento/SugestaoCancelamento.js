@@ -42,8 +42,10 @@ const normalizeDadosConsulta = (dados) => {
     return dados.map((c) => {
         return {
             id: `${c.grupo}.${c.item}`,
+            grupo: c.grupo,
+            item: c.item,
             descricao: c.descricao,
-            situacao: c.sugCancelProducao ? "Sugerido cancelamento" : "Disponível para planejamento"
+            situacao: c.sugCancelProducao === 'S' ? "Sugerido cancelamento" : "Disponível para planejamento"
         };
     });
 };
@@ -158,8 +160,6 @@ const SugestaoCancelamento = (props) => {
         setLoading(true);
         setItensSelected([]);
 
-        console.log(bodyParamAgrupadores);
-
         try {
             const response = await api.post('produtos/itens-colecoes', bodyParamAgrupadores);
             setDadosConsulta(normalizeDadosConsulta(response.data));
@@ -192,13 +192,12 @@ const SugestaoCancelamento = (props) => {
         return isSelected;
     }
 
-    const handleConfirmaSugCancelamento = () => {
+    const handleConfirmaSugCancelamento = () => {        
         api.post('item-sugestao-cancel/sugerir', bodyParametros).then(() => {
 
             setItensSelected([]);
 
-            api.post('produtos/itens-colecoes', bodyParamAgrupadores).then((response) => {
-                console.log(response.data);
+            api.post('produtos/itens-colecoes', bodyParamAgrupadores).then((response) => {                
                 setDadosConsulta(normalizeDadosConsulta(response.data));
             }).catch((e) => {
                 console.log('ocorreu algum erro!');
@@ -218,8 +217,7 @@ const SugestaoCancelamento = (props) => {
 
             setItensSelected([]);
 
-            api.post('produtos/itens-colecoes', bodyParamAgrupadores).then((response) => {
-                console.log(response.data);
+            api.post('produtos/itens-colecoes', bodyParamAgrupadores).then((response) => {                
                 setDadosConsulta(normalizeDadosConsulta(response.data));
             }).catch((e) => {
                 console.log('ocorreu algum erro!');

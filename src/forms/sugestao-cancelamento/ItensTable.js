@@ -27,7 +27,9 @@ export default class ItensTable extends React.Component {
 
         return (
             <BootstrapTable ref='table' data={dadosConsulta} selectRow={selectRowPropAux} pagination={true} options={options} striped={true} hover={true} condensed={true}>
-                <TableHeaderColumn dataField='id' isKey={true} dataSort>Código</TableHeaderColumn>
+                <TableHeaderColumn dataField='id' isKey={true} dataSort hidden={true} width='150'>Ref . Cor</TableHeaderColumn>
+                <TableHeaderColumn dataField='grupo' dataSort width='150'>Referência</TableHeaderColumn>
+                <TableHeaderColumn dataField='item' dataSort width='150'>Cor</TableHeaderColumn>
                 <TableHeaderColumn dataField='descricao' dataSort>Descrição</TableHeaderColumn>
                 <TableHeaderColumn dataField='situacao' dataSort>Situação</TableHeaderColumn>
             </BootstrapTable>

@@ -232,8 +232,6 @@ const AbaPlanejamento = (props) => {
                             value={values.demInicio1}
                             onChange={handleChange}
                             onBlur={() => {
-                                console.log("valor demInicio01");
-                                console.log(values.demInicio1);
                                 props.setPerDemInico1Info(values.demInicio1);
                                 setFieldValue("procInicio1", values.demInicio1);
                             }}

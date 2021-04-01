@@ -6,6 +6,7 @@ import {
     Route
 } from "react-router-dom";
 import '../../css/style.scss';
+import PrevisaoVendas from '../../forms/previsao-vendas/PrevisaoVendas';
 import CapacidadeProducao from '../../forms/capacidade-producao/CapacidadeProducao';
 import SugestaoCancelamento from '../../forms/sugestao-cancelamento/SugestaoCancelamento';
 import PlanoMestre from '../../forms/plano-mestre/PlanoMestre';
@@ -34,6 +35,7 @@ class NavBar extends Component {
                     <Route path="/home">
                     </Route>
                     <Route path="/previsao-vendas">
+                        <PrevisaoVendas />
                     </Route>
                     <Route path="/capacidade-producao">
                         <CapacidadeProducao />

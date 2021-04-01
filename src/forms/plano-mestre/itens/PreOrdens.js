@@ -235,7 +235,7 @@ const FormPreOrdens = (props) => {
                         />
                     </Form.Group>
 
-                    <Form.Group as={Col} md="4" controlId="deposito">
+                    <Form.Group as={Col} md="3" controlId="deposito">
                         <Form.Label>
                             Depósito de Entrada de Peças
                         </Form.Label>
@@ -253,7 +253,7 @@ const FormPreOrdens = (props) => {
 
                 </Form.Row>
                 <Form.Row>
-                    <Form.Group as={Col} md="4" controlId="observacaoOP">
+                    <Form.Group as={Col} md="3" controlId="observacaoOP">
                         <Form.Label>
                             Observação das Ordens
                         </Form.Label>

@@ -84,8 +84,6 @@ const GerarPlanoMestre = (props) => {
 
         event.preventDefault();
         props.setLoading(true);
-        console.log('gerarPlanoMestre');
-        console.log(bodyParametros);
         try {
             const response = await api.post('plano-mestre/gerar', bodyParametros);
             props.onSubmit(response.data);
