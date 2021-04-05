@@ -359,12 +359,21 @@ const ItensPlanoMestre = (props) => {
         });
     }
 
-    const onCalcularMultiplicador = async event => {
+    const salvarParametrosProgramacao = async event => {
 
         setLoadingAplicarMulti(true);
 
+        const body = ({
+            idPlanoMestre: idPlanoMestre,
+            codGrupoItemProg: itemSelecionado,
+            alternativaProg: alternativaItem.value,
+            roteiroProg: roteiroItem.value,
+            periodoProg: values.periodoPadraoItem,
+            multiplicadorProg: values.multiplicadorItem
+        });
+
         try {
-            const response = await api.get(`plano-mestre/multiplicador/${idPlanoMestre}/${itemSelecionado}/${values.multiplicadorItem}`);
+            const response = await api.post('plano-mestre/salvar-param-programacao', body);
             setTamanhosItem(normalizeTamanhos(response.data));
 
             try {
@@ -779,7 +788,7 @@ const ItensPlanoMestre = (props) => {
                 Salvar
             </Button>
 
-            <Button variant="danger" onClick={onCancelarAlteracaoItens}>
+            <Button variant="danger" onClick={onCancelarAlteracaoItens} hidden={true}>
                 Cancelar
             </Button>
 
@@ -887,7 +896,7 @@ const ItensPlanoMestre = (props) => {
 
                                 <Button
                                     variant="success"
-                                    onClick={onCalcularMultiplicador}
+                                    onClick={salvarParametrosProgramacao}
                                     disabled={loadingAplicarMulti}
                                 >
                                     {loadingAplicarMulti ?
@@ -919,7 +928,7 @@ const ItensPlanoMestre = (props) => {
                                 Salvar
                             </Button>
 
-                            <Button variant="danger" onClick={onCancelarAlteracaoGrade}>
+                            <Button variant="danger" onClick={onCancelarAlteracaoGrade} hidden={true}>
                                 Cancelar
                             </Button>
 
@@ -979,7 +988,7 @@ FormModal.propTypes = {
     show: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
     idPlanoMestre: PropTypes.number.isRequired,
-    descPlanoMestre: PropTypes.string    
+    descPlanoMestre: PropTypes.string
 };
 
 export default FormModal;

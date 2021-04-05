@@ -33,8 +33,31 @@ export default class ItensTable extends React.Component {
             enterToEdit: true            
         };
         
+        const footerData = [
+            [
+                {
+                    label: 'Total',
+                    columnIndex: 5
+                },
+                {
+                    label: 'Total value',
+                    columnIndex: 6,
+                    align: 'right',
+                    formatter: (tableData) => {
+                        let label = 0;
+                        for (let i = 0, tableDataLen = tableData.length; i < tableDataLen; i++) {
+                            label += parseInt(tableData[i].qtdePrevisaoVendas);
+                        }
+                        return (
+                            <strong>{label}</strong>
+                        );
+                    }
+                }
+            ]
+        ];
+
         return (
-            <BootstrapTable ref='previsao-table' data={previsaoVendas} pagination={true} options={options} striped={true} hover={true} cellEdit={cellEditProp} keyBoardNav={keyBoardNav}>
+            <BootstrapTable ref='previsao-table' data={previsaoVendas} pagination={true} options={options} striped={true} hover={true} cellEdit={cellEditProp} keyBoardNav={keyBoardNav} footerData={footerData} footer>
                 <TableHeaderColumn dataField='id' isKey={true} dataSort width='50' >ID</TableHeaderColumn>
                 <TableHeaderColumn dataField='grupo' dataSort width='150' editable={false}  filter={{ type: 'TextFilter', placeholder: '' }}>Referência</TableHeaderColumn>
                 <TableHeaderColumn dataField='item' dataSort width='150' editable={false}  filter={{ type: 'TextFilter', placeholder: '' }}>Cor</TableHeaderColumn>

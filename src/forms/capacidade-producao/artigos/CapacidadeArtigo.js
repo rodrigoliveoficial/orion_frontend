@@ -84,7 +84,7 @@ const CapacidadeArtigo = (props) => {
 
             </Button>
 
-            <Button onClick={onClickCancelar} variant="danger">
+            <Button onClick={onClickCancelar} variant="danger" hidden={true}>
                 Cancelar
             </Button>
 

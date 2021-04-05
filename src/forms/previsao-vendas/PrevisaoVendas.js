@@ -4,7 +4,6 @@ import Spinner from 'react-bootstrap/Spinner'
 import Select from 'react-select';
 import api from '../../services/api';
 import PrevisaoTable from './PrevisaoTable';
-import ConfirmDialog from '../../components/Alert/ConfirmDialog';
 
 const formStyle = { marginLeft: '20px', marginTop: '20px', marginRight: '20px' };
 
@@ -40,10 +39,11 @@ const PrevisaoVendas = (props) => {
     const [tabelaSellOut, setTabelaSellOut] = useState([]);
 
     const [colecaoInfo, setColecaoInfo] = useState(0);
-    const [tabelaSellInInfo, setTabelaSellInInfo] = useState(0);
-    const [tabelaSellOutInfo, setTabelaSellOutInfo] = useState(0);
+    const [tabelaSellInInfo, setTabelaSellInInfo] = useState('');
+    const [tabelaSellOutInfo, setTabelaSellOutInfo] = useState('');
 
     const [loading, setLoading] = useState(false);
+    const [desabilitarBotoes, setDesabilitarBotoes] = useState(true);
 
     const load = () => {
 
@@ -68,13 +68,40 @@ const PrevisaoVendas = (props) => {
         load();
     }, []);
 
-    const consultaPrevisaoVendasColecao = (colecao) => {        
+    useEffect(() => {        
+        setDesabilitarBotoes(true);
+        if ((colecaoInfo !== 0) && (tabelaSellInInfo !== '') && (tabelaSellOutInfo !== '')) setDesabilitarBotoes(false);
+    }, [colecaoInfo, tabelaSellInInfo, tabelaSellOutInfo]);
+
+    const consultaPrevisaoVendasColecao = (colecao) => {
         api.get(`previsao-vendas/${colecao}`).then((response) => {
             setPrevisaoVendas(response.data);
         }).catch((e) => {
             console.log('ocorreu algum erro!');
             console.error(e);
             setPrevisaoVendas([]);
+        });
+    }
+
+    const obterIdTabelaSellIn = (colecao) => {
+        api.get(`previsao-vendas/id-tabela-sell-in/${colecao}`).then((response) => {
+            setTabelaSellIn(tabelasPreco.find(o => o.value === response.data));
+            setTabelaSellInInfo(response.data);
+        }).catch((e) => {
+            console.log('ocorreu algum erro!');
+            console.error(e);
+            setTabelaSellIn([])
+        });
+    }
+
+    const obterIdTabelaSellOut = (colecao) => {
+        api.get(`previsao-vendas/id-tabela-sell-out/${colecao}`).then((response) => {
+            setTabelaSellOut(tabelasPreco.find(o => o.value === response.data));
+            setTabelaSellOutInfo(response.data);
+        }).catch((e) => {
+            console.log('ocorreu algum erro!');
+            console.error(e);
+            setTabelaSellOut([])
         });
     }
 
@@ -89,14 +116,14 @@ const PrevisaoVendas = (props) => {
             previsoesVendas: previsaoVendas
         });
 
-        //try {
-        //    const response = await api.get(`plano-mestre/multiplicador/${idPlanoMestre}/${itemSelecionado}/${values.multiplicadorItem}`);
-        //    setTamanhosItem(normalizeTamanhos(response.data));
-        //} catch (e) {
-        //    console.log('ocorreu algum erro!');
-        //    console.error(e);
-        //    setTamanhosItem([]);
-        //}
+        try {
+            const response = await api.post('previsao-vendas', body);
+            setPrevisaoVendas(response.data);
+        } catch (e) {
+            console.log('ocorreu algum erro!');
+            console.error(e);
+            setPrevisaoVendas([]);
+        }
 
         setLoading(false);
     };
@@ -115,11 +142,13 @@ const PrevisaoVendas = (props) => {
                     <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe a coleção."
                         name="colecao"
                         options={colecoes}
-                        value={colecao}                        
+                        value={colecao}
                         onChange={(selected) => {
                             setColecao(selected);
                             setColecaoInfo(selected.value);
-                            consultaPrevisaoVendasColecao(selected.value);
+                            obterIdTabelaSellIn(selected.value);
+                            obterIdTabelaSellOut(selected.value);
+                            consultaPrevisaoVendasColecao(selected.value);                            
                         }}
                     />
                 </Form.Group>
@@ -134,10 +163,10 @@ const PrevisaoVendas = (props) => {
                     <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe a tabela Sell IN"
                         name="tabelaSellIn"
                         options={tabelasPreco}
-                        value={tabelaSellIn}                        
+                        value={tabelaSellIn}
                         onChange={(selected) => {
                             setTabelaSellIn(selected);
-                            setTabelaSellInInfo(selected.value);
+                            setTabelaSellInInfo(selected.value);                            
                         }}
                     />
                 </Form.Group>
@@ -152,10 +181,10 @@ const PrevisaoVendas = (props) => {
                     <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe a tabela Sell OUT"
                         name="tabelaSellOut"
                         options={tabelasPreco}
-                        value={tabelaSellOut}                        
+                        value={tabelaSellOut}
                         onChange={(selected) => {
                             setTabelaSellOut(selected);
-                            setTabelaSellOutInfo(selected.value);
+                            setTabelaSellOutInfo(selected.value);                            
                         }}
                     />
                 </Form.Group>
@@ -164,7 +193,7 @@ const PrevisaoVendas = (props) => {
 
             <br></br>
 
-            <Button disabled={loading} variant="success" onClick={salvarPrevisaoVendas}
+            <Button variant="success" onClick={salvarPrevisaoVendas} disabled={desabilitarBotoes}
             >
                 {loading ?
                     <Spinner
@@ -178,7 +207,7 @@ const PrevisaoVendas = (props) => {
                             Salvar
 
             </Button>
-            <Button variant="danger">
+            <Button variant="danger" disabled={desabilitarBotoes} hidden={true}>
                 Cancelar
             </Button>
 

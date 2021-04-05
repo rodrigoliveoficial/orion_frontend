@@ -11,7 +11,7 @@ export default class TamanhosPlanoTable extends React.Component {
 
         };
     }
-
+    
     render() {
 
         const { tamanhosItem } = this.props;
@@ -21,10 +21,14 @@ export default class TamanhosPlanoTable extends React.Component {
             blurToSave: true
         };
 
-        return (
-            <BootstrapTable ref='table' data={tamanhosItem}  striped={true} hover={true} cellEdit={cellEditProp} keyBoardNav>
+        const keyBoardNav = {
+            enterToEdit: true              
+        };
 
-                <TableHeaderColumn dataField='ordem' isKey={true} hidden={true}>Ordem</TableHeaderColumn>
+        return (
+            <BootstrapTable ref='table' data={tamanhosItem}  striped={true} hover={true} cellEdit={cellEditProp} keyBoardNav={keyBoardNav}>
+
+                <TableHeaderColumn dataField='ordem' isKey={true} width='50'>ID</TableHeaderColumn>
                 <TableHeaderColumn dataField='sub' editable={false}>Tamanho</TableHeaderColumn>
                 <TableHeaderColumn dataField='qtdeEstoque' editable={false} dataAlign="right">Estoque</TableHeaderColumn>
                 <TableHeaderColumn dataField='qtdeDemanda' editable={false} dataAlign="right">Demanda</TableHeaderColumn>
