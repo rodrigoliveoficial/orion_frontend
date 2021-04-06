@@ -160,8 +160,12 @@ const ItensPlanoMestre = (props) => {
     const [loadingSalvarGrade, setLoadingSalvarGrade] = useState(false);
     const [loadingAplicarMulti, setLoadingAplicarMulti] = useState(false);
 
-    const { currPage } = useState(1);
+    const [showConfirmaPlanoAlert, setShowConfirmaPlanoAlert] = useState(false);
+    const [planoConfirmado, setPlanoConfirmado] = useState(false);
+
+    const [currPage, setCurrPage] = useState(1);
     const { idPlanoMestre } = props;
+    const { sitPlanoMestre } = props;
 
     const options = {
         sizePerPageList: [5, 10, 20, 100, 10000],
@@ -169,6 +173,10 @@ const ItensPlanoMestre = (props) => {
         page: currPage,
         onRowClick: function (row) {
             setItemSelecionado(row.codigo);
+        },
+        onPageChange: function (page) {
+            setCurrPage(page);
+            setItemSelecionado('');
         }
     };
 
@@ -278,7 +286,6 @@ const ItensPlanoMestre = (props) => {
             });
         };
 
-
         const loadParamProgItem = () => {
             api.get(`plano-mestre/param-prog-item/${idPlanoMestre}/${itemSelecionado}`).then((response) => {
                 setAlternativaGravada(response.data.alternativa);
@@ -349,6 +356,20 @@ const ItensPlanoMestre = (props) => {
 
     }, [idPlanoMestre, itemSelecionado, tamanhosItem]);
 
+    useEffect(() => {
+        
+        console.log('TESTE DA SIT PLANO');
+        console.log(sitPlanoMestre);
+        
+        if (sitPlanoMestre !== 0) setPlanoConfirmado(false);
+        else setPlanoConfirmado(true);
+
+        if (sitPlanoMestre === 0) console.log('diferente de zero');
+        else console.log('igual a zero');
+
+
+    }, [sitPlanoMestre]);
+
     const loadRoteirosAlternativa = (nrAlternativa) => {
         api.get(`produtos/roteiros/${itemSelecionado}/${nrAlternativa}`).then((responseRot) => {
             setRoteirosItem(normalizeRoteiros(responseRot.data));
@@ -356,6 +377,22 @@ const ItensPlanoMestre = (props) => {
             console.log('ocorreu algum erro!');
             console.error(e);
             setRoteirosItem([]);
+        });
+    }
+
+    const confirmarPlanoMestre = () => {
+
+        const body = ({
+            idPlanoMestre: idPlanoMestre,
+            situacaoPlanoMestre: 1
+        });
+
+        api.post('plano-mestre/salvar-situacao', body).then((response) => {
+            setShowConfirmaPlanoAlert(false);
+            setPlanoConfirmado(true);
+        }).catch((e) => {
+            console.log('ocorreu algum erro!');
+            console.error(e);
         });
     }
 
@@ -419,16 +456,6 @@ const ItensPlanoMestre = (props) => {
         setLoadingSalvarItem(false);
     };
 
-    const onCancelarAlteracaoItens = () => {
-        api.get(`plano-mestre/produtos/${idPlanoMestre}`).then((response) => {
-            setItens(normalizeDados(response.data));
-        }).catch((e) => {
-            console.log('ocorreu algum erro!');
-            console.error(e);
-            setItens([]);
-        });
-    };
-
     const onSalvarAlteracaoGrade = async event => {
 
         setLoadingSalvarGrade(true);
@@ -455,492 +482,507 @@ const ItensPlanoMestre = (props) => {
         setLoadingSalvarGrade(false);
     };
 
-    const onCancelarAlteracaoGrade = () => {
-        api.get(`plano-mestre/tamanhos/${idPlanoMestre}/${itemSelecionado}`).then((response) => {
-            setTamanhosItem(normalizeTamanhos(response.data));
-        }).catch((e) => {
-            console.log('ocorreu algum erro!');
-            console.error(e);
-            setTamanhosItem([]);
-        });
-    };
-
     return (
         <div>
-            <Accordion >
-                <Accordion.Toggle
-                    eventKey="0"
 
-                    as={(p) => {
-                        return (
-                            <div style={{ display: 'inline-flex', width: '100%' }}>
-                                <i
-                                    style={{ lineHeight: '3.4em' }}
-                                    className="fa fa-chevron-down"
-                                    onClick={p.onClick}
-                                />
-                            </div>
-                        );
-                    }}
+            {!showConfirmaPlanoAlert && (
 
-                />
+                <div>
 
-                <Accordion.Collapse eventKey="0">
-                    <>
-                        <h3>
-                            Parâmetros:
-                        </h3>
-                        <br></br>
+                    <Accordion >
+                        <Accordion.Toggle
+                            eventKey="0"
 
-                        <h4>
-                            Global
-                        </h4>
+                            as={(p) => {
+                                return (
+                                    <div style={{ display: 'inline-flex', width: '100%' }}>
+                                        <i
+                                            style={{ lineHeight: '3.4em' }}
+                                            className="fa fa-chevron-down"
+                                            onClick={p.onClick}
+                                        />
+                                    </div>
+                                );
+                            }}
 
-                        <Form.Row>
-                            <Form.Group as={Col} md="3" controlId="tipo-distribuicao">
-                                <Form.Label>
-                                    Tipo de Distribuição
-                                </Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="tipo-distribuicao"
-                                    disabled
-                                    value={tipoDistribuicaoParam}
-                                />
-                            </Form.Group>
+                        />
 
-                            <Form.Group as={Col} md="1" controlId="multiplicador">
-                                <Form.Label>
-                                    Multiplicador
-                                </Form.Label>
-                                <Form.Control
-                                    type="number"
-                                    name="multiplicador"
-                                    disabled
-                                    value={multiplicadorParam}
-                                />
-                            </Form.Group>
+                        <Accordion.Collapse eventKey="0">
+                            <>
+                                <h3>
+                                    Parâmetros:
+                                </h3>
+                                <br></br>
 
-                            <Form.Group as={Col} md="2" controlId="periodo-padrao">
-                                <Form.Label>
-                                    Período de Produção (Padrão)
-                                </Form.Label>
-                                <Form.Control
-                                    type="number"
-                                    name="periodo-padrao"
-                                    disabled
-                                    value={periodoPadraoParam}
-                                />
-                            </Form.Group>
-                        </Form.Row>
+                                <h4>
+                                    Global
+                                </h4>
 
-                        <h4>
-                            Análise de Produtos
-                        </h4>
-
-                        <Form.Row>
-                            <Form.Group as={Col} md="3" controlId="colecoes">
-                                <Form.Label>
-                                    Coleções
-                                </Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="colecoes"
-                                    disabled
-                                    value={colecoesParam}
-                                />
-                            </Form.Group>
-
-                            <Form.Group as={Col} md="3" controlId="colecoes-permanentes">
-                                <Form.Label>
-                                    Coleções Permanentes
-                                </Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="colecoes-permanentes"
-                                    disabled
-                                    value={colecoesPermanentesParam}
-                                />
-                            </Form.Group>
-
-                            <Form.Group as={Col} md="3" controlId="linhas_produtos">
-                                <Form.Label>
-                                    Linhas de Produto
-                                </Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="linhas_produtos"
-                                    disabled
-                                    value={linhasProdutosParam}
-                                />
-                            </Form.Group>
-
-                            <Form.Group as={Col} md="3" controlId="artigos_produtos">
-                                <Form.Label>
-                                    Artigos de Produto
-                                </Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="artigos_produtos"
-                                    disabled
-                                    value={artigosProdutosParam}
-                                />
-                            </Form.Group>
-                        </Form.Row>
-
-                        <Form.Row>
-                            <Form.Group as={Col} md="3" controlId="artigos_cotas">
-                                <Form.Label>
-                                    Artigo de Cotas
-                                </Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="artigos_cotas"
-                                    disabled
-                                    value={artigosCotasParam}
-                                />
-                            </Form.Group>
-
-                            <Form.Group as={Col} md="3" controlId="publicos_alvos">
-                                <Form.Label>
-                                    Publico Alvo
-                                </Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="publicos_alvos"
-                                    disabled
-                                    value={publicosAlvosParam}
-                                />
-                            </Form.Group>
-
-                            <Form.Group as={Col} md="6" controlId="embarques">
-                                <Form.Label>
-                                    Embarques
-                                </Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="embarques"
-                                    disabled
-                                    value={embarquesParam}
-                                />
-                            </Form.Group>
-
-                        </Form.Row>
-
-                        <Form.Row>
-                            <Form.Group as={Col} md="6" controlId="referencias">
-                                <Form.Label>
-                                    Referências
-                                </Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="referencias"
-                                    disabled
-                                    value={referenciasParam}
-                                />
-                            </Form.Group>
-
-                            <Form.Group as={Col} md="6" controlId="cores">
-                                <Form.Label>
-                                    Cores
-                                </Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="cores"
-                                    disabled
-                                    value={coresParam}
-                                />
-                            </Form.Group>
-                        </Form.Row>
-                        <Form.Row>
-                            <Form.Group as={Col} md="3" controlId="origens_produtos">
-                                <Form.Label>
-                                    Origem Produto
-                                </Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="origens_produtos"
-                                    disabled
-                                    value={origensParam}
-                                />
-                            </Form.Group>
-                        </Form.Row>
-
-                        <h4>
-                            Planejamento
-                            </h4>
-
-                        <Form.Row>
-                            <Form.Group as={Col} md="2" controlId="considera_deposito">
-                                <Form.Label>
-                                    Considera Depósitos?
-                                </Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="considera_deposito"
-                                    disabled
-                                    value={consideraDepositosParam}
-                                />
-                            </Form.Group>
-
-                            <Form.Group as={Col} md="2" controlId="considera_prod_sem_estq">
-                                <Form.Label>
-                                    Considera Produto Sem Estoque?
-                                </Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="considera_prod_sem_estq"
-                                    disabled
-                                    value={consideraProdSemEstqParam}
-                                />
-                            </Form.Group>
-
-                            <Form.Group as={Col} md="2" controlId="depositos">
-                                <Form.Label>
-                                    Depósitos
-                                </Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="depositos"
-                                    disabled
-                                    value={depositosParam}
-                                />
-                            </Form.Group>
-                        </Form.Row>
-                        <Form.Row>
-                            <Form.Group as={Col} md="2" controlId="considera_prod_sem_proc">
-                                <Form.Label>
-                                    Considera Produto Sem Processo?
-                                </Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="considera_prod_sem_proc"
-                                    disabled
-                                    value={consideraProdSemProcParam}
-                                />
-                            </Form.Group>
-                        </Form.Row>
-
-                        <Form.Row>
-                            <Form.Group as={Col} md="2" controlId="considera_pedido_bloq">
-                                <Form.Label>
-                                    Pedidos Bloqueados?
-                                </Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="considera_pedido_bloq"
-                                    disabled
-                                    value={consideraPedBloqueadoParam}
-                                />
-                            </Form.Group>
-
-                            <Form.Group as={Col} md="2" controlId="considera_prod_sem_pedi">
-                                <Form.Label>
-                                    Considera Produto Sem Pedido?
-                                </Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="considera_prod_sem_pedi"
-                                    disabled
-                                    value={consideraProdSemPediParam}
-                                />
-                            </Form.Group>
-
-                            <Form.Group as={Col} md="2" controlId="numero_interno">
-                                <Form.Label>
-                                    Numero Interno
-                                </Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="numero_interno"
-                                    disabled
-                                    value={numeroInternoParam}
-                                />
-                            </Form.Group>
-
-                            <Form.Group as={Col} md="6" controlId="pedidos">
-                                <Form.Label>
-                                    Pedidos
-                                </Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="pedidos"
-                                    disabled
-                                    value={pedidosParam}
-                                />
-                            </Form.Group>
-                        </Form.Row>
-                    </>
-                </Accordion.Collapse>
-
-            </Accordion>
-
-            <Button variant="success" onClick={onSalvarAlteracaoItens} disabled={loadingSalvarItem}>
-                {loadingSalvarItem ?
-                    <Spinner
-                        show="false"
-                        as="span"
-                        animation="grow"
-                        size="sm"
-                        role="status"
-                        aria-hidden="true"
-                    /> : ''}
-                Salvar
-            </Button>
-
-            <Button variant="danger" onClick={onCancelarAlteracaoItens} hidden={true}>
-                Cancelar
-            </Button>
-
-            <ItensPlanoTable
-                {...props}
-                itens={itens}
-                options={options}
-                plano1={plano1}
-                plano2={plano2}
-                plano3={plano3}
-                plano4={plano4}
-                plano5={plano5}
-                plano6={plano6}
-                plano7={plano7}
-                plano8={plano8}
-            />
-
-            {showImgTamanhos && (
-                <Container fluid>
-                    <Row>
-                        <Col xl={1} md={1}>
-                            <Figure>
-                                <Figure.Image
-                                    width={171}
-                                    height={180}
-                                    alt="171x180"
-                                    src={imagem}
-                                />
-                            </Figure>
-                        </Col>
-                        <Col xl={5} md={3}>
-
-                            <h4>
-                                <b>PRODUTO:</b> <i>{descItemSelecionado}</i>
-                            </h4>
-
-                            <Form id="param-programacao-item" noValidate>
                                 <Form.Row>
-                                    <Form.Group as={Col} md="8" controlId="alternativaItem">
+                                    <Form.Group as={Col} md="3" controlId="tipo-distribuicao">
                                         <Form.Label>
-                                            Alternativa
-                                        </Form.Label>
-                                        <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe a alternativa"
-                                            name="alternativaItem"
-                                            options={alternativasItem}
-                                            value={alternativaItem}
-                                            onChange={(selected) => {
-                                                setAlternativaItem(selected);
-                                                loadRoteirosAlternativa(selected.value);
-                                            }}
-                                        />
-                                    </Form.Group>
-
-                                    <Form.Group as={Col} md="2" controlId="roteiroItem">
-                                        <Form.Label>
-                                            Roteiro
-                                        </Form.Label>
-                                        <Select className="basic-multi-select" classNamePrefix="select" placeholder=""
-                                            name="roteiroItem"
-                                            options={roteirosItem}
-                                            value={roteiroItem}
-                                            onChange={(selected) => {
-                                                setRoteiroItem(selected);
-                                            }}
-                                        />
-                                    </Form.Group>
-
-                                    <Form.Group as={Col} md="2" controlId="periodoPadraoItem">
-                                        <Form.Label>
-                                            Período de Produção
+                                            Tipo de Distribuição
                                         </Form.Label>
                                         <Form.Control
-                                            type="number"
-                                            maxLength="9999"
-                                            name="periodoPadraoItem"
-                                            value={values.periodoPadraoItem}
-                                            onChange={handleChange}
-                                            onBlur={() => {
-                                                //props.setPeriodoPadraoInfo(values.periodoPadrao);
-                                            }}
+                                            type="text"
+                                            name="tipo-distribuicao"
+                                            disabled
+                                            value={tipoDistribuicaoParam}
                                         />
                                     </Form.Group>
 
-                                </Form.Row>
-
-                                <Form.Row>
-
-                                    <Form.Group as={Col} md="2" controlId="multiplicadorItem">
+                                    <Form.Group as={Col} md="1" controlId="multiplicador">
                                         <Form.Label>
                                             Multiplicador
                                         </Form.Label>
                                         <Form.Control
                                             type="number"
-                                            maxLength="9999"
-                                            name="multiplicadorItem"
-                                            value={values.multiplicadorItem}
-                                            onChange={handleChange}
-                                            onBlur={() => {
-                                                //props.setPeriodoPadraoInfo(values.periodoPadrao);
-                                            }}
+                                            name="multiplicador"
+                                            disabled
+                                            value={multiplicadorParam}
+                                        />
+                                    </Form.Group>
+
+                                    <Form.Group as={Col} md="2" controlId="periodo-padrao">
+                                        <Form.Label>
+                                            Período de Produção (Padrão)
+                                        </Form.Label>
+                                        <Form.Control
+                                            type="number"
+                                            name="periodo-padrao"
+                                            disabled
+                                            value={periodoPadraoParam}
+                                        />
+                                    </Form.Group>
+                                </Form.Row>
+
+                                <h4>
+                                    Análise de Produtos
+                                </h4>
+
+                                <Form.Row>
+                                    <Form.Group as={Col} md="3" controlId="colecoes">
+                                        <Form.Label>
+                                            Coleções
+                                        </Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            name="colecoes"
+                                            disabled
+                                            value={colecoesParam}
+                                        />
+                                    </Form.Group>
+
+                                    <Form.Group as={Col} md="3" controlId="colecoes-permanentes">
+                                        <Form.Label>
+                                            Coleções Permanentes
+                                        </Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            name="colecoes-permanentes"
+                                            disabled
+                                            value={colecoesPermanentesParam}
+                                        />
+                                    </Form.Group>
+
+                                    <Form.Group as={Col} md="3" controlId="linhas_produtos">
+                                        <Form.Label>
+                                            Linhas de Produto
+                                        </Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            name="linhas_produtos"
+                                            disabled
+                                            value={linhasProdutosParam}
+                                        />
+                                    </Form.Group>
+
+                                    <Form.Group as={Col} md="3" controlId="artigos_produtos">
+                                        <Form.Label>
+                                            Artigos de Produto
+                                        </Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            name="artigos_produtos"
+                                            disabled
+                                            value={artigosProdutosParam}
+                                        />
+                                    </Form.Group>
+                                </Form.Row>
+
+                                <Form.Row>
+                                    <Form.Group as={Col} md="3" controlId="artigos_cotas">
+                                        <Form.Label>
+                                            Artigo de Cotas
+                                        </Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            name="artigos_cotas"
+                                            disabled
+                                            value={artigosCotasParam}
+                                        />
+                                    </Form.Group>
+
+                                    <Form.Group as={Col} md="3" controlId="publicos_alvos">
+                                        <Form.Label>
+                                            Publico Alvo
+                                        </Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            name="publicos_alvos"
+                                            disabled
+                                            value={publicosAlvosParam}
+                                        />
+                                    </Form.Group>
+
+                                    <Form.Group as={Col} md="6" controlId="embarques">
+                                        <Form.Label>
+                                            Embarques
+                                        </Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            name="embarques"
+                                            disabled
+                                            value={embarquesParam}
                                         />
                                     </Form.Group>
 
                                 </Form.Row>
 
-                                <Button
-                                    variant="success"
-                                    onClick={salvarParametrosProgramacao}
-                                    disabled={loadingAplicarMulti}
-                                >
-                                    {loadingAplicarMulti ?
-                                        <Spinner
-                                            show="false"
-                                            as="span"
-                                            animation="grow"
-                                            size="sm"
-                                            role="status"
-                                            aria-hidden="true"
-                                        /> : ''}
-                                    Salvar
-                                </Button>
-                            </Form>
-                        </Col>
+                                <Form.Row>
+                                    <Form.Group as={Col} md="6" controlId="referencias">
+                                        <Form.Label>
+                                            Referências
+                                        </Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            name="referencias"
+                                            disabled
+                                            value={referenciasParam}
+                                        />
+                                    </Form.Group>
 
-                        <Col>
+                                    <Form.Group as={Col} md="6" controlId="cores">
+                                        <Form.Label>
+                                            Cores
+                                        </Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            name="cores"
+                                            disabled
+                                            value={coresParam}
+                                        />
+                                    </Form.Group>
+                                </Form.Row>
+                                <Form.Row>
+                                    <Form.Group as={Col} md="3" controlId="origens_produtos">
+                                        <Form.Label>
+                                            Origem Produto
+                                        </Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            name="origens_produtos"
+                                            disabled
+                                            value={origensParam}
+                                        />
+                                    </Form.Group>
+                                </Form.Row>
 
-                            <Button variant="success" onClick={onSalvarAlteracaoGrade} disabled={loadingSalvarGrade}>
-                                {loadingSalvarGrade ?
-                                    <Spinner
-                                        show="false"
-                                        as="span"
-                                        animation="grow"
-                                        size="sm"
-                                        role="status"
-                                        aria-hidden="true"
-                                    /> : ''}
-                                Salvar
-                            </Button>
+                                <h4>
+                                    Planejamento
+                                </h4>
 
-                            <Button variant="danger" onClick={onCancelarAlteracaoGrade} hidden={true}>
-                                Cancelar
-                            </Button>
+                                <Form.Row>
+                                    <Form.Group as={Col} md="2" controlId="considera_deposito">
+                                        <Form.Label>
+                                            Considera Depósitos?
+                                        </Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            name="considera_deposito"
+                                            disabled
+                                            value={consideraDepositosParam}
+                                        />
+                                    </Form.Group>
 
-                            <TamanhosPlanoTable
-                                {...props}
-                                tamanhosItem={tamanhosItem}
-                            />
-                        </Col>
+                                    <Form.Group as={Col} md="2" controlId="considera_prod_sem_estq">
+                                        <Form.Label>
+                                            Considera Produto Sem Estoque?
+                                        </Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            name="considera_prod_sem_estq"
+                                            disabled
+                                            value={consideraProdSemEstqParam}
+                                        />
+                                    </Form.Group>
 
-                    </Row>
-                </Container>
+                                    <Form.Group as={Col} md="2" controlId="depositos">
+                                        <Form.Label>
+                                            Depósitos
+                                        </Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            name="depositos"
+                                            disabled
+                                            value={depositosParam}
+                                        />
+                                    </Form.Group>
+                                </Form.Row>
+                                <Form.Row>
+                                    <Form.Group as={Col} md="2" controlId="considera_prod_sem_proc">
+                                        <Form.Label>
+                                            Considera Produto Sem Processo?
+                                        </Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            name="considera_prod_sem_proc"
+                                            disabled
+                                            value={consideraProdSemProcParam}
+                                        />
+                                    </Form.Group>
+                                </Form.Row>
+
+                                <Form.Row>
+                                    <Form.Group as={Col} md="2" controlId="considera_pedido_bloq">
+                                        <Form.Label>
+                                            Pedidos Bloqueados?
+                                        </Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            name="considera_pedido_bloq"
+                                            disabled
+                                            value={consideraPedBloqueadoParam}
+                                        />
+                                    </Form.Group>
+
+                                    <Form.Group as={Col} md="2" controlId="considera_prod_sem_pedi">
+                                        <Form.Label>
+                                            Considera Produto Sem Pedido?
+                                        </Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            name="considera_prod_sem_pedi"
+                                            disabled
+                                            value={consideraProdSemPediParam}
+                                        />
+                                    </Form.Group>
+
+                                    <Form.Group as={Col} md="2" controlId="numero_interno">
+                                        <Form.Label>
+                                            Numero Interno
+                                        </Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            name="numero_interno"
+                                            disabled
+                                            value={numeroInternoParam}
+                                        />
+                                    </Form.Group>
+
+                                    <Form.Group as={Col} md="6" controlId="pedidos">
+                                        <Form.Label>
+                                            Pedidos
+                                        </Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            name="pedidos"
+                                            disabled
+                                            value={pedidosParam}
+                                        />
+                                    </Form.Group>
+                                </Form.Row>
+                            </>
+                        </Accordion.Collapse>
+
+                    </Accordion>
+
+                    <Button variant="success" onClick={onSalvarAlteracaoItens} disabled={planoConfirmado}>
+                        {loadingSalvarItem ?
+                            <Spinner
+                                show="false"
+                                as="span"
+                                animation="grow"
+                                size="sm"
+                                role="status"
+                                aria-hidden="true"
+                            /> : ''}
+                        Salvar
+                    </Button>
+
+                    <Button variant="secondary" onClick={() => { setShowConfirmaPlanoAlert(true) }} disabled={planoConfirmado}>
+                        Confirmar Plano
+                    </Button>
+
+                    <ItensPlanoTable
+                        {...props}
+                        itens={itens}
+                        options={options}
+                        plano1={plano1}
+                        plano2={plano2}
+                        plano3={plano3}
+                        plano4={plano4}
+                        plano5={plano5}
+                        plano6={plano6}
+                        plano7={plano7}
+                        plano8={plano8}
+                    />
+
+                    {showImgTamanhos && (
+                        <Container fluid>
+                            <Row>
+                                <Col xl={1} md={1}>
+                                    <Figure>
+                                        <Figure.Image
+                                            width={171}
+                                            height={180}
+                                            alt="171x180"
+                                            src={imagem}
+                                        />
+                                    </Figure>
+                                </Col>
+                                <Col xl={5} md={3}>
+
+                                    <h4>
+                                        <b>PRODUTO:</b> <i>{descItemSelecionado}</i>
+                                    </h4>
+
+                                    <Form id="param-programacao-item" noValidate>
+                                        <Form.Row>
+                                            <Form.Group as={Col} md="8" controlId="alternativaItem">
+                                                <Form.Label>
+                                                    Alternativa
+                                                </Form.Label>
+                                                <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe a alternativa"
+                                                    name="alternativaItem"
+                                                    options={alternativasItem}
+                                                    value={alternativaItem}
+                                                    onChange={(selected) => {
+                                                        setAlternativaItem(selected);
+                                                        loadRoteirosAlternativa(selected.value);
+                                                    }}
+                                                />
+                                            </Form.Group>
+
+                                            <Form.Group as={Col} md="2" controlId="roteiroItem">
+                                                <Form.Label>
+                                                    Roteiro
+                                                </Form.Label>
+                                                <Select className="basic-multi-select" classNamePrefix="select" placeholder=""
+                                                    name="roteiroItem"
+                                                    options={roteirosItem}
+                                                    value={roteiroItem}
+                                                    onChange={(selected) => {
+                                                        setRoteiroItem(selected);
+                                                    }}
+                                                />
+                                            </Form.Group>
+
+                                            <Form.Group as={Col} md="2" controlId="periodoPadraoItem">
+                                                <Form.Label>
+                                                    Período de Produção
+                                                </Form.Label>
+                                                <Form.Control
+                                                    type="number"
+                                                    maxLength="9999"
+                                                    name="periodoPadraoItem"
+                                                    value={values.periodoPadraoItem}
+                                                    onChange={handleChange}
+                                                    onBlur={() => {
+                                                        //props.setPeriodoPadraoInfo(values.periodoPadrao);
+                                                    }}
+                                                />
+                                            </Form.Group>
+
+                                        </Form.Row>
+
+                                        <Form.Row>
+
+                                            <Form.Group as={Col} md="2" controlId="multiplicadorItem">
+                                                <Form.Label>
+                                                    Multiplicador
+                                                </Form.Label>
+                                                <Form.Control
+                                                    type="number"
+                                                    maxLength="9999"
+                                                    name="multiplicadorItem"
+                                                    value={values.multiplicadorItem}
+                                                    onChange={handleChange}
+                                                    onBlur={() => {
+                                                        //props.setPeriodoPadraoInfo(values.periodoPadrao);
+                                                    }}
+                                                />
+                                            </Form.Group>
+
+                                        </Form.Row>
+
+                                        <Button
+                                            variant="success"
+                                            onClick={salvarParametrosProgramacao}
+                                            disabled={planoConfirmado}
+                                        >
+                                            {loadingAplicarMulti ?
+                                                <Spinner
+                                                    show="false"
+                                                    as="span"
+                                                    animation="grow"
+                                                    size="sm"
+                                                    role="status"
+                                                    aria-hidden="true"
+                                                /> : ''}
+                                            Salvar
+                                        </Button>
+                                    </Form>
+                                </Col>
+
+                                <Col>
+
+                                    <Button variant="success" onClick={onSalvarAlteracaoGrade} disabled={planoConfirmado}>
+                                        {loadingSalvarGrade ?
+                                            <Spinner
+                                                show="false"
+                                                as="span"
+                                                animation="grow"
+                                                size="sm"
+                                                role="status"
+                                                aria-hidden="true"
+                                            /> : ''}
+                                        Salvar
+                                    </Button>
+
+                                    <TamanhosPlanoTable
+                                        {...props}
+                                        tamanhosItem={tamanhosItem}
+                                    />
+                                </Col>
+
+                            </Row>
+                        </Container>
+                    )}
+
+                </div>
             )}
+
+            {showConfirmaPlanoAlert && (
+
+                <div>
+                    <br></br>
+                    <h3> Confirma a programação deste plano mestre? </h3>
+                    <br></br>
+                    <h5> Após a confirmação não será mais possível fazer alterações nas quantidades programadas! </h5>
+                    <br></br>
+
+                    <Button variant="outline-dark" onClick={() => { setShowConfirmaPlanoAlert(false) }}>
+                        Cancelar
+                    </Button>
+
+                    <Button variant="outline-success" onClick={ confirmarPlanoMestre }>
+                        Confirmar
+                    </Button>
+
+                </div>
+            )}
+
         </div>
     );
 }
@@ -988,7 +1030,8 @@ FormModal.propTypes = {
     show: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
     idPlanoMestre: PropTypes.number.isRequired,
-    descPlanoMestre: PropTypes.string
+    descPlanoMestre: PropTypes.string,
+    sitPlanoMestre: PropTypes.number
 };
 
 export default FormModal;

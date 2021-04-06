@@ -3,6 +3,7 @@ import { Form, Col, Button } from 'react-bootstrap';
 import Spinner from 'react-bootstrap/Spinner'
 import Select from 'react-select';
 import api from '../../services/api';
+import Figure from 'react-bootstrap/Figure'
 import PrevisaoTable from './PrevisaoTable';
 
 const formStyle = { marginLeft: '20px', marginTop: '20px', marginRight: '20px' };
@@ -45,6 +46,48 @@ const PrevisaoVendas = (props) => {
     const [loading, setLoading] = useState(false);
     const [desabilitarBotoes, setDesabilitarBotoes] = useState(true);
 
+    const [imagem, setImagem] = useState('');
+    const [showImagem, setShowImagem] = useState(false);
+    const [itemSelecionado, setItemSelecionado] = useState('');
+
+    const [currPage, setCurrPage] = useState(1);
+
+    const options = {
+        sizePerPageList: [5, 10, 20, 100, 10000],
+        sizePerPage: 10,
+        page: currPage,        
+        onRowClick: function (row) {
+            setItemSelecionado(`${row.grupo}.${row.item}`);
+        },
+        onPageChange: function (page) {
+            setCurrPage(page);
+            setItemSelecionado('');
+        }
+    };
+
+    useEffect(() => {
+
+        const loadImagem = () => {
+            let conteudo = "";
+            let referencia = "";
+            let cor = "";
+
+            conteudo = itemSelecionado.split(".");
+            referencia = conteudo[0];
+            cor = conteudo[1];
+
+            setImagem(`/images/${referencia}_${cor}_1.jpg`);
+        };
+
+        if (itemSelecionado !== null && itemSelecionado !== undefined && itemSelecionado !== '') {
+            loadImagem();
+            setShowImagem(true);
+        } else {
+            setShowImagem(false);
+        }
+
+    }, [itemSelecionado]);
+
     const load = () => {
 
         Promise.all([
@@ -68,7 +111,7 @@ const PrevisaoVendas = (props) => {
         load();
     }, []);
 
-    useEffect(() => {        
+    useEffect(() => {
         setDesabilitarBotoes(true);
         if ((colecaoInfo !== 0) && (tabelaSellInInfo !== '') && (tabelaSellOutInfo !== '')) setDesabilitarBotoes(false);
     }, [colecaoInfo, tabelaSellInInfo, tabelaSellOutInfo]);
@@ -148,7 +191,7 @@ const PrevisaoVendas = (props) => {
                             setColecaoInfo(selected.value);
                             obterIdTabelaSellIn(selected.value);
                             obterIdTabelaSellOut(selected.value);
-                            consultaPrevisaoVendasColecao(selected.value);                            
+                            consultaPrevisaoVendasColecao(selected.value);
                         }}
                     />
                 </Form.Group>
@@ -166,13 +209,10 @@ const PrevisaoVendas = (props) => {
                         value={tabelaSellIn}
                         onChange={(selected) => {
                             setTabelaSellIn(selected);
-                            setTabelaSellInInfo(selected.value);                            
+                            setTabelaSellInInfo(selected.value);
                         }}
                     />
                 </Form.Group>
-
-            </Form.Row>
-            <Form.Row>
 
                 <Form.Group as={Col} md="4" controlId="tabelaSellOut">
                     <Form.Label>
@@ -184,11 +224,10 @@ const PrevisaoVendas = (props) => {
                         value={tabelaSellOut}
                         onChange={(selected) => {
                             setTabelaSellOut(selected);
-                            setTabelaSellOutInfo(selected.value);                            
+                            setTabelaSellOutInfo(selected.value);
                         }}
                     />
                 </Form.Group>
-
             </Form.Row>
 
             <br></br>
@@ -216,9 +255,20 @@ const PrevisaoVendas = (props) => {
 
             <PrevisaoTable
                 {...props}
+                options={options}
                 previsaoVendas={previsaoVendas}
             />
 
+            {showImagem && (
+                <Figure>
+                    <Figure.Image
+                        width={171}
+                        height={180}
+                        alt="171x180"
+                        src={imagem}
+                    />
+                </Figure>
+            )}
         </div>
     );
 }

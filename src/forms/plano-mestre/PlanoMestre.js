@@ -15,13 +15,34 @@ const formStyle = { marginLeft: '20px', marginTop: '20px', marginRight: '20px' }
 const loadDepositos = () => api.get('depositos');
 const loadPlanoMestre = () => api.get('plano-mestre');
 
+const getDescSituacao = (situacao) => {
+
+    let descricao = "Em Análise";
+
+    if (situacao === 1)  descricao = "Plano Confirmado"
+    if (situacao === 2)  descricao = "Ordens Geradas"
+
+    return descricao;
+}
+
+const getCodSituacao = (situacao) => {
+
+    let conteudo = "";
+    let codSituacaoPlano = 0;
+
+    conteudo = situacao.split("-");
+    codSituacaoPlano = conteudo[0];
+
+    return codSituacaoPlano;
+}
+
 const normalizeDados = (dados) => {
     return dados.map((c) => {
         return {
             id: c.id,
             descricao: c.descricao,
             data: format(parseISO(c.data), 'dd/MM/yyyy HH:mm:ss'),
-            situacao: 'Em análise'
+            situacao: `${c.situacao}-${getDescSituacao(c.situacao)}`
         };
     });
 };
@@ -39,7 +60,7 @@ const columns = [
     { key: 'id', name: 'Numero' },
     { key: 'descricao', name: 'Descrição' },
     { key: 'data', name: 'Data Geração' },
-    { key: 'situacao', name: 'Situação', editable: true }
+    { key: 'situacao', name: 'Situação' }
 ];
 
 const PlanoMestre = (props) => {
@@ -55,6 +76,7 @@ const PlanoMestre = (props) => {
     const [disabledButton, setDisabledButton] = useState(true);
     const [idPlanoMestre, setIdPlanoMestre] = useState(0);
     const [descPlanoMestre, setDescPlanoMestre] = useState('');
+    const [sitPlanoMestre, setSitPlanoMestre] = useState(0);
     const [msgDelete, setMsgDelete] = useState('');
     const [showDeleteAlert, setShowDeleteAlert] = useState(false);
 
@@ -99,9 +121,10 @@ const PlanoMestre = (props) => {
 
     };
 
-    const onRowClick = (id, data) => {
+    const onRowClick = (id, data) => {        
         setIdPlanoMestre(data.id);
         setDescPlanoMestre(data.descricao);
+        setSitPlanoMestre(getCodSituacao(data.situacao));
         setDisabledButton(false);
     };
 
@@ -150,6 +173,7 @@ const PlanoMestre = (props) => {
                 show={showFormItens}
                 idPlanoMestre={idPlanoMestre}
                 descPlanoMestre={descPlanoMestre}
+                sitPlanoMestre={sitPlanoMestre}
                 depositos={depositos}
                 onClose={() => {
                     setShowFormItens(false);
