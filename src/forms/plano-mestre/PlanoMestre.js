@@ -31,7 +31,7 @@ const getCodSituacao = (situacao) => {
     let codSituacaoPlano = 0;
 
     conteudo = situacao.split("-");
-    codSituacaoPlano = conteudo[0];
+    codSituacaoPlano = parseInt(conteudo[0]);
 
     return codSituacaoPlano;
 }
@@ -177,6 +177,7 @@ const PlanoMestre = (props) => {
                 depositos={depositos}
                 onClose={() => {
                     setShowFormItens(false);
+                    load();
                 }}
             />
 

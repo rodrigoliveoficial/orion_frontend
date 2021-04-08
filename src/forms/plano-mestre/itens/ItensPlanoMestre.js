@@ -357,17 +357,8 @@ const ItensPlanoMestre = (props) => {
     }, [idPlanoMestre, itemSelecionado, tamanhosItem]);
 
     useEffect(() => {
-        
-        console.log('TESTE DA SIT PLANO');
-        console.log(sitPlanoMestre);
-        
-        if (sitPlanoMestre !== 0) setPlanoConfirmado(false);
+        if (sitPlanoMestre === 0) setPlanoConfirmado(false);
         else setPlanoConfirmado(true);
-
-        if (sitPlanoMestre === 0) console.log('diferente de zero');
-        else console.log('igual a zero');
-
-
     }, [sitPlanoMestre]);
 
     const loadRoteirosAlternativa = (nrAlternativa) => {
@@ -1031,7 +1022,7 @@ FormModal.propTypes = {
     onClose: PropTypes.func.isRequired,
     idPlanoMestre: PropTypes.number.isRequired,
     descPlanoMestre: PropTypes.string,
-    sitPlanoMestre: PropTypes.number
+    sitPlanoMestre: PropTypes.string
 };
 
 export default FormModal;
