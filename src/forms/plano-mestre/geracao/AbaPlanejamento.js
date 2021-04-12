@@ -68,38 +68,38 @@ const schema = yup.object().shape({
 });
 
 const initialValues = {
-    demInicio1: 2001,
-    demInicio2: 2052,
-    demInicio3: 2053,
-    demInicio4: 2101,
-    demInicio5: 2102,
-    demInicio6: 2103,
-    demInicio7: 2104,
-    demInicio8: 2105,
-    demFim1: 2051,
-    demFim2: 2052,
-    demFim3: 2053,
-    demFim4: 2101,
-    demFim5: 2102,
-    demFim6: 2103,
-    demFim7: 2104,
-    demFim8: 2140,
-    procInicio1: 5001,
-    procInicio2: 5052,
-    procInicio3: 5053,
-    procInicio4: 5101,
-    procInicio5: 5102,
-    procInicio6: 5103,
-    procInicio7: 5104,
-    procInicio8: 5105,
-    procFim1: 5051,
-    procFim2: 5052,
-    procFim3: 5053,
-    procFim4: 5101,
-    procFim5: 5102,
-    procFim6: 5103,
-    procFim7: 5104,
-    procFim8: 5140,
+    demInicio1: 0,
+    demInicio2: 0,
+    demInicio3: 0,
+    demInicio4: 0,
+    demInicio5: 0,
+    demInicio6: 0,
+    demInicio7: 0,
+    demInicio8: 0,
+    demFim1: 0,
+    demFim2: 0,
+    demFim3: 0,
+    demFim4: 0,
+    demFim5: 0,
+    demFim6: 0,
+    demFim7: 0,
+    demFim8: 0,
+    procInicio1: 0,
+    procInicio2: 0,
+    procInicio3: 0,
+    procInicio4: 0,
+    procInicio5: 0,
+    procInicio6: 0,
+    procInicio7: 0,
+    procInicio8: 0,
+    procFim1: 0,
+    procFim2: 0,
+    procFim3: 0,
+    procFim4: 0,
+    procFim5: 0,
+    procFim6: 0,
+    procFim7: 0,
+    procFim8: 0,
     consideraDeposito: 1,
     mostraProdSemDepo: 1,
     mostraProdSemProc: 1,
@@ -119,6 +119,42 @@ const AbaPlanejamento = (props) => {
 
     const [depositos, setDepositos] = useState([]);
     const [pedidos, setPedidos] = useState([]);
+
+    const [perDemInicio1, setPerDemInicio1] = useState([]);
+    const [perDemInicio2, setPerDemInicio2] = useState([]);
+    const [perDemInicio3, setPerDemInicio3] = useState([]);
+    const [perDemInicio4, setPerDemInicio4] = useState([]);
+    const [perDemInicio5, setPerDemInicio5] = useState([]);
+    const [perDemInicio6, setPerDemInicio6] = useState([]);
+    const [perDemInicio7, setPerDemInicio7] = useState([]);
+    const [perDemInicio8, setPerDemInicio8] = useState([]);
+    const [perDemFim1, setPerDemFim1] = useState([]);
+    const [perDemFim2, setPerDemFim2] = useState([]);
+    const [perDemFim3, setPerDemFim3] = useState([]);
+    const [perDemFim4, setPerDemFim4] = useState([]);
+    const [perDemFim5, setPerDemFim5] = useState([]);
+    const [perDemFim6, setPerDemFim6] = useState([]);
+    const [perDemFim7, setPerDemFim7] = useState([]);
+    const [perDemFim8, setPerDemFim8] = useState([]);
+    const [perProcInicio1, setPerProcInicio1] = useState([]);
+    const [perProcInicio2, setPerProcInicio2] = useState([]);
+    const [perProcInicio3, setPerProcInicio3] = useState([]);
+    const [perProcInicio4, setPerProcInicio4] = useState([]);
+    const [perProcInicio5, setPerProcInicio5] = useState([]);
+    const [perProcInicio6, setPerProcInicio6] = useState([]);
+    const [perProcInicio7, setPerProcInicio7] = useState([]);
+    const [perProcInicio8, setPerProcInicio8] = useState([]);
+    const [perProcFim1, setPerProcFim1] = useState([]);
+    const [perProcFim2, setPerProcFim2] = useState([]);
+    const [perProcFim3, setPerProcFim3] = useState([]);
+    const [perProcFim4, setPerProcFim4] = useState([]);
+    const [perProcFim5, setPerProcFim5] = useState([]);
+    const [perProcFim6, setPerProcFim6] = useState([]);
+    const [perProcFim7, setPerProcFim7] = useState([]);
+    const [perProcFim8, setPerProcFim8] = useState([]);
+
+    const { periodosDemanda } = props;
+    const { periodosProducao } = props;
 
     const load = () => {
 
@@ -224,449 +260,490 @@ const AbaPlanejamento = (props) => {
                     <InputGroup>
                         <InputGroup.Text>Plano 1</InputGroup.Text>
                         <InputGroup.Text>Demanda</InputGroup.Text>
-                        <Form.Control
-                            name="demInicio1"
-                            type="number"
-                            rows="1"
-                            placeholder="Inicio"
-                            value={values.demInicio1}
-                            onChange={handleChange}
-                            onBlur={() => {
-                                props.setPerDemInico1Info(values.demInicio1);
-                                setFieldValue("procInicio1", values.demInicio1);
-                            }}
-                            isInvalid={errors.demInicio1 && touched.demInicio1}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                            {errors.demInicio1}
-                        </Form.Control.Feedback>
+
+                        <Form.Group as={Col} md="2" controlId="demInicio1">
+                            <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo inicio"
+                                name="demInicio1"
+                                options={periodosDemanda}
+                                value={perDemInicio1}
+                                onChange={(selected) => {
+                                    setPerDemInicio1(selected)
+                                    props.setPerDemInico1Info(selected.value);                                    
+                                }}
+                            />
+                        </Form.Group>
 
                         <InputGroup.Text>até</InputGroup.Text>
-                        <Form.Control
-                            name="demFim1"
-                            type="number"
-                            rows="1"
-                            placeholder="Fim"
-                            value={values.demFim1}
-                            onChange={handleChange}
-                            onBlur={() => {
-                                props.setPerDemFim1Info(values.demFim1);
-                                setFieldValue("procFim1", values.demFim1);
-                            }}
-                        />
+
+                        <Form.Group as={Col} md="2" controlId="demFim1">
+                            <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo fim"
+                                name="demFim1"
+                                options={periodosDemanda}
+                                value={perDemFim1}
+                                onChange={(selected) => {
+                                    setPerDemFim1(selected)
+                                    props.setPerDemFim1Info(selected.value);                                    
+                                }}
+                            />
+                        </Form.Group>
+
                         <InputGroup.Text>Processo</InputGroup.Text>
-                        <Form.Control
-                            name="procInicio1"
-                            type="number"
-                            rows="1"
-                            placeholder="Inicio"
-                            value={values.procInicio1}
-                            onChange={handleChange}
-                            onBlur={() => {
-                                props.setPerProcInico1Info(values.procInicio1);
-                            }}
-                        />
+
+                        <Form.Group as={Col} md="2" controlId="procInicio1">
+                            <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo inicio"
+                                name="procInicio1"
+                                options={periodosProducao}
+                                value={perProcInicio1}
+                                onChange={(selected) => {
+                                    setPerProcInicio1(selected)
+                                    props.setPerProcInico1Info(selected.value);                                    
+                                }}
+                            />
+                        </Form.Group>
+
                         <InputGroup.Text>até</InputGroup.Text>
-                        <Form.Control
-                            name="procFim1"
-                            type="number"
-                            rows="1"
-                            placeholder="Fim"
-                            value={values.procFim1}
-                            onChange={handleChange}
-                            onBlur={() => {
-                                props.setPerProcFim1Info(values.procFim1);
-                            }}
-                        />
+                       
+                        <Form.Group as={Col} md="2" controlId="procFim1">
+                            <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo fim"
+                                name="procFim1"
+                                options={periodosProducao}
+                                value={perProcFim1}
+                                onChange={(selected) => {
+                                    setPerProcFim1(selected)
+                                    props.setPerProcFim1Info(selected.value);                                    
+                                }}
+                            />
+                        </Form.Group>                       
                     </InputGroup>
                 </Form.Row>
+ 
                 <Form.Row>
-                    <InputGroup >
+                    <InputGroup>
                         <InputGroup.Text>Plano 2</InputGroup.Text>
                         <InputGroup.Text>Demanda</InputGroup.Text>
-                        <Form.Control
-                            name="demInicio2"
-                            type="number"
-                            rows="1"
-                            placeholder="Inicio"
-                            value={values.demInicio2}
-                            onChange={handleChange}
-                            onBlur={() => {
-                                props.setPerDemInico2Info(values.demInicio2);
-                                setFieldValue("procInicio2", values.demInicio2);
-                            }}
-                        />
+
+                        <Form.Group as={Col} md="2" controlId="demInicio2">
+                            <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo inicio"
+                                name="demInicio2"
+                                options={periodosDemanda}
+                                value={perDemInicio2}
+                                onChange={(selected) => {
+                                    setPerDemInicio2(selected)
+                                    props.setPerDemInico2Info(selected.value);                                    
+                                }}
+                            />
+                        </Form.Group>
+
                         <InputGroup.Text>até</InputGroup.Text>
-                        <Form.Control
-                            name="demFim2"
-                            type="number"
-                            rows="1"
-                            placeholder="Fim"
-                            value={values.demFim2}
-                            onChange={handleChange}
-                            onBlur={() => {
-                                props.setPerDemFim2Info(values.demFim2);
-                                setFieldValue("procFim2", values.demFim2);
-                            }}
-                        />
+
+                        <Form.Group as={Col} md="2" controlId="demFim2">
+                            <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo fim"
+                                name="demFim2"
+                                options={periodosDemanda}
+                                value={perDemFim2}
+                                onChange={(selected) => {
+                                    setPerDemFim2(selected)
+                                    props.setPerDemFim2Info(selected.value);                                    
+                                }}
+                            />
+                        </Form.Group>
+
                         <InputGroup.Text>Processo</InputGroup.Text>
-                        <Form.Control
-                            name="procInicio2"
-                            type="number"
-                            rows="1"
-                            placeholder="Inicio"
-                            value={values.procInicio2}
-                            onChange={handleChange}
-                            onBlur={() => {
-                                props.setPerProcInico2Info(values.procInicio2);
-                            }}
-                        />
+
+                        <Form.Group as={Col} md="2" controlId="procInicio2">
+                            <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo inicio"
+                                name="procInicio2"
+                                options={periodosProducao}
+                                value={perProcInicio2}
+                                onChange={(selected) => {
+                                    setPerProcInicio2(selected)
+                                    props.setPerProcInico2Info(selected.value);                                    
+                                }}
+                            />
+                        </Form.Group>
+
                         <InputGroup.Text>até</InputGroup.Text>
-                        <Form.Control
-                            name="procFim2"
-                            type="number"
-                            rows="1"
-                            placeholder="Fim"
-                            value={values.procFim2}
-                            onChange={handleChange}
-                            onBlur={() => {
-                                props.setPerProcFim2Info(values.procFim2);
-                            }}
-                        />
+                       
+                        <Form.Group as={Col} md="2" controlId="procFim2">
+                            <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo fim"
+                                name="procFim2"
+                                options={periodosProducao}
+                                value={perProcFim2}
+                                onChange={(selected) => {
+                                    setPerProcFim2(selected)
+                                    props.setPerProcFim2Info(selected.value); 
+                                }}
+                            />
+                        </Form.Group>                       
                     </InputGroup>
                 </Form.Row>
+ 
                 <Form.Row>
-                    <InputGroup >
+                    <InputGroup>
                         <InputGroup.Text>Plano 3</InputGroup.Text>
                         <InputGroup.Text>Demanda</InputGroup.Text>
-                        <Form.Control
-                            name="demInicio3"
-                            type="number"
-                            rows="1"
-                            placeholder="Inicio"
-                            value={values.demInicio3}
-                            onChange={handleChange}
-                            onBlur={() => {
-                                props.setPerDemInico3Info(values.demInicio3);
-                                setFieldValue("procInicio3", values.demInicio3);
-                            }}
-                        />
+
+                        <Form.Group as={Col} md="2" controlId="demInicio3">
+                            <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo inicio"
+                                name="demInicio3"
+                                options={periodosDemanda}
+                                value={perDemInicio3}
+                                onChange={(selected) => {
+                                    setPerDemInicio3(selected)
+                                    props.setPerDemInico3Info(selected.value);                                    
+                                }}
+                            />
+                        </Form.Group>
+
                         <InputGroup.Text>até</InputGroup.Text>
-                        <Form.Control
-                            name="demFim3"
-                            type="number"
-                            rows="1"
-                            placeholder="Fim"
-                            value={values.demFim3}
-                            onChange={handleChange}
-                            onBlur={() => {
-                                props.setPerDemFim3Info(values.demFim3);
-                                setFieldValue("procFim3", values.demFim3);
-                            }}
-                        />
+
+                        <Form.Group as={Col} md="2" controlId="demFim3">
+                            <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo fim"
+                                name="demFim3"
+                                options={periodosDemanda}
+                                value={perDemFim3}
+                                onChange={(selected) => {
+                                    setPerDemFim3(selected)
+                                    props.setPerDemFim3Info(selected.value);                                    
+                                }}
+                            />
+                        </Form.Group>
+
                         <InputGroup.Text>Processo</InputGroup.Text>
-                        <Form.Control
-                            name="procInicio3"
-                            type="number"
-                            rows="1"
-                            placeholder="Inicio"
-                            value={values.procInicio3}
-                            onChange={handleChange}
-                            onBlur={() => {
-                                props.setPerProcInico3Info(values.procInicio3);
-                            }}
-                        />
+
+                        <Form.Group as={Col} md="2" controlId="procInicio3">
+                            <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo inicio"
+                                name="procInicio3"
+                                options={periodosProducao}
+                                value={perProcInicio3}
+                                onChange={(selected) => {
+                                    setPerProcInicio3(selected)
+                                    props.setPerProcInico3Info(selected.value);
+                                }}
+                            />
+                        </Form.Group>
+
                         <InputGroup.Text>até</InputGroup.Text>
-                        <Form.Control
-                            name="procFim3"
-                            type="number"
-                            rows="1"
-                            placeholder="Fim"
-                            value={values.procFim3}
-                            onChange={handleChange}
-                            onBlur={() => {
-                                props.setPerProcFim3Info(values.procFim3);
-                            }}
-                        />
+                       
+                        <Form.Group as={Col} md="2" controlId="procFim3">
+                            <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo fim"
+                                name="procFim3"
+                                options={periodosProducao}
+                                value={perProcFim3}
+                                onChange={(selected) => {
+                                    setPerProcFim3(selected)
+                                    props.setPerProcFim3Info(selected.value);                                    
+                                }}
+                            />
+                        </Form.Group>                       
                     </InputGroup>
                 </Form.Row>
+ 
                 <Form.Row>
-                    <InputGroup >
+                    <InputGroup>
                         <InputGroup.Text>Plano 4</InputGroup.Text>
                         <InputGroup.Text>Demanda</InputGroup.Text>
-                        <Form.Control
-                            name="demInicio4"
-                            type="number"
-                            rows="1"
-                            placeholder="Inicio"
-                            value={values.demInicio4}
-                            onChange={handleChange}
-                            onBlur={() => {
-                                props.setPerDemInico4Info(values.demInicio4);
-                                setFieldValue("procInicio4", values.demInicio4);
-                            }}
-                        />
+
+                        <Form.Group as={Col} md="2" controlId="demInicio4">
+                            <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo inicio"
+                                name="demInicio4"
+                                options={periodosDemanda}
+                                value={perDemInicio4}
+                                onChange={(selected) => {
+                                    setPerDemInicio4(selected)
+                                    props.setPerDemInico4Info(selected.value);                                
+                                }}
+                            />
+                        </Form.Group>
+
                         <InputGroup.Text>até</InputGroup.Text>
-                        <Form.Control
-                            name="demFim4"
-                            type="number"
-                            rows="1"
-                            placeholder="Fim"
-                            value={values.demFim4}
-                            onChange={handleChange}
-                            onBlur={() => {
-                                props.setPerDemFim4Info(values.demFim4);
-                                setFieldValue("procFim4", values.demFim4);
-                            }}
-                        />
+
+                        <Form.Group as={Col} md="2" controlId="demFim4">
+                            <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo fim"
+                                name="demFim4"
+                                options={periodosDemanda}
+                                value={perDemFim4}
+                                onChange={(selected) => {
+                                    setPerDemFim4(selected)
+                                    props.setPerDemFim4Info(selected.value);                                    
+                                }}
+                            />
+                        </Form.Group>
+
                         <InputGroup.Text>Processo</InputGroup.Text>
-                        <Form.Control
-                            name="procInicio4"
-                            type="number"
-                            rows="1"
-                            placeholder="Inicio"
-                            value={values.procInicio4}
-                            onChange={handleChange}
-                            onBlur={() => {
-                                props.setPerProcInico4Info(values.procInicio4);
-                            }}
-                        />
+
+                        <Form.Group as={Col} md="2" controlId="procInicio4">
+                            <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo inicio"
+                                name="procInicio4"
+                                options={periodosProducao}
+                                value={perProcInicio4}
+                                onChange={(selected) => {
+                                    setPerProcInicio4(selected)
+                                    props.setPerProcInico4Info(selected.value);                                    
+                                }}
+                            />
+                        </Form.Group>
+
                         <InputGroup.Text>até</InputGroup.Text>
-                        <Form.Control
-                            name="procFim4"
-                            type="number"
-                            rows="1"
-                            placeholder="Fim"
-                            value={values.procFim4}
-                            onChange={handleChange}
-                            onBlur={() => {
-                                props.setPerProcFim4Info(values.procFim4);
-                            }}
-                        />
+                       
+                        <Form.Group as={Col} md="2" controlId="procFim4">
+                            <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo fim"
+                                name="procFim4"
+                                options={periodosProducao}
+                                value={perProcFim4}
+                                onChange={(selected) => {
+                                    setPerProcFim4(selected)
+                                    props.setPerProcFim4Info(selected.value);                                    
+                                }}
+                            />
+                        </Form.Group>                       
                     </InputGroup>
                 </Form.Row>
+ 
                 <Form.Row>
-                    <InputGroup >
+                    <InputGroup>
                         <InputGroup.Text>Plano 5</InputGroup.Text>
                         <InputGroup.Text>Demanda</InputGroup.Text>
-                        <Form.Control
-                            name="demInicio5"
-                            type="number"
-                            rows="1"
-                            placeholder="Inicio"
-                            value={values.demInicio5}
-                            onChange={handleChange}
-                            onBlur={() => {
-                                props.setPerDemInico5Info(values.demInicio5);
-                                setFieldValue("procInicio5", values.demInicio5);
-                            }}
-                        />
+
+                        <Form.Group as={Col} md="2" controlId="demInicio5">
+                            <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo inicio"
+                                name="demInicio5"
+                                options={periodosDemanda}
+                                value={perDemInicio5}
+                                onChange={(selected) => {
+                                    setPerDemInicio5(selected)
+                                    props.setPerDemInico5Info(selected.value);                                    
+                                }}
+                            />
+                        </Form.Group>
+
                         <InputGroup.Text>até</InputGroup.Text>
-                        <Form.Control
-                            name="demFim5"
-                            type="number"
-                            rows="1"
-                            placeholder="Fim"
-                            value={values.demFim5}
-                            onChange={handleChange}
-                            onBlur={() => {
-                                props.setPerDemFim5Info(values.demFim5);
-                                setFieldValue("procFim5", values.demFim5);
-                            }}
-                        />
+
+                        <Form.Group as={Col} md="2" controlId="demFim5">
+                            <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo fim"
+                                name="demFim5"
+                                options={periodosDemanda}
+                                value={perDemFim5}
+                                onChange={(selected) => {
+                                    setPerDemFim5(selected)
+                                    props.setPerDemFim5Info(selected.value);                                    
+                                }}
+                            />
+                        </Form.Group>
+
                         <InputGroup.Text>Processo</InputGroup.Text>
-                        <Form.Control
-                            name="procInicio5"
-                            type="number"
-                            rows="1"
-                            placeholder="Inicio"
-                            value={values.procInicio5}
-                            onChange={handleChange}
-                            onBlur={() => {
-                                props.setPerProcInico5Info(values.procInicio5);
-                            }}
-                        />
+
+                        <Form.Group as={Col} md="2" controlId="procInicio5">
+                            <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo inicio"
+                                name="procInicio5"
+                                options={periodosProducao}
+                                value={perProcInicio5}
+                                onChange={(selected) => {
+                                    setPerProcInicio5(selected)
+                                    props.setPerProcInico5Info(selected.value);                                    
+                                }}
+                            />
+                        </Form.Group>
+
                         <InputGroup.Text>até</InputGroup.Text>
-                        <Form.Control
-                            name="procFim5"
-                            type="number"
-                            rows="1"
-                            placeholder="Fim"
-                            value={values.procFim5}
-                            onChange={handleChange}
-                            onBlur={() => {
-                                props.setPerProcFim5Info(values.procFim5);
-                            }}
-                        />
+                       
+                        <Form.Group as={Col} md="2" controlId="procFim5">
+                            <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo fim"
+                                name="procFim5"
+                                options={periodosProducao}
+                                value={perProcFim5}
+                                onChange={(selected) => {
+                                    setPerProcFim5(selected)
+                                    props.setPerProcFim5Info(selected.value);                                    
+                                }}
+                            />
+                        </Form.Group>                       
                     </InputGroup>
                 </Form.Row>
+ 
                 <Form.Row>
-                    <InputGroup >
+                    <InputGroup>
                         <InputGroup.Text>Plano 6</InputGroup.Text>
                         <InputGroup.Text>Demanda</InputGroup.Text>
-                        <Form.Control
-                            name="demInicio6"
-                            type="number"
-                            rows="1"
-                            placeholder="Inicio"
-                            value={values.demInicio6}
-                            onChange={handleChange}
-                            onBlur={() => {
-                                props.setPerDemInico6Info(values.demInicio6);
-                                setFieldValue("procInicio6", values.demInicio6);
-                            }}
-                        />
+
+                        <Form.Group as={Col} md="2" controlId="demInicio6">
+                            <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo inicio"
+                                name="demInicio6"
+                                options={periodosDemanda}
+                                value={perDemInicio6}
+                                onChange={(selected) => {
+                                    setPerDemInicio6(selected)
+                                    props.setPerDemInico6Info(selected.value);                                    
+                                }}
+                            />
+                        </Form.Group>
+
                         <InputGroup.Text>até</InputGroup.Text>
-                        <Form.Control
-                            name="demFim6"
-                            type="number"
-                            rows="1"
-                            placeholder="Fim"
-                            value={values.demFim6}
-                            onChange={handleChange}
-                            onBlur={() => {
-                                props.setPerDemFim6Info(values.demFim6);
-                                setFieldValue("procFim6", values.demFim6);
-                            }}
-                        />
+
+                        <Form.Group as={Col} md="2" controlId="demFim6">
+                            <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo fim"
+                                name="demFim6"
+                                options={periodosDemanda}
+                                value={perDemFim6}
+                                onChange={(selected) => {
+                                    setPerDemFim6(selected)
+                                    props.setPerDemFim6Info(selected.value);                                    
+                                }}
+                            />
+                        </Form.Group>
+
                         <InputGroup.Text>Processo</InputGroup.Text>
-                        <Form.Control
-                            name="procInicio6"
-                            type="number"
-                            rows="1"
-                            placeholder="Inicio"
-                            value={values.procInicio6}
-                            onChange={handleChange}
-                            onBlur={() => {
-                                props.setPerProcInico6Info(values.procInicio6);
-                            }}
-                        />
+
+                        <Form.Group as={Col} md="2" controlId="procInicio6">
+                            <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo inicio"
+                                name="procInicio6"
+                                options={periodosProducao}
+                                value={perProcInicio6}
+                                onChange={(selected) => {
+                                    setPerProcInicio6(selected)
+                                    props.setPerProcInico6Info(selected.value);                                    
+                                }}
+                            />
+                        </Form.Group>
+
                         <InputGroup.Text>até</InputGroup.Text>
-                        <Form.Control
-                            name="procFim6"
-                            type="number"
-                            rows="1"
-                            placeholder="Fim"
-                            value={values.procFim6}
-                            onChange={handleChange}
-                            onBlur={() => {
-                                props.setPerProcFim6Info(values.procFim6);
-                            }}
-                        />
+                       
+                        <Form.Group as={Col} md="2" controlId="procFim6">
+                            <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo fim"
+                                name="procFim6"
+                                options={periodosProducao}
+                                value={perProcFim6}
+                                onChange={(selected) => {
+                                    setPerProcFim6(selected)
+                                    props.setPerProcFim6Info(selected.value);                                    
+                                }}
+                            />
+                        </Form.Group>                       
                     </InputGroup>
                 </Form.Row>
+ 
                 <Form.Row>
-                    <InputGroup >
+                    <InputGroup>
                         <InputGroup.Text>Plano 7</InputGroup.Text>
                         <InputGroup.Text>Demanda</InputGroup.Text>
-                        <Form.Control
-                            name="demInicio7"
-                            type="number"
-                            rows="1"
-                            placeholder="Inicio"
-                            value={values.demInicio7}
-                            onChange={handleChange}
-                            onBlur={() => {
-                                props.setPerDemInico7Info(values.demInicio7);
-                                setFieldValue("procInicio7", values.demInicio7);
-                            }}
-                        />
+
+                        <Form.Group as={Col} md="2" controlId="demInicio1">
+                            <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo inicio"
+                                name="demInicio7"
+                                options={periodosDemanda}
+                                value={perDemInicio7}
+                                onChange={(selected) => {
+                                    setPerDemInicio7(selected)
+                                    props.setPerDemInico7Info(selected.value);                                    
+                                }}
+                            />
+                        </Form.Group>
+
                         <InputGroup.Text>até</InputGroup.Text>
-                        <Form.Control
-                            name="demFim7"
-                            type="number"
-                            rows="1"
-                            placeholder="Fim"
-                            value={values.demFim7}
-                            onChange={handleChange}
-                            onBlur={() => {
-                                props.setPerDemFim7Info(values.demFim7);
-                                setFieldValue("procFim7", values.demFim7);
-                            }}
-                        />
+
+                        <Form.Group as={Col} md="2" controlId="demFim7">
+                            <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo fim"
+                                name="demFim7"
+                                options={periodosDemanda}
+                                value={perDemFim7}
+                                onChange={(selected) => {
+                                    setPerDemFim7(selected)
+                                    props.setPerDemFim7Info(selected.value);                                    
+                                }}
+                            />
+                        </Form.Group>
+
                         <InputGroup.Text>Processo</InputGroup.Text>
-                        <Form.Control
-                            name="procInicio7"
-                            type="number"
-                            rows="1"
-                            placeholder="Inicio"
-                            value={values.procInicio7}
-                            onChange={handleChange}
-                            onBlur={() => {
-                                props.setPerProcInico7Info(values.procInicio7);
-                            }}
-                        />
+
+                        <Form.Group as={Col} md="2" controlId="procInicio7">
+                            <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo inicio"
+                                name="procInicio7"
+                                options={periodosProducao}
+                                value={perProcInicio7}
+                                onChange={(selected) => {
+                                    setPerProcInicio7(selected)
+                                    props.setPerProcInico7Info(selected.value);                                    
+                                }}
+                            />
+                        </Form.Group>
+
                         <InputGroup.Text>até</InputGroup.Text>
-                        <Form.Control
-                            name="procFim7"
-                            type="number"
-                            rows="1"
-                            placeholder="Fim"
-                            value={values.procFim7}
-                            onChange={handleChange}
-                            onBlur={() => {
-                                props.setPerProcFim7Info(values.procFim7);
-                            }}
-                        />
+                       
+                        <Form.Group as={Col} md="2" controlId="procFim7">
+                            <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo fim"
+                                name="procFim7"
+                                options={periodosProducao}
+                                value={perProcFim7}
+                                onChange={(selected) => {
+                                    setPerProcFim7(selected)
+                                    props.setPerProcFim7Info(selected.value);                                    
+                                }}
+                            />
+                        </Form.Group>                       
                     </InputGroup>
                 </Form.Row>
+ 
                 <Form.Row>
-                    <InputGroup >
+                    <InputGroup>
                         <InputGroup.Text>Plano 8</InputGroup.Text>
                         <InputGroup.Text>Demanda</InputGroup.Text>
-                        <Form.Control
-                            name="demInicio8"
-                            type="number"
-                            rows="1"
-                            placeholder="Inicio"
-                            value={values.demInicio8}
-                            onChange={handleChange}
-                            onBlur={() => {
-                                props.setPerDemInico8Info(values.demInicio8);
-                                setFieldValue("procInicio8", values.demInicio8);
-                            }}
-                        />
+
+                        <Form.Group as={Col} md="2" controlId="demInicio8">
+                            <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo inicio"
+                                name="demInicio8"
+                                options={periodosDemanda}
+                                value={perDemInicio8}
+                                onChange={(selected) => {
+                                    setPerDemInicio8(selected)
+                                    props.setPerDemInico8Info(selected.value);                                    
+                                }}
+                            />
+                        </Form.Group>
+
                         <InputGroup.Text>até</InputGroup.Text>
-                        <Form.Control
-                            name="demFim8"
-                            type="number"
-                            rows="1"
-                            placeholder="Fim"
-                            value={values.demFim8}
-                            onChange={handleChange}
-                            onBlur={() => {
-                                props.setPerDemFim8Info(values.demFim8);
-                                setFieldValue("procFim8", values.demFim8);
-                                getPedidos(values);
-                            }}
-                        />
+
+                        <Form.Group as={Col} md="2" controlId="demFim8">
+                            <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo fim"
+                                name="demFim8"
+                                options={periodosDemanda}
+                                value={perDemFim8}
+                                onChange={(selected) => {
+                                    setPerDemFim8(selected)
+                                    props.setPerDemFim8Info(selected.value);                                    
+                                }}
+                            />
+                        </Form.Group>
+
                         <InputGroup.Text>Processo</InputGroup.Text>
-                        <Form.Control
-                            name="procInicio8"
-                            type="number"
-                            rows="1"
-                            placeholder="Inicio"
-                            value={values.procInicio8}
-                            onChange={handleChange}
-                            onBlur={() => {
-                                props.setPerProcInico8Info(values.procInicio8);
-                            }}
-                        />
+
+                        <Form.Group as={Col} md="2" controlId="procInicio8">
+                            <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo inicio"
+                                name="procInicio8"
+                                options={periodosProducao}
+                                value={perProcInicio8}
+                                onChange={(selected) => {
+                                    setPerProcInicio8(selected)
+                                    props.setPerProcInico8Info(selected.value);                                    
+                                }}
+                            />
+                        </Form.Group>
+
                         <InputGroup.Text>até</InputGroup.Text>
-                        <Form.Control
-                            name="procFim8"
-                            type="number"
-                            rows="1"
-                            placeholder="Fim"
-                            value={values.procFim8}
-                            onChange={handleChange}
-                            onBlur={() => {
-                                props.setPerProcFim8Info(values.procFim8);
-                            }}
-                        />
+                       
+                        <Form.Group as={Col} md="2" controlId="procFim8">
+                            <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo fim"
+                                name="procFim8"
+                                options={periodosProducao}
+                                value={perProcFim8}
+                                onChange={(selected) => {
+                                    setPerProcFim8(selected)
+                                    props.setPerProcFim8Info(selected.value);                                    
+                                }}
+                            />
+                        </Form.Group>                       
                     </InputGroup>
                 </Form.Row>
-
+ 
                 <br></br>
                 <h4>
                     Informações para a coluna "Estoque"

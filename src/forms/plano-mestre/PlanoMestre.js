@@ -14,13 +14,15 @@ const formStyle = { marginLeft: '20px', marginTop: '20px', marginRight: '20px' }
 
 const loadDepositos = () => api.get('depositos');
 const loadPlanoMestre = () => api.get('plano-mestre');
+const loadPeriodosDemanda = () => api.get('periodos-producao/demanda');
+const loadPeriodosProducao = () => api.get('periodos-producao/producao');
 
 const getDescSituacao = (situacao) => {
 
     let descricao = "Em Análise";
 
-    if (situacao === 1)  descricao = "Plano Confirmado"
-    if (situacao === 2)  descricao = "Ordens Geradas"
+    if (situacao === 1) descricao = "Plano Confirmado"
+    if (situacao === 2) descricao = "Ordens Geradas"
 
     return descricao;
 }
@@ -56,6 +58,15 @@ const normalizeDepositos = (dados) => {
     });
 };
 
+const normalizePeriodos = (dados) => {
+    return dados.map((c) => {
+        return {
+            value: c.periodo,
+            label: `${c.periodo} - ${c.dataIniPeriodo} até ${c.dataFimPeriodo}`
+        };
+    });
+};
+
 const columns = [
     { key: 'id', name: 'Numero' },
     { key: 'descricao', name: 'Descrição' },
@@ -67,6 +78,8 @@ const PlanoMestre = (props) => {
 
     const [planosMestre, setPlanosMestre] = useState([]);
     const [depositos, setDepositos] = useState([]);
+    const [periodosDemanda, setPeriodosDemanda] = useState([]);
+    const [periodosProducao, setPeriodosProducao] = useState([]);
 
     const [showFormGerar, setShowFormGerar] = useState(false);
     const [showFormItens, setShowFormItens] = useState(false);
@@ -84,14 +97,20 @@ const PlanoMestre = (props) => {
 
         Promise.all([
             loadDepositos(),
-            loadPlanoMestre()
+            loadPlanoMestre(),
+            loadPeriodosDemanda(),
+            loadPeriodosProducao()
         ])
             .then(([
                 responseDepositos,
-                responsePlanoMestre
+                responsePlanoMestre,
+                responsePeriodosDemanda,
+                responsePeriodosProducao
             ]) => {
                 setDepositos(normalizeDepositos(responseDepositos.data));
                 setPlanosMestre(normalizeDados(responsePlanoMestre.data));
+                setPeriodosDemanda(normalizePeriodos(responsePeriodosDemanda.data));
+                setPeriodosProducao(normalizePeriodos(responsePeriodosProducao.data));
             })
             .catch((e) => {
                 console.log('ocorreu algum erro!');
@@ -121,7 +140,7 @@ const PlanoMestre = (props) => {
 
     };
 
-    const onRowClick = (id, data) => {        
+    const onRowClick = (id, data) => {
         setIdPlanoMestre(data.id);
         setDescPlanoMestre(data.descricao);
         setSitPlanoMestre(getCodSituacao(data.situacao));
@@ -143,7 +162,7 @@ const PlanoMestre = (props) => {
                 Gerar
             </Button>
             <Button onClick={handleShowFormItens} variant="secondary" disabled={disabledButton}>
-                Plano 
+                Plano
             </Button>
             <Button onClick={() => { setShowDeleteAlert(true) }} variant="danger" disabled={disabledButton}>
                 Excluir
@@ -163,6 +182,8 @@ const PlanoMestre = (props) => {
                 {...props}
                 onSubmit={planos => setPlanosMestre(normalizeDados(planos))}
                 show={showFormGerar}
+                periodosDemanda={periodosDemanda}
+                periodosProducao={periodosProducao}
                 onClose={() => {
                     setShowFormGerar(false);
                 }}
@@ -174,7 +195,8 @@ const PlanoMestre = (props) => {
                 idPlanoMestre={idPlanoMestre}
                 descPlanoMestre={descPlanoMestre}
                 sitPlanoMestre={sitPlanoMestre}
-                depositos={depositos}
+                depositos={depositos}                
+                periodosProducao={periodosProducao}
                 onClose={() => {
                     setShowFormItens(false);
                     load();
@@ -182,7 +204,7 @@ const PlanoMestre = (props) => {
             />
 
             {showDeleteAlert && (
-                <DeleteDialog                    
+                <DeleteDialog
                     title={msgDelete}
                     handleCancel={() => setShowDeleteAlert(false)}
                     handleDelete={handleDeletePlanoMestre}

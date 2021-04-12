@@ -147,6 +147,7 @@ const ItensPlanoMestre = (props) => {
     const [alternativaItem, setAlternativaItem] = useState([]);
     const [roteirosItem, setRoteirosItem] = useState([]);
     const [roteiroItem, setRoteiroItem] = useState([]);
+    const [periodoPadraoItem, setPeriodoPadraoItem] = useState([]);
 
     const [alternativaGravada, setAlternativaGravada] = useState(0);
     const [roteiroGravado, setRoteiroGravado] = useState(0);
@@ -166,6 +167,7 @@ const ItensPlanoMestre = (props) => {
     const [currPage, setCurrPage] = useState(1);
     const { idPlanoMestre } = props;
     const { sitPlanoMestre } = props;
+    const { periodosProducao } = props;
 
     const options = {
         sizePerPageList: [5, 10, 20, 100, 10000],
@@ -291,6 +293,8 @@ const ItensPlanoMestre = (props) => {
                 setAlternativaGravada(response.data.alternativa);
                 setFieldValue('periodoPadraoItem', response.data.periodo);
                 setFieldValue('multiplicadorItem', response.data.multiplicador);
+                setPeriodoPadraoItem(periodosProducao.find(o => o.value === response.data.periodo));
+
                 api.get(`produtos/roteiros/${itemSelecionado}/${response.data.alternativa}`).then((responseRot) => {
                     setRoteirosItem(normalizeRoteiros(responseRot.data));
                     setRoteiroGravado(response.data.roteiro);
@@ -320,7 +324,7 @@ const ItensPlanoMestre = (props) => {
             setShowImgTamanhos(false);
         }
 
-    }, [idPlanoMestre, itemSelecionado, setFieldValue]);
+    }, [idPlanoMestre, itemSelecionado, setFieldValue, periodosProducao]);
 
     useEffect(() => {
         setAlternativaItem(alternativasItem.find(o => o.value === alternativaGravada));
@@ -396,7 +400,7 @@ const ItensPlanoMestre = (props) => {
             codGrupoItemProg: itemSelecionado,
             alternativaProg: alternativaItem.value,
             roteiroProg: roteiroItem.value,
-            periodoProg: values.periodoPadraoItem,
+            periodoProg: periodoPadraoItem.value, 
             multiplicadorProg: values.multiplicadorItem
         });
 
@@ -840,7 +844,7 @@ const ItensPlanoMestre = (props) => {
 
                                     <Form id="param-programacao-item" noValidate>
                                         <Form.Row>
-                                            <Form.Group as={Col} md="8" controlId="alternativaItem">
+                                            <Form.Group as={Col} md="6" controlId="alternativaItem">
                                                 <Form.Label>
                                                     Alternativa
                                                 </Form.Label>
@@ -869,22 +873,19 @@ const ItensPlanoMestre = (props) => {
                                                 />
                                             </Form.Group>
 
-                                            <Form.Group as={Col} md="2" controlId="periodoPadraoItem">
+                                            <Form.Group as={Col} md="4" controlId="periodoPadrao">
                                                 <Form.Label>
                                                     Período de Produção
-                                                </Form.Label>
-                                                <Form.Control
-                                                    type="number"
-                                                    maxLength="9999"
-                                                    name="periodoPadraoItem"
-                                                    value={values.periodoPadraoItem}
-                                                    onChange={handleChange}
-                                                    onBlur={() => {
-                                                        //props.setPeriodoPadraoInfo(values.periodoPadrao);
+		                                        </Form.Label>
+                                                <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo da ordem"
+                                                    name="periodoPadrao"
+                                                    options={periodosProducao}
+                                                    value={periodoPadraoItem}
+                                                    onChange={(selected) => {
+                                                        setPeriodoPadraoItem(selected);                                                        
                                                     }}
                                                 />
                                             </Form.Group>
-
                                         </Form.Row>
 
                                         <Form.Row>
@@ -967,7 +968,7 @@ const ItensPlanoMestre = (props) => {
                         Cancelar
                     </Button>
 
-                    <Button variant="outline-success" onClick={ confirmarPlanoMestre }>
+                    <Button variant="outline-success" onClick={confirmarPlanoMestre}>
                         Confirmar
                     </Button>
 

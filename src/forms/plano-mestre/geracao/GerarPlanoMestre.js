@@ -17,7 +17,7 @@ const GerarPlanoMestre = (props) => {
     const [descricaoInfo, setDescricaoInfo] = useState('');
     const [periodoPadraoInfo, setPeriodoPadraoInfo] = useState(0);
     const [multiplicadorInfo, setMultiplicadorInfo] = useState([]);
-    const [tipoDistribuicaoSelected, setTipoDistribuicaoSelected] = useState([]);    
+    const [tipoDistribuicaoSelected, setTipoDistribuicaoSelected] = useState([]);
 
     // ABA ANALISE
     const [colecoesSelected, setColecoesSelected] = useState([]);
@@ -76,23 +76,111 @@ const GerarPlanoMestre = (props) => {
     const [mostraProdSemPediSelected, setMostraProdSemPediSelected] = useState(0);
 
     const [depositosSelected, setDepositosSelected] = useState([]);
-    const [pedidosSelected, setPedidosSelected] = useState([]);    
+    const [pedidosSelected, setPedidosSelected] = useState([]);
     const [nrInternoPedidoInfo, setNrInternoPedidoInfo] = useState(0);
 
+    const validarPeriodos = () => {
+
+        let periodosValidos = true;
+
+        if (perDemInico1Info > perDemFim1Info) {
+            alert('Plano 1: Período de demanda inicial não pode ser maior que o final!');
+            periodosValidos = false;
+        }
+
+        if (perProcInico1Info > perProcFim1Info) {
+            alert('Plano 1: Período de processo inicial não pode ser maior que o final!');
+            periodosValidos = false;
+        }
+
+        if (perDemInico2Info > perDemFim2Info) {
+            alert('Plano 2: Período de demanda inicial não pode ser maior que o final!');
+            periodosValidos = false;
+        }
+
+        if (perProcInico2Info > perProcFim2Info) {
+            alert('Plano 2: Período de processo inicial não pode ser maior que o final!');
+            periodosValidos = false;
+        }
+
+        if (perDemInico3Info > perDemFim3Info) {
+            alert('Plano 3: Período de demanda inicial não pode ser maior que o final!');
+            periodosValidos = false;
+        }
+
+        if (perProcInico3Info > perProcFim3Info) {
+            alert('Plano 3: Período de processo inicial não pode ser maior que o final!');
+            periodosValidos = false;
+        }
+
+        if (perDemInico4Info > perDemFim4Info) {
+            alert('Plano 4: Período de demanda inicial não pode ser maior que o final!');
+            periodosValidos = false;
+        }
+
+        if (perProcInico4Info > perProcFim4Info) {
+            alert('Plano 4: Período de processo inicial não pode ser maior que o final!');
+            periodosValidos = false;
+        }
+
+        if (perDemInico5Info > perDemFim5Info) {
+            alert('Plano 5: Período de demanda inicial não pode ser maior que o final!');
+            periodosValidos = false;
+        }
+
+        if (perProcInico5Info > perProcFim5Info) {
+            alert('Plano 5: Período de processo inicial não pode ser maior que o final!');
+            periodosValidos = false;
+        }
+
+        if (perDemInico6Info > perDemFim6Info) {
+            alert('Plano 6: Período de demanda inicial não pode ser maior que o final!');
+            periodosValidos = false;
+        }
+
+        if (perProcInico6Info > perProcFim6Info) {
+            alert('Plano 6: Período de processo inicial não pode ser maior que o final!');
+            periodosValidos = false;
+        }
+
+        if (perDemInico7Info > perDemFim7Info) {
+            alert('Plano 7: Período de demanda inicial não pode ser maior que o final!');
+            periodosValidos = false;
+        }
+
+        if (perProcInico7Info > perProcFim7Info) {
+            alert('Plano 7: Período de processo inicial não pode ser maior que o final!');
+            periodosValidos = false;
+        }
+
+        if (perDemInico8Info > perDemFim8Info) {
+            alert('Plano 8: Período de demanda inicial não pode ser maior que o final!');
+            periodosValidos = false;
+        }
+
+        if (perProcInico8Info > perProcFim8Info) {
+            alert('Plano 8: Período de processo inicial não pode ser maior que o final!');
+            periodosValidos = false;
+        }
+
+        return periodosValidos
+    };
 
     const gerarPlanoMestre = async event => {
 
-        event.preventDefault();
-        props.setLoading(true);
-        try {
-            const response = await api.post('plano-mestre/gerar', bodyParametros);
-            props.onSubmit(response.data);
-        } catch (e) {
-            console.log('ocorreu algum erro na geração do plano mestre!');
-            console.error(e);
+        if (validarPeriodos()) {
+            event.preventDefault();
+            props.setLoading(true);
+            try {
+                const response = await api.post('plano-mestre/gerar', bodyParametros);
+                props.onSubmit(response.data);
+            } catch (e) {
+                console.log('ocorreu algum erro na geração do plano mestre!');
+                console.error(e);
+            }
+            props.setLoading(false);
+            props.onClose();
         }
-        props.setLoading(false);
-        props.onClose();
     };
 
     useEffect(() => {
@@ -101,17 +189,17 @@ const GerarPlanoMestre = (props) => {
             setbodyParametros({
                 descricao: descricaoInfo,
                 multiplicador: multiplicadorInfo,
-                periodoPadrao: periodoPadraoInfo, 
-                tipoDistribuicao: tipoDistribuicaoSelected,                 
+                periodoPadrao: periodoPadraoInfo,
+                tipoDistribuicao: tipoDistribuicaoSelected,
                 colecoes: colecoesSelected,
                 colecoesPermanentes: colecoesPermSelected,
                 linhasProduto: linhasProdutoSelected,
                 artigosProduto: artigosProdutoSelected,
                 artigosCotas: artigosCotasSelected,
-                publicosAlvos: publicoAlvoSelected,                
+                publicosAlvos: publicoAlvoSelected,
                 embarques: embarquesSelected,
-                produtos: produtosSelected, 
-                cores: coresSelected, 
+                produtos: produtosSelected,
+                cores: coresSelected,
                 origProdutos: origProdutoSelected,
                 perDemInicio01: perDemInico1Info,
                 perDemInicio02: perDemInico2Info,
@@ -150,9 +238,9 @@ const GerarPlanoMestre = (props) => {
                 mostraProdSemProcessos: mostraProdSemProcSelected,
                 consideraPedBloqueados: consideraPedBloquSelected,
                 mostraProdSemPedidos: mostraProdSemPediSelected,
-                depositos: depositosSelected, 
-                nrInternoPedido: nrInternoPedidoInfo, 
-                pedidos : pedidosSelected                
+                depositos: depositosSelected,
+                nrInternoPedido: nrInternoPedidoInfo,
+                pedidos: pedidosSelected
             });
         };
 
@@ -163,13 +251,13 @@ const GerarPlanoMestre = (props) => {
         perDemFim1Info, perDemFim2Info, perDemFim3Info, perDemFim4Info, perDemFim5Info, perDemFim6Info, perDemFim7Info, perDemFim8Info, perProcInico1Info,
         perProcInico2Info, perProcInico3Info, perProcInico4Info, perProcInico5Info, perProcInico6Info, perProcInico7Info, perProcInico8Info, perProcFim1Info,
         perProcFim2Info, perProcFim3Info, perProcFim4Info, perProcFim5Info, perProcFim6Info, perProcFim7Info, perProcFim8Info,
-        consideraDepositoSelected, mostraProdSemDepoSelected, mostraProdSemProcSelected, consideraPedBloquSelected, mostraProdSemPediSelected, 
-        produtosSelected, coresSelected, origProdutoSelected, depositosSelected, nrInternoPedidoInfo, pedidosSelected,embarquesSelected,
+        consideraDepositoSelected, mostraProdSemDepoSelected, mostraProdSemProcSelected, consideraPedBloquSelected, mostraProdSemPediSelected,
+        produtosSelected, coresSelected, origProdutoSelected, depositosSelected, nrInternoPedidoInfo, pedidosSelected, embarquesSelected,
         periodoPadraoInfo, tipoDistribuicaoSelected, multiplicadorInfo]);
 
     return (
         <div style={formStyle}>
-            <Form id="plano-mestre-form-gerar" noValidate onSubmit={gerarPlanoMestre}></Form>
+            <Form id="plano-mestre-form-gerar" noValidate onSubmit={gerarPlanoMestre}></Form>            
             <Tabs defaultActiveKey="aba1" transition={false} id="abas-plano-mestre">
                 <Tab eventKey="aba1" title="Global" >
                     <AbaGlobal
@@ -177,7 +265,8 @@ const GerarPlanoMestre = (props) => {
                         setDescricaoInfo={setDescricaoInfo}
                         setPeriodoPadraoInfo={setPeriodoPadraoInfo}
                         setTipoDistribuicaoSelected={setTipoDistribuicaoSelected}
-                        setMultiplicadorInfo={setMultiplicadorInfo}                        
+                        setMultiplicadorInfo={setMultiplicadorInfo}
+                        periodosProducao={props.periodosProducao}
                     />
                 </Tab>
                 <Tab eventKey="aba2" title="Análise Produto" >
@@ -237,7 +326,9 @@ const GerarPlanoMestre = (props) => {
                         setMostraProdSemPediSelected={setMostraProdSemPediSelected}
                         setDepositosSelected={setDepositosSelected}
                         setNrInternoPedidoInfo={setNrInternoPedidoInfo}
-                        setPedidosSelected={setPedidosSelected}                        
+                        setPedidosSelected={setPedidosSelected}
+                        periodosDemanda={props.periodosDemanda}
+                        periodosProducao={props.periodosProducao}
                     />
                 </Tab>
             </Tabs >
@@ -249,7 +340,9 @@ GerarPlanoMestre.propTypes = {
     show: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
     onSubmit: PropTypes.func.isRequired,
-    setLoading: PropTypes.func
+    setLoading: PropTypes.func,
+    periodosDemanda: PropTypes.object.isRequired,
+    periodosProducao: PropTypes.object.isRequired
 };
 
 GerarPlanoMestre.defaultProps = {
@@ -296,6 +389,8 @@ const FormModal = (props) => {
                 <GerarPlanoMestre
                     {...props}
                     setLoading={setLoading}
+                    periodosDemanda={props.periodosDemanda}
+                    periodosProducao={props.periodosProducao}
                 />
             </Modal.Body>
         </Modal>
@@ -306,6 +401,8 @@ FormModal.propTypes = {
     show: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
     onSubmit: PropTypes.func.isRequired,
+    periodosDemanda: PropTypes.object.isRequired,
+    periodosProducao: PropTypes.object.isRequired
 };
 
 export default FormModal;

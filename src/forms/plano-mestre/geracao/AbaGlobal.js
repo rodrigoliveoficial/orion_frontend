@@ -21,6 +21,8 @@ const initialValues = {
 const AbaGlobal = (props) => {
 
     const [tipoDistribuicaoParam, setTipoDistribuicaoParam] = useState([]);    
+    const [periodoPadraoParam, setPeriodoPadraoParam] = useState([]);
+    const { periodosProducao } = props;
 
     const setParametrosGlobalDefault = () => {
         props.setTipoDistribuicaoSelected(1);
@@ -29,7 +31,7 @@ const AbaGlobal = (props) => {
     };
 
     useEffect(() => {
-        setTipoDistribuicaoParam(optionsTipoDistribuicao.find(o => o.value === 1)); 
+        setTipoDistribuicaoParam(optionsTipoDistribuicao.find(o => o.value === 1));
         setParametrosGlobalDefault();
     }, []);
 
@@ -54,7 +56,7 @@ const AbaGlobal = (props) => {
                             type="text"
                             maxLength="100"
                             name="descricao"
-                            autoComplete="off"                            
+                            autoComplete="off"
                             value={values.descricao}
                             onChange={handleChange}
                             onBlur={() => {
@@ -74,8 +76,7 @@ const AbaGlobal = (props) => {
                             options={optionsTipoDistribuicao}
                             value={tipoDistribuicaoParam}
                             onChange={(selected) => {
-                                setTipoDistribuicaoParam(selected);
-                                setFieldValue('tipoDistribuicaoParam', selected.value);
+                                setTipoDistribuicaoParam(selected);                                
                                 props.setTipoDistribuicaoSelected(selected.value);
                             }}
                         />
@@ -94,7 +95,7 @@ const AbaGlobal = (props) => {
                             name="multiplicador"
                             value={values.multiplicador}
                             onChange={handleChange}
-                            onBlur={() => {                                
+                            onBlur={() => {
                                 props.setMultiplicadorInfo(values.multiplicador);
                             }}
                         />
@@ -102,18 +103,17 @@ const AbaGlobal = (props) => {
                 </Form.Row>
 
                 <Form.Row>
-                    <Form.Group as={Col} md="1" controlId="periodoPadrao">
+                    <Form.Group as={Col} md="2" controlId="periodoPadrao">
                         <Form.Label>
                             Período de Produção (Padrão)
                         </Form.Label>
-                        <Form.Control
-                            type="number"
-                            maxLength="9999"
+                        <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo padrão"
                             name="periodoPadrao"
-                            value={values.periodoPadrao}
-                            onChange={handleChange}
-                            onBlur={() => {
-                                props.setPeriodoPadraoInfo(values.periodoPadrao);
+                            options={periodosProducao}
+                            value={periodoPadraoParam}
+                            onChange={(selected) => {
+                                setPeriodoPadraoParam(selected);                                
+                                props.setPeriodoPadraoInfo(selected.value);
                             }}
                         />
                     </Form.Group>
@@ -128,7 +128,8 @@ AbaGlobal.propTypes = {
     setDescricaoInfo: PropTypes.func,
     setTipoDistribuicaoSelected: PropTypes.func,
     setMultiplicadorInfo: PropTypes.func,
-    setPeriodoPadraoInfo: PropTypes.func
+    setPeriodoPadraoInfo: PropTypes.func,    
+    periodosProducao: PropTypes.object
 };
 
 AbaGlobal.defaultProps = {

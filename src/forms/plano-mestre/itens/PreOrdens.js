@@ -28,6 +28,7 @@ const FormPreOrdens = (props) => {
     const [itensSelected, setItensSelected] = useState([]);
 
     const [depositoOP, setDepositoOP] = useState([]);
+    const [periodoOP, setPeriodoOP] = useState([]); 
 
     const [agruparInfo, setAgruparInfo] = useState([]);
     const [qtdeMaxInfo, setQtdeMaxInfo] = useState(999999);
@@ -46,6 +47,7 @@ const FormPreOrdens = (props) => {
 
     const { idPlanoMestre } = props;
     const { depositos } = props;
+    const { periodosProducao } = props;
 
     const {
         handleChange,
@@ -69,7 +71,8 @@ const FormPreOrdens = (props) => {
                 setFieldValue('observacaoOP', response.data.observacaoOP);
 
                 setAgrupaOpPorRefer(optionsAgrupaOpPorRefer.find(o => o.value === response.data.agrupaOpPorRefer));
-                setDepositoOP(depositos.find(o => o.value === response.data.depositoOP));
+                setPeriodoOP(periodosProducao.find(o => o.value === response.data.periodoOP));
+                setDepositoOP(depositos.find(o => o.value === response.data.depositoOP));                
 
                 setAgruparInfo(response.data.agrupaOpPorRefer);
                 setQtdeMaxInfo(response.data.qtdeMaximaOP);
@@ -105,26 +108,7 @@ const FormPreOrdens = (props) => {
         loadParametros();
         loadPreOrdens();
 
-    }, [idPlanoMestre, setFieldValue, depositos]);
-
-    const validarPeriodoExiste = (periodo) => {
-
-        let periodoExiste = false
-
-        console.log("validar periodo");
-
-        api.get(`periodos-producao/existe/${periodo}`).then((response) => {
-
-            console.log(response.data);
-
-            periodoExiste = response.data;
-        }).catch((e) => {
-            console.log('ocorreu algum erro!');
-            console.error(e);
-        });
-
-        return periodoExiste;
-    }
+    }, [idPlanoMestre, setFieldValue, depositos, periodosProducao]);
 
     const validarParametros = () => {
 
@@ -146,11 +130,6 @@ const FormPreOrdens = (props) => {
             alert('Qtde Mínima por Ordem: Não pode ser menor que 0');
             parametrosValidos = false;
         }
-
-        //if (!validarPeriodoExiste(periodoInfo)) {
-        //    alert('Período de produção informado não existe!');
-        //    parametrosValidos = false;
-        //}
 
         return parametrosValidos
     };
@@ -193,17 +172,17 @@ const FormPreOrdens = (props) => {
                 preOrdensSelected: itensSelected
             });
 
-            api.post('plano-mestre/pre-ordens/indicadores/selecionados', body).then((response) => {                                                           
+            api.post('plano-mestre/pre-ordens/indicadores/selecionados', body).then((response) => {
                 setQtdePecasProg(response.data.qtdePecasProgramadas);
                 setQtdeMinutosProg(response.data.qtdeMinutosProgramados);
                 setQtdeReferenciasProg(response.data.qtdeReferencias);
                 setQtdeSKUsProg(response.data.qtdeSKUs);
                 setQtdeLoteMedioProg(response.data.qtdeLoteMedio);
                 setDetMaiorOrdemProg(response.data.detMaiorOrdem);
-                setDetMenorOrdemProg(response.data.detMenorOrdem);                            
+                setDetMenorOrdemProg(response.data.detMenorOrdem);
             }).catch((e) => {
                 console.log('ocorreu algum erro!');
-                console.error(e);            
+                console.error(e);
 
                 setQtdePecasProg(0);
                 setQtdeMinutosProg(0);
@@ -216,7 +195,7 @@ const FormPreOrdens = (props) => {
         }
 
         obterIndicadoresPreOrdens();
-        
+
     }, [idPlanoMestre, itensSelected]);
 
     const onRowSelect = ({ id }, isSelected) => {
@@ -301,24 +280,22 @@ const FormPreOrdens = (props) => {
                         />
                     </Form.Group>
 
-                    <Form.Group as={Col} md="1" controlId="periodoOP">
+                    <Form.Group as={Col} md="2" controlId="periodoOP">
                         <Form.Label>
-                            Período de Produção
-                        </Form.Label>
-
-                        <Form.Control
-                            type="number"
-                            maxLength="9999"
+                            Período de Produção (Padrão)
+		                </Form.Label>
+                        <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo padrão"
                             name="periodoOP"
-                            value={values.periodoOP}
-                            onChange={handleChange}
-                            onBlur={() => {
-                                setPeriodoInfo(values.periodoOP);
+                            options={periodosProducao}
+                            value={periodoOP}
+                            onChange={(selected) => {
+                                setPeriodoOP(selected);
+                                setPeriodoInfo(selected.value);
                             }}
                         />
                     </Form.Group>
 
-                    <Form.Group as={Col} md="3" controlId="deposito">
+                    <Form.Group as={Col} md="2" controlId="deposito">
                         <Form.Label>
                             Depósito de Entrada de Peças
                         </Form.Label>
