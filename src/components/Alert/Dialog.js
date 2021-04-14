@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Spinner from 'react-bootstrap/Spinner'
 import { Button, Modal } from 'react-bootstrap';
 
 const Dialog = (props) => {
@@ -26,6 +27,7 @@ const Dialog = (props) => {
               variant="outline-dark"
               onClick={props.onCancel}
               autoFocus
+              disabled={props.desabledButtons}
             >
               Cancelar
             </Button>
@@ -33,7 +35,19 @@ const Dialog = (props) => {
               variant={props.confirmButtonVariant}
               className="left"
               onClick={props.onConfirm}
+              disabled={props.desabledButtons}
             >
+
+              {props.showSpinner ?
+                <Spinner
+                  show="false"
+                  as="span"
+                  animation="grow"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                /> : ''}
+
               {props.buttonLabel}
             </Button>
           </Modal.Footer>
@@ -49,13 +63,17 @@ Dialog.propTypes = {
   onCancel: PropTypes.func.isRequired,
   buttonLabel: PropTypes.string.isRequired,
   title: PropTypes.string,
-  content: PropTypes.string
+  content: PropTypes.string,
+  desabledButtons: PropTypes.bool,
+  showSpinner: PropTypes.bool
 };
 
 Dialog.defaultProps = {
   title: 'Deletar',
   content: 'Essa operação não pode ser desfeita',
-  confirmButtonVariant: 'outline-success'
+  confirmButtonVariant: 'outline-success',
+  desabledButtons: false,
+  showSpinner: false
 };
 
 export default Dialog;

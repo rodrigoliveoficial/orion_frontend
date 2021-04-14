@@ -72,7 +72,7 @@ const renderArtigos = (dado, index) => {
                         chartType="Gauge"
                         data={[
                             ['', ''],
-                            ['Ocupação', dado.percOcupacaoPecas]
+                            ['', dado.percOcupacaoPecas]
                         ]}
                     />
                 </Form.Row>
@@ -133,7 +133,7 @@ const renderArtigos = (dado, index) => {
                         chartType="Gauge"
                         data={[
                             ['', ''],
-                            ['Ocupação', dado.percOcupacaoMinutos]
+                            ['', dado.percOcupacaoMinutos]
                         ]}
                     />
                 </Form.Row>
@@ -163,6 +163,7 @@ const FormOcupacaoEstagios = (props) => {
     const [dataMinutos, setDataMinutos] = useState([]);
 
     const { idPlanoMestre } = props;
+    const { periodosProducao } = props;
 
     const load = () => {
 
@@ -197,11 +198,11 @@ const FormOcupacaoEstagios = (props) => {
 
             setDataPecas([
                 ['', ''],
-                ['Ocupação', response.data.percOcupacaoPecas]]);
+                ['', response.data.percOcupacaoPecas]]);
 
             setDataMinutos([
                 ['', ''],
-                ['Ocupação', response.data.percOcupacaoMinutos]]);
+                ['', response.data.percOcupacaoMinutos]]);
 
         }).catch((e) => {
             console.log('ocorreu algum erro!');
@@ -225,17 +226,53 @@ const FormOcupacaoEstagios = (props) => {
         });
     };
 
-    const consultarOcupacaoEstagio = () => {
+    const calcularOcupacaoPeriodo = () => {
+       
+        
+       
         loadOcupacaoEstagio(estagio.value);
     };
 
     return (
         <div>
             <br></br>
+
+            <Form.Row>
+                <Form.Group as={Col} md="2" controlId="periodoInicial">
+                    <Form.Label>
+                        Período Inicial (Ocupação)
+                        </Form.Label>
+                    <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo inicial"
+                        name="periodoInicial"
+                        options={periodosProducao}
+                        //value={periodoPadraoParam}
+                        onChange={(selected) => {
+                            //setPeriodoPadraoParam(selected);
+                            //props.setPeriodoPadraoInfo(selected.value);
+                        }}
+                    />
+                </Form.Group>
+
+                <Form.Group as={Col} md="2" controlId="periodoFinal">
+                    <Form.Label>
+                        Período Final (Ocupação)
+                        </Form.Label>
+                    <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo final"
+                        name="periodoFinal"
+                        options={periodosProducao}
+                        //value={periodoPadraoParam}
+                        onChange={(selected) => {
+                            //setPeriodoPadraoParam(selected);
+                            //props.setPeriodoPadraoInfo(selected.value);
+                        }}
+                    />
+                </Form.Group>
+            </Form.Row>
+
             <Form.Row>
                 <Form.Group as={Col} md="4" controlId="cor">
                     <Form.Label>
-                        Estagio
+                        Estágio
                     </Form.Label>
                     <Select className="basic-multi-select" classNamePrefix="select" placeholder="Selecione o Estagio."
                         name="estagio"
@@ -251,9 +288,9 @@ const FormOcupacaoEstagios = (props) => {
 
             <Button
                 variant="primary"
-                onClick={consultarOcupacaoEstagio}
+                onClick={calcularOcupacaoPeriodo}
             >
-                Consultar
+                Calcular Ocupação do Período
             </Button>
 
             <br></br>

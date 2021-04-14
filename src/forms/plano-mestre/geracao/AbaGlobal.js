@@ -36,8 +36,7 @@ const AbaGlobal = (props) => {
     }, []);
 
     const {
-        handleChange,
-        setFieldValue,
+        handleChange,        
         values
     } = useFormik({
         initialValues: initialValues

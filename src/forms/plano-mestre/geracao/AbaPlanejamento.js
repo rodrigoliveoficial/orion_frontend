@@ -153,6 +153,9 @@ const AbaPlanejamento = (props) => {
     const [perProcFim7, setPerProcFim7] = useState([]);
     const [perProcFim8, setPerProcFim8] = useState([]);
 
+    const [perDemandaInicial, setPerDemandaInicial] = useState(0);
+    const [perDemandaFinal, setPerDemandaFinal] = useState(0);
+
     const { periodosDemanda } = props;
     const { periodosProducao } = props;
 
@@ -216,9 +219,7 @@ const AbaPlanejamento = (props) => {
     const {
         handleChange,
         setFieldValue,
-        values,
-        errors,
-        touched
+        values
     } = useFormik({
         validationSchema: schema,
         validateOnChange: true,
@@ -226,15 +227,21 @@ const AbaPlanejamento = (props) => {
         initialValues: initialValues
     });
 
-    const getPedidos = (parametros) => {
-        api.get(`pedidos/${parametros.demInicio1}/${parametros.demFim8}`).then((response) => {
-            setPedidos(normalizePedidos(response.data));
-        }).catch((e) => {
-            setPedidos(null);
-            console.log('ocorreu algum erro!');
-            console.error(e);
-        }).finally();
+    const getPedidos = (inicio, fim) => {
+        if (inicio > 0 && fim > 0) {
+            api.get(`pedidos/${inicio}/${fim}`).then((response) => {
+                setPedidos(normalizePedidos(response.data));
+            }).catch((e) => {
+                setPedidos(null);
+                console.log('ocorreu algum erro!');
+                console.error(e);
+            }).finally();
+        }
     }
+
+    useEffect(() => {
+        getPedidos(perDemandaInicial, perDemandaFinal);
+    }, [perDemandaInicial, perDemandaFinal]);
 
     useEffect(() => {
         setConsideraDepositoParam(options.find(o => o.value === 1));
@@ -268,7 +275,8 @@ const AbaPlanejamento = (props) => {
                                 value={perDemInicio1}
                                 onChange={(selected) => {
                                     setPerDemInicio1(selected)
-                                    props.setPerDemInico1Info(selected.value);                                    
+                                    props.setPerDemInico1Info(selected.value);
+                                    setPerDemandaInicial(selected.value);
                                 }}
                             />
                         </Form.Group>
@@ -282,7 +290,7 @@ const AbaPlanejamento = (props) => {
                                 value={perDemFim1}
                                 onChange={(selected) => {
                                     setPerDemFim1(selected)
-                                    props.setPerDemFim1Info(selected.value);                                    
+                                    props.setPerDemFim1Info(selected.value);
                                 }}
                             />
                         </Form.Group>
@@ -296,13 +304,13 @@ const AbaPlanejamento = (props) => {
                                 value={perProcInicio1}
                                 onChange={(selected) => {
                                     setPerProcInicio1(selected)
-                                    props.setPerProcInico1Info(selected.value);                                    
+                                    props.setPerProcInico1Info(selected.value);
                                 }}
                             />
                         </Form.Group>
 
                         <InputGroup.Text>até</InputGroup.Text>
-                       
+
                         <Form.Group as={Col} md="2" controlId="procFim1">
                             <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo fim"
                                 name="procFim1"
@@ -310,13 +318,13 @@ const AbaPlanejamento = (props) => {
                                 value={perProcFim1}
                                 onChange={(selected) => {
                                     setPerProcFim1(selected)
-                                    props.setPerProcFim1Info(selected.value);                                    
+                                    props.setPerProcFim1Info(selected.value);
                                 }}
                             />
-                        </Form.Group>                       
+                        </Form.Group>
                     </InputGroup>
                 </Form.Row>
- 
+
                 <Form.Row>
                     <InputGroup>
                         <InputGroup.Text>Plano 2</InputGroup.Text>
@@ -329,7 +337,7 @@ const AbaPlanejamento = (props) => {
                                 value={perDemInicio2}
                                 onChange={(selected) => {
                                     setPerDemInicio2(selected)
-                                    props.setPerDemInico2Info(selected.value);                                    
+                                    props.setPerDemInico2Info(selected.value);
                                 }}
                             />
                         </Form.Group>
@@ -343,7 +351,7 @@ const AbaPlanejamento = (props) => {
                                 value={perDemFim2}
                                 onChange={(selected) => {
                                     setPerDemFim2(selected)
-                                    props.setPerDemFim2Info(selected.value);                                    
+                                    props.setPerDemFim2Info(selected.value);
                                 }}
                             />
                         </Form.Group>
@@ -357,13 +365,13 @@ const AbaPlanejamento = (props) => {
                                 value={perProcInicio2}
                                 onChange={(selected) => {
                                     setPerProcInicio2(selected)
-                                    props.setPerProcInico2Info(selected.value);                                    
+                                    props.setPerProcInico2Info(selected.value);
                                 }}
                             />
                         </Form.Group>
 
                         <InputGroup.Text>até</InputGroup.Text>
-                       
+
                         <Form.Group as={Col} md="2" controlId="procFim2">
                             <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo fim"
                                 name="procFim2"
@@ -371,13 +379,13 @@ const AbaPlanejamento = (props) => {
                                 value={perProcFim2}
                                 onChange={(selected) => {
                                     setPerProcFim2(selected)
-                                    props.setPerProcFim2Info(selected.value); 
+                                    props.setPerProcFim2Info(selected.value);
                                 }}
                             />
-                        </Form.Group>                       
+                        </Form.Group>
                     </InputGroup>
                 </Form.Row>
- 
+
                 <Form.Row>
                     <InputGroup>
                         <InputGroup.Text>Plano 3</InputGroup.Text>
@@ -390,7 +398,7 @@ const AbaPlanejamento = (props) => {
                                 value={perDemInicio3}
                                 onChange={(selected) => {
                                     setPerDemInicio3(selected)
-                                    props.setPerDemInico3Info(selected.value);                                    
+                                    props.setPerDemInico3Info(selected.value);
                                 }}
                             />
                         </Form.Group>
@@ -404,7 +412,7 @@ const AbaPlanejamento = (props) => {
                                 value={perDemFim3}
                                 onChange={(selected) => {
                                     setPerDemFim3(selected)
-                                    props.setPerDemFim3Info(selected.value);                                    
+                                    props.setPerDemFim3Info(selected.value);
                                 }}
                             />
                         </Form.Group>
@@ -424,7 +432,7 @@ const AbaPlanejamento = (props) => {
                         </Form.Group>
 
                         <InputGroup.Text>até</InputGroup.Text>
-                       
+
                         <Form.Group as={Col} md="2" controlId="procFim3">
                             <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo fim"
                                 name="procFim3"
@@ -432,13 +440,13 @@ const AbaPlanejamento = (props) => {
                                 value={perProcFim3}
                                 onChange={(selected) => {
                                     setPerProcFim3(selected)
-                                    props.setPerProcFim3Info(selected.value);                                    
+                                    props.setPerProcFim3Info(selected.value);
                                 }}
                             />
-                        </Form.Group>                       
+                        </Form.Group>
                     </InputGroup>
                 </Form.Row>
- 
+
                 <Form.Row>
                     <InputGroup>
                         <InputGroup.Text>Plano 4</InputGroup.Text>
@@ -451,7 +459,7 @@ const AbaPlanejamento = (props) => {
                                 value={perDemInicio4}
                                 onChange={(selected) => {
                                     setPerDemInicio4(selected)
-                                    props.setPerDemInico4Info(selected.value);                                
+                                    props.setPerDemInico4Info(selected.value);
                                 }}
                             />
                         </Form.Group>
@@ -465,7 +473,7 @@ const AbaPlanejamento = (props) => {
                                 value={perDemFim4}
                                 onChange={(selected) => {
                                     setPerDemFim4(selected)
-                                    props.setPerDemFim4Info(selected.value);                                    
+                                    props.setPerDemFim4Info(selected.value);
                                 }}
                             />
                         </Form.Group>
@@ -479,13 +487,13 @@ const AbaPlanejamento = (props) => {
                                 value={perProcInicio4}
                                 onChange={(selected) => {
                                     setPerProcInicio4(selected)
-                                    props.setPerProcInico4Info(selected.value);                                    
+                                    props.setPerProcInico4Info(selected.value);
                                 }}
                             />
                         </Form.Group>
 
                         <InputGroup.Text>até</InputGroup.Text>
-                       
+
                         <Form.Group as={Col} md="2" controlId="procFim4">
                             <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo fim"
                                 name="procFim4"
@@ -493,13 +501,13 @@ const AbaPlanejamento = (props) => {
                                 value={perProcFim4}
                                 onChange={(selected) => {
                                     setPerProcFim4(selected)
-                                    props.setPerProcFim4Info(selected.value);                                    
+                                    props.setPerProcFim4Info(selected.value);
                                 }}
                             />
-                        </Form.Group>                       
+                        </Form.Group>
                     </InputGroup>
                 </Form.Row>
- 
+
                 <Form.Row>
                     <InputGroup>
                         <InputGroup.Text>Plano 5</InputGroup.Text>
@@ -512,7 +520,7 @@ const AbaPlanejamento = (props) => {
                                 value={perDemInicio5}
                                 onChange={(selected) => {
                                     setPerDemInicio5(selected)
-                                    props.setPerDemInico5Info(selected.value);                                    
+                                    props.setPerDemInico5Info(selected.value);
                                 }}
                             />
                         </Form.Group>
@@ -526,7 +534,7 @@ const AbaPlanejamento = (props) => {
                                 value={perDemFim5}
                                 onChange={(selected) => {
                                     setPerDemFim5(selected)
-                                    props.setPerDemFim5Info(selected.value);                                    
+                                    props.setPerDemFim5Info(selected.value);
                                 }}
                             />
                         </Form.Group>
@@ -540,13 +548,13 @@ const AbaPlanejamento = (props) => {
                                 value={perProcInicio5}
                                 onChange={(selected) => {
                                     setPerProcInicio5(selected)
-                                    props.setPerProcInico5Info(selected.value);                                    
+                                    props.setPerProcInico5Info(selected.value);
                                 }}
                             />
                         </Form.Group>
 
                         <InputGroup.Text>até</InputGroup.Text>
-                       
+
                         <Form.Group as={Col} md="2" controlId="procFim5">
                             <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo fim"
                                 name="procFim5"
@@ -554,13 +562,13 @@ const AbaPlanejamento = (props) => {
                                 value={perProcFim5}
                                 onChange={(selected) => {
                                     setPerProcFim5(selected)
-                                    props.setPerProcFim5Info(selected.value);                                    
+                                    props.setPerProcFim5Info(selected.value);
                                 }}
                             />
-                        </Form.Group>                       
+                        </Form.Group>
                     </InputGroup>
                 </Form.Row>
- 
+
                 <Form.Row>
                     <InputGroup>
                         <InputGroup.Text>Plano 6</InputGroup.Text>
@@ -573,7 +581,7 @@ const AbaPlanejamento = (props) => {
                                 value={perDemInicio6}
                                 onChange={(selected) => {
                                     setPerDemInicio6(selected)
-                                    props.setPerDemInico6Info(selected.value);                                    
+                                    props.setPerDemInico6Info(selected.value);
                                 }}
                             />
                         </Form.Group>
@@ -587,7 +595,7 @@ const AbaPlanejamento = (props) => {
                                 value={perDemFim6}
                                 onChange={(selected) => {
                                     setPerDemFim6(selected)
-                                    props.setPerDemFim6Info(selected.value);                                    
+                                    props.setPerDemFim6Info(selected.value);
                                 }}
                             />
                         </Form.Group>
@@ -601,13 +609,13 @@ const AbaPlanejamento = (props) => {
                                 value={perProcInicio6}
                                 onChange={(selected) => {
                                     setPerProcInicio6(selected)
-                                    props.setPerProcInico6Info(selected.value);                                    
+                                    props.setPerProcInico6Info(selected.value);
                                 }}
                             />
                         </Form.Group>
 
                         <InputGroup.Text>até</InputGroup.Text>
-                       
+
                         <Form.Group as={Col} md="2" controlId="procFim6">
                             <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo fim"
                                 name="procFim6"
@@ -615,13 +623,13 @@ const AbaPlanejamento = (props) => {
                                 value={perProcFim6}
                                 onChange={(selected) => {
                                     setPerProcFim6(selected)
-                                    props.setPerProcFim6Info(selected.value);                                    
+                                    props.setPerProcFim6Info(selected.value);
                                 }}
                             />
-                        </Form.Group>                       
+                        </Form.Group>
                     </InputGroup>
                 </Form.Row>
- 
+
                 <Form.Row>
                     <InputGroup>
                         <InputGroup.Text>Plano 7</InputGroup.Text>
@@ -634,7 +642,7 @@ const AbaPlanejamento = (props) => {
                                 value={perDemInicio7}
                                 onChange={(selected) => {
                                     setPerDemInicio7(selected)
-                                    props.setPerDemInico7Info(selected.value);                                    
+                                    props.setPerDemInico7Info(selected.value);
                                 }}
                             />
                         </Form.Group>
@@ -648,7 +656,7 @@ const AbaPlanejamento = (props) => {
                                 value={perDemFim7}
                                 onChange={(selected) => {
                                     setPerDemFim7(selected)
-                                    props.setPerDemFim7Info(selected.value);                                    
+                                    props.setPerDemFim7Info(selected.value);
                                 }}
                             />
                         </Form.Group>
@@ -662,13 +670,13 @@ const AbaPlanejamento = (props) => {
                                 value={perProcInicio7}
                                 onChange={(selected) => {
                                     setPerProcInicio7(selected)
-                                    props.setPerProcInico7Info(selected.value);                                    
+                                    props.setPerProcInico7Info(selected.value);
                                 }}
                             />
                         </Form.Group>
 
                         <InputGroup.Text>até</InputGroup.Text>
-                       
+
                         <Form.Group as={Col} md="2" controlId="procFim7">
                             <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo fim"
                                 name="procFim7"
@@ -676,13 +684,13 @@ const AbaPlanejamento = (props) => {
                                 value={perProcFim7}
                                 onChange={(selected) => {
                                     setPerProcFim7(selected)
-                                    props.setPerProcFim7Info(selected.value);                                    
+                                    props.setPerProcFim7Info(selected.value);
                                 }}
                             />
-                        </Form.Group>                       
+                        </Form.Group>
                     </InputGroup>
                 </Form.Row>
- 
+
                 <Form.Row>
                     <InputGroup>
                         <InputGroup.Text>Plano 8</InputGroup.Text>
@@ -695,7 +703,7 @@ const AbaPlanejamento = (props) => {
                                 value={perDemInicio8}
                                 onChange={(selected) => {
                                     setPerDemInicio8(selected)
-                                    props.setPerDemInico8Info(selected.value);                                    
+                                    props.setPerDemInico8Info(selected.value);
                                 }}
                             />
                         </Form.Group>
@@ -709,7 +717,8 @@ const AbaPlanejamento = (props) => {
                                 value={perDemFim8}
                                 onChange={(selected) => {
                                     setPerDemFim8(selected)
-                                    props.setPerDemFim8Info(selected.value);                                    
+                                    props.setPerDemFim8Info(selected.value);
+                                    setPerDemandaFinal(selected.value);
                                 }}
                             />
                         </Form.Group>
@@ -723,13 +732,13 @@ const AbaPlanejamento = (props) => {
                                 value={perProcInicio8}
                                 onChange={(selected) => {
                                     setPerProcInicio8(selected)
-                                    props.setPerProcInico8Info(selected.value);                                    
+                                    props.setPerProcInico8Info(selected.value);
                                 }}
                             />
                         </Form.Group>
 
                         <InputGroup.Text>até</InputGroup.Text>
-                       
+
                         <Form.Group as={Col} md="2" controlId="procFim8">
                             <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo fim"
                                 name="procFim8"
@@ -737,13 +746,13 @@ const AbaPlanejamento = (props) => {
                                 value={perProcFim8}
                                 onChange={(selected) => {
                                     setPerProcFim8(selected)
-                                    props.setPerProcFim8Info(selected.value);                                    
+                                    props.setPerProcFim8Info(selected.value);
                                 }}
                             />
-                        </Form.Group>                       
+                        </Form.Group>
                     </InputGroup>
                 </Form.Row>
- 
+
                 <br></br>
                 <h4>
                     Informações para a coluna "Estoque"

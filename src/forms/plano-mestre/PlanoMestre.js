@@ -6,6 +6,7 @@ import { parseISO } from 'date-fns';
 import { format } from 'date-fns-tz';
 import api from '../../services/api';
 import DeleteDialog from '../../components/Alert/DeleteDialog';
+import ConfirmDialog from '../../components/Alert/ConfirmDialog';
 import GerarPlanoMestre from './geracao/GerarPlanoMestre';
 import ItensPlanoMestre from './itens/ItensPlanoMestre';
 
@@ -91,7 +92,11 @@ const PlanoMestre = (props) => {
     const [descPlanoMestre, setDescPlanoMestre] = useState('');
     const [sitPlanoMestre, setSitPlanoMestre] = useState(0);
     const [msgDelete, setMsgDelete] = useState('');
+    const [msgCopia, setMsgCopia] = useState('');
     const [showDeleteAlert, setShowDeleteAlert] = useState(false);
+    const [showCopiaAlert, setShowCopiaAlert] = useState(false);
+
+    const [waitConexao, setWaitConexao] = useState(false);
 
     const load = () => {
 
@@ -120,24 +125,53 @@ const PlanoMestre = (props) => {
 
     useEffect(() => {
         setMsgDelete(`Deletar plano mestre de produção: ${idPlanoMestre}?`);
+        setMsgCopia(`Copiar plano mestre de produção: ${idPlanoMestre}?`);
     }, [idPlanoMestre]);
 
     useEffect(() => {
         load();
     }, []);
 
-    const handleDeletePlanoMestre = () => {
+    const handleCopiaPlanoMestre = async event => {
 
-        api.delete(`plano-mestre/${idPlanoMestre}`).then((response) => {
+        setWaitConexao(true);
+
+        const body = ({
+            idPlanoMestre: idPlanoMestre
+        });
+
+        try {
+            const response = await api.post('plano-mestre/copiar', body);
             setPlanosMestre(normalizeDados(response.data));
             setIdPlanoMestre(0);
             setDescPlanoMestre('');
             setDisabledButton(true);
-        }).catch((e) => {
+        } catch (e) {
             console.log('ocorreu algum erro!');
             console.error(e);
-        }).finally(() => setShowDeleteAlert(false));
+        }
 
+        setWaitConexao(false);
+        setShowCopiaAlert(false);
+    };
+
+    const handleDeletePlanoMestre = async event => {
+
+        setWaitConexao(true);
+
+        try {
+            const response = await api.delete(`plano-mestre/${idPlanoMestre}`);
+            setPlanosMestre(normalizeDados(response.data));
+            setIdPlanoMestre(0);
+            setDescPlanoMestre('');
+            setDisabledButton(true);
+        } catch (e) {
+            console.log('ocorreu algum erro!');
+            console.error(e);
+        }
+
+        setWaitConexao(false);
+        setShowDeleteAlert(false);
     };
 
     const onRowClick = (id, data) => {
@@ -158,11 +192,14 @@ const PlanoMestre = (props) => {
             <h2><b>Plano Mestre de Produção</b></h2>
             <br></br>
 
-            <Button onClick={handleShowFormGerar} >
+            <Button onClick={ handleShowFormGerar } >
                 Gerar
             </Button>
-            <Button onClick={handleShowFormItens} variant="secondary" disabled={disabledButton}>
+            <Button onClick={ handleShowFormItens } variant="secondary" disabled={disabledButton}>
                 Plano
+            </Button>
+            <Button onClick={() => { setShowCopiaAlert(true) }} variant="success" disabled={disabledButton}>
+                Copiar
             </Button>
             <Button onClick={() => { setShowDeleteAlert(true) }} variant="danger" disabled={disabledButton}>
                 Excluir
@@ -195,7 +232,7 @@ const PlanoMestre = (props) => {
                 idPlanoMestre={idPlanoMestre}
                 descPlanoMestre={descPlanoMestre}
                 sitPlanoMestre={sitPlanoMestre}
-                depositos={depositos}                
+                depositos={depositos}
                 periodosProducao={periodosProducao}
                 onClose={() => {
                     setShowFormItens(false);
@@ -203,11 +240,24 @@ const PlanoMestre = (props) => {
                 }}
             />
 
+            {showCopiaAlert && (
+                <ConfirmDialog
+                    title={msgCopia}
+                    content=""
+                    handleCancel={() => setShowCopiaAlert(false)}
+                    handleConfirm={handleCopiaPlanoMestre}
+                    desabledButtons={waitConexao}
+                    showSpinner={waitConexao}
+                />
+            )}
+
             {showDeleteAlert && (
                 <DeleteDialog
                     title={msgDelete}
                     handleCancel={() => setShowDeleteAlert(false)}
                     handleDelete={handleDeletePlanoMestre}
+                    desabledButtons={waitConexao}
+                    showSpinner={waitConexao}
                 />
             )}
 

@@ -1004,7 +1004,7 @@ const FormModal = (props) => {
                     </Tab>
                     <Tab eventKey="aba2" title="Ocupação" >
                         <OcupacaoEstagio
-                            {...props}
+                            {...props}                            
                         />
                     </Tab>
                     <Tab eventKey="aba3" title="Pré-Ordens" >
