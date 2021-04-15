@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Form, Row, Col, Tabs, Tab, Button } from 'react-bootstrap';
+import Spinner from 'react-bootstrap/Spinner'
 import Select from 'react-select';
 import api from '../../../services/api';
 import { Chart } from "react-google-charts";
 
 const loadEstagios = () => api.get('capacidade-producao/estagios-configurados');
+
 
 const normalizeEstagios = (dados) => {
     return dados.map((c) => {
@@ -19,7 +21,7 @@ const renderArtigos = (dado, index) => {
     return (
         <Row>
             <Col>
-                <h5> {dado.artigo} - {dado.descricao} </h5>
+                <h5> {dado.artigo} - {dado.descArtigo} </h5>
                 <br></br>
 
                 <Form.Row>
@@ -31,7 +33,7 @@ const renderArtigos = (dado, index) => {
                             type="text"
                             name="pecasCapacidade"
                             disabled
-                            value={dado.capacidadePecas}
+                            value={dado.qtdeCapacidadePecas}
                         />
                     </Form.Group>
                     <Form.Group as={Col} md="2" >
@@ -42,7 +44,18 @@ const renderArtigos = (dado, index) => {
                             type="text"
                             name="pecasPlano"
                             disabled
-                            value={dado.qtdePecas}
+                            value={dado.qtdePecasPlano}
+                        />
+                    </Form.Group>
+                    <Form.Group as={Col} md="2" >
+                        <Form.Label>
+                            Quantidade Programado
+                        </Form.Label>
+                        <Form.Control
+                            type="text"
+                            name="pecasPlano"
+                            disabled
+                            value={dado.qtdePecasProgramado}
                         />
                     </Form.Group>
                     <Form.Group as={Col} md="2" >
@@ -64,7 +77,7 @@ const renderArtigos = (dado, index) => {
                             type="text"
                             name="pecasFaltaSobra"
                             disabled
-                            value={dado.sobraFaltaPecas}
+                            value={dado.qtdeSobraFaltaPecas}
                         />
                     </Form.Group>
 
@@ -80,7 +93,7 @@ const renderArtigos = (dado, index) => {
             </Col>
 
             <Col>
-                <h5> {dado.artigo} - {dado.descricao} </h5>
+                <h5> {dado.artigo} - {dado.descArtigo} </h5>
                 <br></br>
 
                 <Form.Row>
@@ -92,7 +105,7 @@ const renderArtigos = (dado, index) => {
                             type="text"
                             name="pecasCapacidade"
                             disabled
-                            value={dado.capacidadeMinutos}
+                            value={dado.qtdeCapacidadeMinutos}
                         />
                     </Form.Group>
                     <Form.Group as={Col} md="2" >
@@ -103,7 +116,18 @@ const renderArtigos = (dado, index) => {
                             type="text"
                             name="pecasPlano"
                             disabled
-                            value={dado.qtdeMinutos}
+                            value={dado.qtdeMinutosPlano}
+                        />
+                    </Form.Group>
+                    <Form.Group as={Col} md="2" >
+                        <Form.Label>
+                            Quantidade Programado
+                        </Form.Label>
+                        <Form.Control
+                            type="text"
+                            name="pecasPlano"
+                            disabled
+                            value={dado.qtdeMinutosProgramado}
                         />
                     </Form.Group>
                     <Form.Group as={Col} md="2" >
@@ -125,7 +149,7 @@ const renderArtigos = (dado, index) => {
                             type="text"
                             name="pecasFaltaSobra"
                             disabled
-                            value={dado.sobraFaltaMinutos}
+                            value={dado.qtdeSobraFaltaMinutos}
                         />
                     </Form.Group>
 
@@ -151,16 +175,28 @@ const FormOcupacaoEstagios = (props) => {
     const [artigos, setArtigos] = useState([]);
 
     const [capacidadePecas, setCapacidadePecas] = useState(0);
-    const [qtdePecas, setQtdePecas] = useState(0);
+    const [qtdePecasPlano, setQtdePecasPlano] = useState(0);
+    const [qtdePecasProgramado, setQtdePecasProgramado] = useState(0);
     const [percOcupacaoPecas, setPercOcupacaoPecas] = useState(0);
     const [sobraFaltaPecas, setSobraFaltaPecas] = useState(0);
     const [capacidadeMinutos, setCapacidadeMinutos] = useState(0);
-    const [qtdeMinutos, setQtdeMinutos] = useState(0);
+    const [qtdeMinutosPlano, setQtdeMinutosPlano] = useState(0);
+    const [qtdeMinutosProgramado, setQtdeMinutosProgramado] = useState(0);
     const [percOcupacaoMinutos, setPercOcupacaoMinutos] = useState(0);
     const [sobraFaltaMinutos, setSobraFaltaMinutos] = useState(0);
 
     const [dataPecas, setDataPecas] = useState([]);
     const [dataMinutos, setDataMinutos] = useState([]);
+
+    const [periodoInicial, setPeriodoInicial] = useState([]);
+    const [periodoFinal, setPeriodoFinal] = useState([]);
+
+    const [periodoInicialInfo, setPeriodoInicialInfo] = useState(0);
+    const [periodoFinalInfo, setPeriodoFinalInfo] = useState(0);
+    const [estagioInfo, setEstagioInfo] = useState(0);
+
+    const [desabilitarCalculo, setDesabilitarCalculo] = useState(true);
+    const [waitConexao, setWaitConexao] = useState(false);
 
     const { idPlanoMestre } = props;
     const { periodosProducao } = props;
@@ -185,16 +221,47 @@ const FormOcupacaoEstagios = (props) => {
         load();
     }, []);
 
+    useEffect(() => {
+
+        const loadParametros = () => {
+            api.get(`plano-mestre/parametros/${idPlanoMestre}`).then((response) => {
+                setPeriodoInicial(periodosProducao.find(o => o.value === response.data.periodoInicioOcupacao));
+                setPeriodoFinal(periodosProducao.find(o => o.value === response.data.periodoFimOcupacao));
+                setPeriodoInicialInfo(response.data.periodoFimOcupacao);
+                setPeriodoFinalInfo(response.data.periodoFimOcupacao);
+            }).catch((e) => {
+                console.log('ocorreu algum erro!');
+                console.error(e);
+                setPeriodoInicial([]);
+                setPeriodoFinal([]);
+            });
+        };
+
+        loadParametros();
+
+    }, [idPlanoMestre, periodosProducao]);
+
+    useEffect(() => {
+
+        setDesabilitarCalculo(true);
+
+        if  (estagioInfo > 0 && periodoInicialInfo > 0 && periodoFinalInfo > 0) setDesabilitarCalculo(false);
+
+    }, [estagioInfo, periodoInicialInfo, periodoFinalInfo]);
+
     const loadOcupacaoEstagio = (codEstagio) => {
+        
         api.get(`plano-mestre/ocupacao-estagio/${idPlanoMestre}/${codEstagio}`).then((response) => {
-            setCapacidadePecas(response.data.capacidadePecas);
-            setQtdePecas(response.data.qtdePecas);
+            setCapacidadePecas(response.data.qtdeCapacidadePecas);
+            setQtdePecasPlano(response.data.qtdePecasPlano);
+            setQtdePecasProgramado(response.data.qtdePecasProgramado);
             setPercOcupacaoPecas(response.data.percOcupacaoPecas);
-            setSobraFaltaPecas(response.data.sobraFaltaPecas);
-            setCapacidadeMinutos(response.data.capacidadeMinutos);
-            setQtdeMinutos(response.data.qtdeMinutos);
+            setSobraFaltaPecas(response.data.qtdeSobraFaltaPecas);
+            setCapacidadeMinutos(response.data.qtdeCapacidadeMinutos);
+            setQtdeMinutosPlano(response.data.qtdeMinutosPlano);
+            setQtdeMinutosProgramado(response.data.qtdeMinutosProgramado);
             setPercOcupacaoMinutos(response.data.percOcupacaoMinutos);
-            setSobraFaltaMinutos(response.data.sobraFaltaMinutos);
+            setSobraFaltaMinutos(response.data.qtdeSobraFaltaMinutos);
 
             setDataPecas([
                 ['', ''],
@@ -208,17 +275,19 @@ const FormOcupacaoEstagios = (props) => {
             console.log('ocorreu algum erro!');
             console.error(e);
             setCapacidadePecas(0);
-            setQtdePecas(0);
+            setQtdePecasPlano(0);
+            setQtdePecasProgramado(0);
             setPercOcupacaoPecas(0);
             setSobraFaltaPecas(0);
             setCapacidadeMinutos(0);
-            setQtdeMinutos(0);
+            setQtdeMinutosPlano(0);
+            setQtdeMinutosProgramado(0);
             setPercOcupacaoMinutos(0);
             setSobraFaltaMinutos(0);
         });
 
-        api.get(`plano-mestre/ocupacao-artigos/${idPlanoMestre}/${codEstagio}`).then((response) => {
-            setArtigos(response.data);
+        api.get(`plano-mestre/ocupacao-artigos/${idPlanoMestre}/${codEstagio}`).then((responseArtigos) => {                        
+            setArtigos(responseArtigos.data);
         }).catch((e) => {
             console.log('ocorreu algum erro!');
             console.error(e);
@@ -226,10 +295,25 @@ const FormOcupacaoEstagios = (props) => {
         });
     };
 
-    const calcularOcupacaoPeriodo = () => {
-       
-        
-       
+    const calcularOcupacaoPeriodo = async event => {
+
+        setWaitConexao(true);
+
+        const body = ({
+            idPlanoMestre: idPlanoMestre,
+            periodoOcupacaoInicio: periodoInicial.value,
+            periodoOcupacaoFim: periodoFinal.value
+        });
+
+        try {
+            await api.post('plano-mestre/ocupacao/calcular', body);
+        } catch (e) {
+            console.log('ocorreu algum erro!');
+            console.error(e);
+        }
+
+        setWaitConexao(false);
+
         loadOcupacaoEstagio(estagio.value);
     };
 
@@ -241,14 +325,14 @@ const FormOcupacaoEstagios = (props) => {
                 <Form.Group as={Col} md="2" controlId="periodoInicial">
                     <Form.Label>
                         Período Inicial (Ocupação)
-                        </Form.Label>
+                    </Form.Label>
                     <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo inicial"
                         name="periodoInicial"
                         options={periodosProducao}
-                        //value={periodoPadraoParam}
+                        value={periodoInicial}
                         onChange={(selected) => {
-                            //setPeriodoPadraoParam(selected);
-                            //props.setPeriodoPadraoInfo(selected.value);
+                            setPeriodoInicial(selected);
+                            setPeriodoInicialInfo(selected.value);
                         }}
                     />
                 </Form.Group>
@@ -260,10 +344,10 @@ const FormOcupacaoEstagios = (props) => {
                     <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o periodo final"
                         name="periodoFinal"
                         options={periodosProducao}
-                        //value={periodoPadraoParam}
+                        value={periodoFinal}
                         onChange={(selected) => {
-                            //setPeriodoPadraoParam(selected);
-                            //props.setPeriodoPadraoInfo(selected.value);
+                            setPeriodoFinal(selected);
+                            setPeriodoFinalInfo(selected.value);
                         }}
                     />
                 </Form.Group>
@@ -280,7 +364,8 @@ const FormOcupacaoEstagios = (props) => {
                         value={estagio}
                         onChange={(selected) => {
                             setEstagio(selected);
-                            loadOcupacaoEstagio(selected.value);
+                            setEstagioInfo(selected.value);                            
+                            loadOcupacaoEstagio(selected.value);                            
                         }}
                     />
                 </Form.Group>
@@ -289,8 +374,19 @@ const FormOcupacaoEstagios = (props) => {
             <Button
                 variant="primary"
                 onClick={calcularOcupacaoPeriodo}
+                disabled={desabilitarCalculo}
             >
-                Calcular Ocupação do Período
+                {waitConexao ?
+                    <Spinner
+                        show="false"
+                        as="span"
+                        animation="grow"
+                        size="sm"
+                        role="status"
+                        aria-hidden="true"
+                    /> : ''}
+
+                Atualizar Ocupação
             </Button>
 
             <br></br>
@@ -327,7 +423,19 @@ const FormOcupacaoEstagios = (props) => {
                                             type="text"
                                             name="pecasPlano"
                                             disabled
-                                            value={qtdePecas}
+                                            value={qtdePecasPlano}
+                                        />
+                                    </Form.Group>
+
+                                    <Form.Group as={Col} md="2" >
+                                        <Form.Label>
+                                            Quantidade Programado
+                                    </Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            name="pecasPlano"
+                                            disabled
+                                            value={qtdePecasProgramado}
                                         />
                                     </Form.Group>
 
@@ -392,7 +500,19 @@ const FormOcupacaoEstagios = (props) => {
                                             type="text"
                                             name="minutosPlano"
                                             disabled
-                                            value={qtdeMinutos}
+                                            value={qtdeMinutosPlano}
+                                        />
+                                    </Form.Group>
+
+                                    <Form.Group as={Col} md="2" >
+                                        <Form.Label>
+                                            Quantidade Programado
+                                        </Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            name="minutosPlano"
+                                            disabled
+                                            value={qtdeMinutosProgramado}
                                         />
                                     </Form.Group>
 
