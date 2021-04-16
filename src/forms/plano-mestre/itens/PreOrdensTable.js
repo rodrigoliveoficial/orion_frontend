@@ -23,11 +23,12 @@ export default class PreOrdensTable extends React.Component {
             [
                 {
                     label: 'Total',
-                    columnIndex: 6
+                    columnIndex: 7,
+                    align: 'right'
                 },
                 {
                     label: 'Total value',
-                    columnIndex: 7,
+                    columnIndex: 8,
                     align: 'right',
                     formatter: (tableData) => {
                         let label = 0;

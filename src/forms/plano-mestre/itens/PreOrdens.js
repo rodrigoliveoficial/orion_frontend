@@ -45,7 +45,7 @@ const FormPreOrdens = (props) => {
     const [detMaiorOrdemProg, setDetMaiorOrdemProg] = useState(0);
     const [detMenorOrdemProg, setDetMenorOrdemProg] = useState(0);
 
-    const { idPlanoMestre } = props;
+    const { idPlanoMestre } = props;    
     const { depositos } = props;
     const { periodosProducao } = props;
 

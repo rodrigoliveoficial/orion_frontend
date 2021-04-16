@@ -199,6 +199,7 @@ const FormOcupacaoEstagios = (props) => {
     const [waitConexao, setWaitConexao] = useState(false);
 
     const { idPlanoMestre } = props;
+    const { sitPlanoMestre } = props;
     const { periodosProducao } = props;
 
     const load = () => {
@@ -245,9 +246,9 @@ const FormOcupacaoEstagios = (props) => {
 
         setDesabilitarCalculo(true);
 
-        if  (estagioInfo > 0 && periodoInicialInfo > 0 && periodoFinalInfo > 0) setDesabilitarCalculo(false);
+        if  (sitPlanoMestre === 0 && estagioInfo > 0 && periodoInicialInfo > 0 && periodoFinalInfo > 0) setDesabilitarCalculo(false);
 
-    }, [estagioInfo, periodoInicialInfo, periodoFinalInfo]);
+    }, [sitPlanoMestre, estagioInfo, periodoInicialInfo, periodoFinalInfo]);
 
     const loadOcupacaoEstagio = (codEstagio) => {
         

@@ -7,7 +7,7 @@ import Select from 'react-select';
 import api from '../../../services/api';
 
 const loadColecoes = () => api.get('colecoes');
-const loadColecoesPermanentes = () => api.get('colecoes-permanentes');
+const loadColecoesPermanentes = () => api.get('colecoes/permanentes');
 const loadLinhasProduto = () => api.get('linhasproduto');
 const loadArtigosProduto = () => api.get('artigosproduto');
 const loadArtigosCotas = () => api.get('artigoscotas');

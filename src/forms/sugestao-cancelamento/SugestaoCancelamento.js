@@ -9,7 +9,7 @@ import ConfirmDialog from '../../components/Alert/ConfirmDialog';
 const formStyle = { marginLeft: '20px', marginTop: '20px', marginRight: '20px' };
 
 const loadColecoes = () => api.get('colecoes');
-const loadColecoesPermanentes = () => api.get('colecoes-permanentes');
+const loadColecoesPermanentes = () => api.get('colecoes/permanentes');
 
 const normalizeDados = (dados) => {
     return dados.map((c) => {
