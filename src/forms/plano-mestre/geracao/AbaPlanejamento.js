@@ -12,8 +12,8 @@ const loadDepositos = () => api.get('depositos');
 const normalizePedidos = (dados) => {
     return dados.map((c) => {
         return {
-            value: c.id,
-            label: c.id
+            value: c.pedidoVenda,
+            label: c.pedidoVenda
         };
     });
 };
@@ -232,7 +232,7 @@ const AbaPlanejamento = (props) => {
             api.get(`pedidos/${inicio}/${fim}`).then((response) => {
                 setPedidos(normalizePedidos(response.data));
             }).catch((e) => {
-                setPedidos(null);
+                setPedidos([]);
                 console.log('ocorreu algum erro!');
                 console.error(e);
             }).finally();

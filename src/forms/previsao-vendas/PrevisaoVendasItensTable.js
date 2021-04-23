@@ -2,7 +2,7 @@
 import React from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 
-export default class PrevisaoTable extends React.Component {
+export default class PrevisaoVendasItensTable extends React.Component {
 
     constructor(props) {
         super(props);
