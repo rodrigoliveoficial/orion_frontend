@@ -59,7 +59,11 @@ export default class PrevisaoVendasItensTable extends React.Component {
                 <TableHeaderColumn dataField='embarque' dataSort editable={false}  filter={{ type: 'TextFilter', placeholder: '' }}>Embarque</TableHeaderColumn>
                 <TableHeaderColumn dataField='valorSellIn' editable={false} width='200' dataAlign="right" dataSort> Sell IN</TableHeaderColumn>
                 <TableHeaderColumn dataField='valorSellOut' editable={false} width='200' dataAlign="right" dataSort>Sell OUT</TableHeaderColumn>                
-                <TableHeaderColumn dataField='qtdePrevisaoVendas' editable={{ type: 'number' }} width='200' dataAlign="right" dataSort>Previsão Vendas</TableHeaderColumn>                                
+                <TableHeaderColumn dataField='grupoBase' width='200' dataSort>Referência (Base)</TableHeaderColumn>                
+                <TableHeaderColumn dataField='itemBase' width='200' dataSort>Cor (Base)</TableHeaderColumn>                
+                <TableHeaderColumn dataField='qtdeVendidaBase' width='200' editable={false} dataSort>Qtde Vendida (Base)</TableHeaderColumn>                
+                <TableHeaderColumn dataField='percentualAplicar' editable={{ type: 'number' }} width='200' dataAlign="right" dataSort>Percentual Aplicar</TableHeaderColumn>
+                <TableHeaderColumn dataField='qtdePrevisaoVendas' editable={{ type: 'number' }} width='200' dataAlign="right" dataSort>Previsão Vendas</TableHeaderColumn>
             </BootstrapTable>
         );
     }

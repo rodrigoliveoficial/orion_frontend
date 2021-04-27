@@ -107,14 +107,22 @@ const initialValues = {
 const ItensPlanoMestre = (props) => {
 
     const [itens, setItens] = useState([]);
-    const [plano1, setPlano1] = useState('');
-    const [plano2, setPlano2] = useState('');
-    const [plano3, setPlano3] = useState('');
-    const [plano4, setPlano4] = useState('');
-    const [plano5, setPlano5] = useState('');
-    const [plano6, setPlano6] = useState('');
-    const [plano7, setPlano7] = useState('');
-    const [plano8, setPlano8] = useState('');
+    const [planoDem1, setPlanoDem1] = useState('');
+    const [planoDem2, setPlanoDem2] = useState('');
+    const [planoDem3, setPlanoDem3] = useState('');
+    const [planoDem4, setPlanoDem4] = useState('');
+    const [planoDem5, setPlanoDem5] = useState('');
+    const [planoDem6, setPlanoDem6] = useState('');
+    const [planoDem7, setPlanoDem7] = useState('');
+    const [planoDem8, setPlanoDem8] = useState('');
+    const [planoProc1, setPlanoProc1] = useState('');
+    const [planoProc2, setPlanoProc2] = useState('');
+    const [planoProc3, setPlanoProc3] = useState('');
+    const [planoProc4, setPlanoProc4] = useState('');
+    const [planoProc5, setPlanoProc5] = useState('');
+    const [planoProc6, setPlanoProc6] = useState('');
+    const [planoProc7, setPlanoProc7] = useState('');
+    const [planoProc8, setPlanoProc8] = useState('');
 
     const [tipoDistribuicaoParam, setTipoDistribuicaoParam] = useState('');
     const [multiplicadorParam, setMultiplicadorParam] = useState('');
@@ -225,14 +233,22 @@ const ItensPlanoMestre = (props) => {
                 setConsideraProdSemPediParam(response.data.considera_prod_sem_pedi ? 'Sim' : 'Não');
                 setNumeroInternoParam(response.data.numero_interno);
                 setPedidosParam(response.data.pedidos);
-                setPlano1(`${response.data.plano1_dem_inicio} - ${response.data.plano1_dem_fim}`);
-                setPlano2(`${response.data.plano2_dem_inicio} - ${response.data.plano2_dem_fim}`);
-                setPlano3(`${response.data.plano3_dem_inicio} - ${response.data.plano3_dem_fim}`);
-                setPlano4(`${response.data.plano4_dem_inicio} - ${response.data.plano4_dem_fim}`);
-                setPlano5(`${response.data.plano5_dem_inicio} - ${response.data.plano5_dem_fim}`);
-                setPlano6(`${response.data.plano6_dem_inicio} - ${response.data.plano6_dem_fim}`);
-                setPlano7(`${response.data.plano7_dem_inicio} - ${response.data.plano7_dem_fim}`);
-                setPlano8(`${response.data.plano8_dem_inicio} - ${response.data.plano8_dem_fim}`);
+                setPlanoDem1(`${response.data.plano1_dem_inicio} - ${response.data.plano1_dem_fim}`);
+                setPlanoDem2(`${response.data.plano2_dem_inicio} - ${response.data.plano2_dem_fim}`);
+                setPlanoDem3(`${response.data.plano3_dem_inicio} - ${response.data.plano3_dem_fim}`);
+                setPlanoDem4(`${response.data.plano4_dem_inicio} - ${response.data.plano4_dem_fim}`);
+                setPlanoDem5(`${response.data.plano5_dem_inicio} - ${response.data.plano5_dem_fim}`);
+                setPlanoDem6(`${response.data.plano6_dem_inicio} - ${response.data.plano6_dem_fim}`);
+                setPlanoDem7(`${response.data.plano7_dem_inicio} - ${response.data.plano7_dem_fim}`);
+                setPlanoDem8(`${response.data.plano8_dem_inicio} - ${response.data.plano8_dem_fim}`);
+                setPlanoProc1(`${response.data.plano1_proc_inicio} - ${response.data.plano1_proc_fim}`);
+                setPlanoProc2(`${response.data.plano2_proc_inicio} - ${response.data.plano2_proc_fim}`);
+                setPlanoProc3(`${response.data.plano3_proc_inicio} - ${response.data.plano3_proc_fim}`);
+                setPlanoProc4(`${response.data.plano4_proc_inicio} - ${response.data.plano4_proc_fim}`);
+                setPlanoProc5(`${response.data.plano5_proc_inicio} - ${response.data.plano5_proc_fim}`);
+                setPlanoProc6(`${response.data.plano6_proc_inicio} - ${response.data.plano6_proc_fim}`);
+                setPlanoProc7(`${response.data.plano7_proc_inicio} - ${response.data.plano7_proc_fim}`);
+                setPlanoProc8(`${response.data.plano8_proc_inicio} - ${response.data.plano8_proc_fim}`);
             }).catch((e) => {
                 console.log('ocorreu algum erro!');
                 console.error(e);
@@ -813,14 +829,22 @@ const ItensPlanoMestre = (props) => {
                         {...props}
                         itens={itens}
                         options={options}
-                        plano1={plano1}
-                        plano2={plano2}
-                        plano3={plano3}
-                        plano4={plano4}
-                        plano5={plano5}
-                        plano6={plano6}
-                        plano7={plano7}
-                        plano8={plano8}
+                        planoDem1={planoDem1}
+                        planoDem2={planoDem2}
+                        planoDem3={planoDem3}
+                        planoDem4={planoDem4}
+                        planoDem5={planoDem5}
+                        planoDem6={planoDem6}
+                        planoDem7={planoDem7}
+                        planoDem8={planoDem8}
+                        planoProc1={planoProc1}
+                        planoProc2={planoProc2}
+                        planoProc3={planoProc3}
+                        planoProc4={planoProc4}
+                        planoProc5={planoProc5}
+                        planoProc6={planoProc6}
+                        planoProc7={planoProc7}
+                        planoProc8={planoProc8}
                     />
 
                     {showImgTamanhos && (

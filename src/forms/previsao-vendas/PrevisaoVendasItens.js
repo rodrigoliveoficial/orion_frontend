@@ -1,38 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Col, Button } from 'react-bootstrap';
+import { Modal, Form, Col, Button } from 'react-bootstrap';
+import { useFormik } from 'formik';
+import PropTypes from 'prop-types';
 import Spinner from 'react-bootstrap/Spinner'
 import Select from 'react-select';
 import api from '../../services/api';
 import Figure from 'react-bootstrap/Figure'
 import PrevisaoVendasItensTable from './PrevisaoVendasItensTable';
 
-const formStyle = { marginLeft: '20px', marginTop: '20px', marginRight: '20px' };
-
-const loadColecoes = () => api.get('colecoes');
-const loadTabelasPreco = () => api.get('tabelas-preco');
-
-const normalizeDados = (dados) => {
-    return dados.map((c) => {
-        return {
-            value: c.id,
-            label: `${c.id} - ${c.descricao}`
-        };
-    });
-};
-
-const normalizeTabelasPreco = (dados) => {
-    return dados.map((c) => {
-        return {
-            value: c.id,
-            label: `${c.colecao} . ${c.mes} . ${c.sequencia} - ${c.descricao}`
-        };
-    });
-};
+const initialValues = {
+    id: 0,
+    descricao: '',
+    colecao: 0,
+    tabelaSellIn: '',
+    tabelaSellOut: ''
+}
 
 const PrevisaoVendasItens = (props) => {
 
-    const [colecoes, setColecoes] = useState([]);
-    const [tabelasPreco, setTabelasPreco] = useState([]);
     const [previsaoVendas, setPrevisaoVendas] = useState([]);
 
     const [colecao, setColecao] = useState([]);
@@ -51,6 +36,9 @@ const PrevisaoVendasItens = (props) => {
     const [itemSelecionado, setItemSelecionado] = useState('');
 
     const [currPage, setCurrPage] = useState(1);
+
+    const { colecoes } = props;
+    const { tabelasPreco } = props;
 
     const options = {
         sizePerPageList: [5, 10, 20, 100, 10000],
@@ -87,29 +75,6 @@ const PrevisaoVendasItens = (props) => {
         }
 
     }, [itemSelecionado]);
-
-    const load = () => {
-
-        Promise.all([
-            loadColecoes(),
-            loadTabelasPreco()
-        ])
-            .then(([
-                responseColecoes,
-                responseTabelasPreco
-            ]) => {
-                setColecoes(normalizeDados(responseColecoes.data));
-                setTabelasPreco(normalizeTabelasPreco(responseTabelasPreco.data));
-            })
-            .catch((e) => {
-                console.log('ocorreu algum erro!');
-                console.error(e);
-            });
-    };
-
-    useEffect(() => {
-        load();
-    }, []);
 
     useEffect(() => {
         setDesabilitarBotoes(true);
@@ -162,6 +127,10 @@ const PrevisaoVendasItens = (props) => {
         try {
             const response = await api.post('previsao-vendas', body);
             setPrevisaoVendas(response.data);
+
+            // Deve retornar o ID Criado e atualizar a tela.
+
+
         } catch (e) {
             console.log('ocorreu algum erro!');
             console.error(e);
@@ -171,11 +140,46 @@ const PrevisaoVendasItens = (props) => {
         setLoading(false);
     };
 
-    return (
-        <div style={formStyle}>
+    const {
+        handleChange,        
+        values
+    } = useFormik({
+        initialValues: initialValues
+    });
 
-            <h2><b>Previsão de Vendas</b></h2>
-            <br></br>
+    return (
+        <div >
+
+            <Form.Row>
+                <Form.Group as={Col} md="1" controlId="id">
+                    <Form.Label>
+                        Código 
+                    </Form.Label>
+                    <Form.Control
+                        type="number"
+                        name="id"
+                        disabled={true}
+                        value={values.id}
+                        onChange={handleChange}
+                    />
+                </Form.Group>
+            </Form.Row>
+
+            <Form.Row>
+                <Form.Group as={Col} md="4" controlId="descricao">
+                    <Form.Label>
+                        Descrição 
+                    </Form.Label>
+                    <Form.Control
+                        type="text"
+                        maxLength="100"
+                        name="descricao"
+                        autoComplete="off"
+                        value={values.descricao}
+                        onChange={handleChange}
+                    />
+                </Form.Group>
+            </Form.Row>
 
             <Form.Row>
                 <Form.Group as={Col} md="4" controlId="colecao">
@@ -280,14 +284,6 @@ const FormModal = (props) => {
             <Modal.Header>
                 <Modal.Title>{`Previsão de Vendas: ${props.editMode ? 'Edição' : 'Inserção'}`}</Modal.Title>
                 <div>
-                    <Button
-                        variant="primary"
-                        type="submit"
-                        form="previsao-vendas-form-salvar"
-                    >
-                        Salvar
-                    </Button>
-
                     <Button
                         variant="secondary"
                         onClick={props.onClose}
