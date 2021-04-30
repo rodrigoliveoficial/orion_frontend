@@ -15,6 +15,7 @@ const initialValues = {
     descricao: '',
     tipoDistribuicao: 1,
     multiplicador: 0,
+    qtdeMinimaReferencia: 0,
     periodoPadrao: 0
 }
 
@@ -27,6 +28,7 @@ const AbaGlobal = (props) => {
     const setParametrosGlobalDefault = () => {
         props.setTipoDistribuicaoSelected(1);
         props.setMultiplicadorInfo(0);
+        props.setQtdeMinimaReferenciaInfo(0);
         props.setPeriodoPadraoInfo(0);
     };
 
@@ -102,6 +104,25 @@ const AbaGlobal = (props) => {
                 </Form.Row>
 
                 <Form.Row>
+                    <Form.Group as={Col} md="1" controlId="qtdeMinimaReferencia">
+                        <Form.Label>
+                            Qtde Mínima por Referência
+                        </Form.Label>
+
+                        <Form.Control
+                            type="number"
+                            maxLength="999999"
+                            name="qtdeMinimaReferencia"
+                            value={values.qtdeMinimaReferencia}
+                            onChange={handleChange}
+                            onBlur={() => {                                
+                                props.setQtdeMinimaReferenciaInfo(values.qtdeMinimaReferencia);
+                            }}
+                        />
+                    </Form.Group>
+                </Form.Row>
+
+                <Form.Row>
                     <Form.Group as={Col} md="2" controlId="periodoPadrao">
                         <Form.Label>
                             Período de Produção (Padrão)
@@ -126,7 +147,8 @@ const AbaGlobal = (props) => {
 AbaGlobal.propTypes = {
     setDescricaoInfo: PropTypes.func,
     setTipoDistribuicaoSelected: PropTypes.func,
-    setMultiplicadorInfo: PropTypes.func,
+    setMultiplicadorInfo: PropTypes.func,    
+    setQtdeMinimaReferenciaInfo: PropTypes.func,    
     setPeriodoPadraoInfo: PropTypes.func,    
     periodosProducao: PropTypes.object
 };
@@ -135,6 +157,7 @@ AbaGlobal.defaultProps = {
     setDescricaoInfo: () => { },
     setTipoDistribuicaoSelected: () => { },
     setMultiplicadorInfo: () => { },
+    setQtdeMinimaReferenciaInfo: () => { },
     setPeriodoPadraoInfo: () => { }
 };
 

@@ -31,6 +31,7 @@ export default class ItensPlanoTable extends React.Component {
         const { planoProc6 } = this.props;
         const { planoProc7 } = this.props;
         const { planoProc8 } = this.props;
+        const { planoProg } = this.props;
         const { options } = this.props;        
 
         const footerData = [
@@ -544,7 +545,8 @@ export default class ItensPlanoTable extends React.Component {
                 <TableHeaderColumn row='0' colSpan='3' headerAlign="center">Plano 7</TableHeaderColumn>
                 <TableHeaderColumn row='0' colSpan='3' headerAlign="center">Plano 8</TableHeaderColumn>
 
-                <TableHeaderColumn row='0' rowSpan='3' colSpan='3' headerAlign="center">Acumulado</TableHeaderColumn>
+                <TableHeaderColumn row='0' rowSpan='3' colSpan='3' headerAlign="center">Acumulado Total</TableHeaderColumn>
+                <TableHeaderColumn row='0' rowSpan='2' colSpan='3' headerAlign="center">Acumulado Parcial</TableHeaderColumn>
                 <TableHeaderColumn row='0' rowSpan='3' colSpan='4' headerAlign="center">Sugestão Programação</TableHeaderColumn>
 
                 <TableHeaderColumn row='1' rowSpan='1' colSpan='3' headerAlign="center">{planoDem1}</TableHeaderColumn>
@@ -563,6 +565,7 @@ export default class ItensPlanoTable extends React.Component {
                 <TableHeaderColumn row='2' rowSpan='1' colSpan='3' headerAlign="center">{planoProc6}</TableHeaderColumn>
                 <TableHeaderColumn row='2' rowSpan='1' colSpan='3' headerAlign="center">{planoProc7}</TableHeaderColumn>
                 <TableHeaderColumn row='2' rowSpan='1' colSpan='3' headerAlign="center">{planoProc8}</TableHeaderColumn>
+                <TableHeaderColumn row='2' rowSpan='1' colSpan='3' headerAlign="center">{planoProg}</TableHeaderColumn>
 
                 <TableHeaderColumn row='3' dataField='codigo' width='140' dataSort isKey={true} filter={{ type: 'TextFilter', placeholder: 'Código' }}>Ref . Cor</TableHeaderColumn>
                 <TableHeaderColumn row='3' dataField='embarque' editable={false} width='130' dataSort filter={{ type: 'TextFilter', placeholder: 'Embarque' }}>Emb</TableHeaderColumn>                
@@ -606,6 +609,10 @@ export default class ItensPlanoTable extends React.Component {
                 <TableHeaderColumn row='3' dataField='qtdeDemAcumulado' editable={false} dataAlign="right" dataSort>Dem</TableHeaderColumn>
                 <TableHeaderColumn row='3' dataField='qtdeProcAcumulado' editable={false} dataAlign="right" dataSort>Proc</TableHeaderColumn>
                 <TableHeaderColumn row='3' dataField='qtdeSaldoAcumulado' editable={false} dataAlign="right" dataSort>Saldo</TableHeaderColumn>
+
+                <TableHeaderColumn row='3' dataField='qtdeDemAcumProg' editable={false} dataAlign="right" dataSort>Dem</TableHeaderColumn>
+                <TableHeaderColumn row='3' dataField='qtdeProcAcumProg' editable={false} dataAlign="right" dataSort>Proc</TableHeaderColumn>
+                <TableHeaderColumn row='3' dataField='qtdeSaldoAcumProg' editable={false} dataAlign="right" dataSort>Saldo</TableHeaderColumn>
 
                 <TableHeaderColumn row='3' dataField='qtdeSugestao' editable={false} dataAlign="right" dataSort>Sug</TableHeaderColumn>
                 <TableHeaderColumn row='3' dataField='qtdeEqualizadoSugestao' editable={false} dataAlign="right" dataSort>Equal</TableHeaderColumn>

@@ -50,53 +50,6 @@ const normalizeRoteiros = (dados) => {
     });
 };
 
-const normalizeDados = (dados) => {
-    return dados.map((d) => {
-        return {
-            idPlanoMestre: d.idPlanoMestre,
-            codigo: d.codigo,
-            grupo: d.grupo,
-            item: d.item,
-            embarque: d.embarque,
-            rank: d.rank,
-            sugCancelProducao: d.sugCancelProducao,
-            qtdePrevisao: d.qtdePrevisao,
-            qtdeEstoque: d.qtdeEstoque,
-            qtdeDemPlano1: d.qtdeDemPlano1,
-            qtdeProcPlano1: d.qtdeProcPlano1,
-            qtdeSaldoPlano1: d.qtdeSaldoPlano1,
-            qtdeDemPlano2: d.qtdeDemPlano2,
-            qtdeProcPlano2: d.qtdeProcPlano2,
-            qtdeSaldoPlano2: d.qtdeSaldoPlano2,
-            qtdeDemPlano3: d.qtdeDemPlano3,
-            qtdeProcPlano3: d.qtdeProcPlano3,
-            qtdeSaldoPlano3: d.qtdeSaldoPlano3,
-            qtdeDemPlano4: d.qtdeDemPlano4,
-            qtdeProcPlano4: d.qtdeProcPlano4,
-            qtdeSaldoPlano4: d.qtdeSaldoPlano4,
-            qtdeDemPlano5: d.qtdeDemPlano5,
-            qtdeProcPlano5: d.qtdeProcPlano5,
-            qtdeSaldoPlano5: d.qtdeSaldoPlano5,
-            qtdeDemPlano6: d.qtdeDemPlano6,
-            qtdeProcPlano6: d.qtdeProcPlano6,
-            qtdeSaldoPlano6: d.qtdeSaldoPlano6,
-            qtdeDemPlano7: d.qtdeDemPlano7,
-            qtdeProcPlano7: d.qtdeProcPlano7,
-            qtdeSaldoPlano7: d.qtdeSaldoPlano7,
-            qtdeDemPlano8: d.qtdeDemPlano8,
-            qtdeProcPlano8: d.qtdeProcPlano8,
-            qtdeSaldoPlano8: d.qtdeSaldoPlano8,
-            qtdeDemAcumulado: d.qtdeDemAcumulado,
-            qtdeProcAcumulado: d.qtdeProcAcumulado,
-            qtdeSaldoAcumulado: d.qtdeSaldoAcumulado,
-            qtdeSugestao: d.qtdeSugestao,
-            qtdeEqualizadoSugestao: d.qtdeEqualizadoSugestao,
-            qtdeDiferencaSugestao: d.qtdeDiferencaSugestao,
-            qtdeProgramada: d.qtdeProgramada
-        };
-    });
-};
-
 const initialValues = {
     alternativaItem: 0,
     roteiroItem: 0,
@@ -123,9 +76,11 @@ const ItensPlanoMestre = (props) => {
     const [planoProc6, setPlanoProc6] = useState('');
     const [planoProc7, setPlanoProc7] = useState('');
     const [planoProc8, setPlanoProc8] = useState('');
+    const [planoProg, setPlanosProg] = useState('');
 
     const [tipoDistribuicaoParam, setTipoDistribuicaoParam] = useState('');
     const [multiplicadorParam, setMultiplicadorParam] = useState('');
+    const [qtdeMinimaReferenciaParam, setQtdeMinimaReferenciaParam] = useState('');
     const [periodoPadraoParam, setPeriodoPadraoParam] = useState('');
     const [colecoesParam, setColecoesParam] = useState('');
     const [colecoesPermanentesParam, setColecoesPermanentesParam] = useState('');
@@ -202,7 +157,7 @@ const ItensPlanoMestre = (props) => {
 
         const loadItensPlanoMestre = () => {
             api.get(`plano-mestre/produtos/${idPlanoMestre}`).then((response) => {
-                setItens(normalizeDados(response.data));
+                setItens(response.data);
             }).catch((e) => {
                 console.log('ocorreu algum erro!');
                 console.error(e);
@@ -214,6 +169,7 @@ const ItensPlanoMestre = (props) => {
             api.get(`plano-mestre/parametros/${idPlanoMestre}`).then((response) => {
                 setTipoDistribuicaoParam(response.data.descTipoDistribuicao);
                 setMultiplicadorParam(response.data.multiplicador);
+                setQtdeMinimaReferenciaParam(response.data.qtdeMinimaReferencia);
                 setPeriodoPadraoParam(response.data.periodoPadrao);
                 setColecoesParam(response.data.colecoes);
                 setColecoesPermanentesParam(response.data.colecoes_permanentes);
@@ -249,6 +205,7 @@ const ItensPlanoMestre = (props) => {
                 setPlanoProc6(`${response.data.plano6_proc_inicio} - ${response.data.plano6_proc_fim}`);
                 setPlanoProc7(`${response.data.plano7_proc_inicio} - ${response.data.plano7_proc_fim}`);
                 setPlanoProc8(`${response.data.plano8_proc_inicio} - ${response.data.plano8_proc_fim}`);
+                setPlanosProg(`Planos: ${response.data.planoAcumProgInicio} ao ${response.data.planoAcumProgFim}`);
             }).catch((e) => {
                 console.log('ocorreu algum erro!');
                 console.error(e);
@@ -307,6 +264,7 @@ const ItensPlanoMestre = (props) => {
         const loadParamProgItem = () => {
             api.get(`plano-mestre/param-prog-item/${idPlanoMestre}/${itemSelecionado}`).then((response) => {
                 setAlternativaGravada(response.data.alternativa);
+                setFieldValue('alternativaItem', response.data.alternativa);
                 setFieldValue('periodoPadraoItem', response.data.periodo);
                 setFieldValue('multiplicadorItem', response.data.multiplicador);
                 setPeriodoPadraoItem(periodosProducao.find(o => o.value === response.data.periodo));
@@ -314,6 +272,7 @@ const ItensPlanoMestre = (props) => {
                 api.get(`produtos/roteiros/${itemSelecionado}/${response.data.alternativa}`).then((responseRot) => {
                     setRoteirosItem(normalizeRoteiros(responseRot.data));
                     setRoteiroGravado(response.data.roteiro);
+                    setFieldValue('roteiroItem', response.data.roteiro);
                 }).catch((e) => {
                     console.log('ocorreu algum erro!');
                     console.error(e);
@@ -414,9 +373,9 @@ const ItensPlanoMestre = (props) => {
         const body = ({
             idPlanoMestre: idPlanoMestre,
             codGrupoItemProg: itemSelecionado,
-            alternativaProg: alternativaItem.value,
-            roteiroProg: roteiroItem.value,
-            periodoProg: periodoPadraoItem.value, 
+            alternativaProg: values.alternativaItem,
+            roteiroProg: values.roteiroItem,
+            periodoProg: values.periodoPadraoItem, 
             multiplicadorProg: values.multiplicadorItem
         });
 
@@ -426,7 +385,7 @@ const ItensPlanoMestre = (props) => {
 
             try {
                 const responseProdutos = await api.get(`plano-mestre/produtos/${idPlanoMestre}`);
-                setItens(normalizeDados(responseProdutos.data));
+                setItens(responseProdutos.data);
             } catch (e) {
                 console.log('ocorreu algum erro!');
                 console.error(e);
@@ -447,7 +406,7 @@ const ItensPlanoMestre = (props) => {
 
         try {
             const response = await api.post('plano-mestre/salvar-itens', bodyItens);
-            setItens(normalizeDados(response.data));
+            setItens(response.data);
 
             try {
                 const responseTamanhos = await api.get(`plano-mestre/tamanhos/${idPlanoMestre}/${itemSelecionado}`);
@@ -477,7 +436,7 @@ const ItensPlanoMestre = (props) => {
 
             try {
                 const responseProdutos = await api.get(`plano-mestre/produtos/${idPlanoMestre}`);
-                setItens(normalizeDados(responseProdutos.data));
+                setItens(responseProdutos.data);
             } catch (e) {
                 console.log('ocorreu algum erro!');
                 console.error(e);
@@ -554,7 +513,19 @@ const ItensPlanoMestre = (props) => {
                                         />
                                     </Form.Group>
 
-                                    <Form.Group as={Col} md="2" controlId="periodo-padrao">
+                                    <Form.Group as={Col} md="1" controlId="qtdeMinimaReferencia">
+                                        <Form.Label>
+                                            Qtde Mínima por Referência
+                                        </Form.Label>
+                                        <Form.Control
+                                            type="number"
+                                            name="qtdeMinimaReferencia"
+                                            disabled
+                                            value={qtdeMinimaReferenciaParam}
+                                        />
+                                    </Form.Group>
+
+                                    <Form.Group as={Col} md="1" controlId="periodo-padrao">
                                         <Form.Label>
                                             Período de Produção (Padrão)
                                         </Form.Label>
@@ -845,6 +816,7 @@ const ItensPlanoMestre = (props) => {
                         planoProc6={planoProc6}
                         planoProc7={planoProc7}
                         planoProc8={planoProc8}
+                        planoProg={planoProg}
                     />
 
                     {showImgTamanhos && (
@@ -878,6 +850,7 @@ const ItensPlanoMestre = (props) => {
                                                     value={alternativaItem}
                                                     onChange={(selected) => {
                                                         setAlternativaItem(selected);
+                                                        setFieldValue('alternativaItem', selected.value);
                                                         loadRoteirosAlternativa(selected.value);
                                                     }}
                                                 />
@@ -893,6 +866,7 @@ const ItensPlanoMestre = (props) => {
                                                     value={roteiroItem}
                                                     onChange={(selected) => {
                                                         setRoteiroItem(selected);
+                                                        setFieldValue('roteiroItem', selected.value);
                                                     }}
                                                 />
                                             </Form.Group>
@@ -906,7 +880,8 @@ const ItensPlanoMestre = (props) => {
                                                     options={periodosProducao}
                                                     value={periodoPadraoItem}
                                                     onChange={(selected) => {
-                                                        setPeriodoPadraoItem(selected);                                                        
+                                                        setPeriodoPadraoItem(selected);  
+                                                        setFieldValue('periodoPadraoItem', selected.value);
                                                     }}
                                                 />
                                             </Form.Group>
@@ -924,9 +899,6 @@ const ItensPlanoMestre = (props) => {
                                                     name="multiplicadorItem"
                                                     value={values.multiplicadorItem}
                                                     onChange={handleChange}
-                                                    onBlur={() => {
-                                                        //props.setPeriodoPadraoInfo(values.periodoPadrao);
-                                                    }}
                                                 />
                                             </Form.Group>
 

@@ -27,6 +27,17 @@ const normalizeDados = (dados) => {
     });
 };
 
+const optionsPlanos = [
+    { value: 1, label: 'PLANO 1' },
+    { value: 2, label: 'PLANO 2' },
+    { value: 3, label: 'PLANO 3' },
+    { value: 4, label: 'PLANO 4' },
+    { value: 5, label: 'PLANO 5' },
+    { value: 6, label: 'PLANO 6' },
+    { value: 7, label: 'PLANO 7' },
+    { value: 8, label: 'PLANO 8' },
+]
+
 const options = [
     { value: 0, label: 'Não' },
     { value: 1, label: 'Sim' }
@@ -104,7 +115,9 @@ const initialValues = {
     mostraProdSemDepo: 1,
     mostraProdSemProc: 1,
     consideraPedBloqu: 1,
-    mostraProdSemPedi: 1
+    mostraProdSemPedi: 1,
+    planoAcumProgInicio: 1,
+    planoAcumProgFim: 8
 };
 
 const AbaPlanejamento = (props) => {
@@ -155,6 +168,9 @@ const AbaPlanejamento = (props) => {
 
     const [perDemandaInicial, setPerDemandaInicial] = useState(0);
     const [perDemandaFinal, setPerDemandaFinal] = useState(0);
+
+    const [planoAcumProgInicio, setPlanoAcumProgInicio] = useState([]);
+    const [planoAcumProgFim, setPlanoAcumProgFim] = useState([]);
 
     const { periodosDemanda } = props;
     const { periodosProducao } = props;
@@ -209,11 +225,11 @@ const AbaPlanejamento = (props) => {
         props.setPerProcFim6Info(5103);
         props.setPerProcFim7Info(5104);
         props.setPerProcFim8Info(5140);
-        props.setConsideraDepositoSelected(1);
-        props.setMostraProdSemDepoSelected(1);
-        props.setMostraProdSemProcSelected(1);
-        props.setConsideraPedBloquSelected(1);
-        props.setMostraProdSemPediSelected(1);
+        //props.setConsideraDepositoSelected(1); No formulário principal é inicializado com 1.
+        //props.setMostraProdSemDepoSelected(1); No formulário principal é inicializado com 1.
+        //props.setMostraProdSemProcSelected(1); No formulário principal é inicializado com 1.
+        //props.setConsideraPedBloquSelected(1); No formulário principal é inicializado com 1.
+        //props.setMostraProdSemPediSelected(1); No formulário principal é inicializado com 1.
     };
 
     const {
@@ -244,6 +260,8 @@ const AbaPlanejamento = (props) => {
     }, [perDemandaInicial, perDemandaFinal]);
 
     useEffect(() => {
+        setPlanoAcumProgInicio(optionsPlanos.find(o => o.value === 1));
+        setPlanoAcumProgFim(optionsPlanos.find(o => o.value === 8));
         setConsideraDepositoParam(options.find(o => o.value === 1));
         setMostraProdSemDepoParam(options.find(o => o.value === 1));
         setMostraProdSemProcParam(options.find(o => o.value === 1));
@@ -755,6 +773,61 @@ const AbaPlanejamento = (props) => {
 
                 <br></br>
                 <h4>
+                    Informações para as colunas "Acumulado" para a programação
+                </h4>
+
+                <Form.Row>
+                    <Form.Group as={Col} md="2" controlId="planoAcumProgInicio">
+                        <Form.Label>
+                            Plano Inicio
+                        </Form.Label>
+
+                        <Select className="basic-select" classNamePrefix="select"
+                            name="planoAcumProgInicio"
+                            value={planoAcumProgInicio}
+                            options={optionsPlanos}
+                            onChange={(selected) => {
+                                if (planoAcumProgFim.value < selected.value) {
+                                    alert('Plano início do acumulado para planejamento não pode ser maior que o plano fim!');
+                                    setPlanoAcumProgInicio(optionsPlanos.find(o => o.value === 1));    
+                                    setFieldValue('planoAcumProgInicio', 1);
+                                    props.setPlanoAcumProgInicioSelected(1);
+                                } else {
+                                    setPlanoAcumProgInicio(selected);
+                                    setFieldValue('planoAcumProgInicio', selected.value);
+                                    props.setPlanoAcumProgInicioSelected(selected.value);                                
+                                }
+                            }}
+                        />
+                    </Form.Group>
+
+                    <Form.Group as={Col} md="2" controlId="planoAcumProgFim">
+                        <Form.Label>
+                            Plano Fim
+                        </Form.Label>
+
+                        <Select className="basic-select" classNamePrefix="select"
+                            name="planoAcumProgFim"
+                            value={planoAcumProgFim}
+                            options={optionsPlanos}
+                            onChange={(selected) => {                                
+                                if (planoAcumProgInicio.value > selected.value) {
+                                    alert('Plano início do acumulado para planejamento não pode ser maior que o plano fim!');
+                                    setPlanoAcumProgFim(optionsPlanos.find(o => o.value === 8));    
+                                    setFieldValue('planoAcumProgFim', 8);
+                                    props.setPlanoAcumProgFimSelected(8);
+                                } else {                                
+                                    setPlanoAcumProgFim(selected);
+                                    setFieldValue('planoAcumProgFim', selected.value);
+                                    props.setPlanoAcumProgFimSelected(selected.value);                                                                
+                                }
+                            }}
+                        />
+                    </Form.Group>
+                </Form.Row>
+
+                <br></br>
+                <h4>
                     Informações para a coluna "Estoque"
                 </h4>
 
@@ -955,7 +1028,9 @@ AbaPlanejamento.propTypes = {
     setMostraProdSemPediSelected: PropTypes.func,
     setDepositosSelected: PropTypes.func,
     setNrInternoPedidoInfo: PropTypes.func,
-    setPedidosSelected: PropTypes.func
+    setPedidosSelected: PropTypes.func,
+    setPlanoAcumProgInicioSelected: PropTypes.func,
+    setPlanoAcumProgFimSelected: PropTypes.func
 };
 
 AbaPlanejamento.defaultProps = {
@@ -998,7 +1073,9 @@ AbaPlanejamento.defaultProps = {
     setMostraProdSemPediSelected: () => { },
     setDepositosSelected: () => { },
     setNrInternoPedidoInfo: () => { },
-    setPedidosSelected: () => { }
+    setPedidosSelected: () => { },
+    setPlanoAcumProgInicioSelected: () => { },
+    setPlanoAcumProgFimSelected: () => { }
 };
 
 export default AbaPlanejamento;

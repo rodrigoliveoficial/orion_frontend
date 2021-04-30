@@ -15,8 +15,9 @@ const GerarPlanoMestre = (props) => {
 
     // ABA GLOBAL
     const [descricaoInfo, setDescricaoInfo] = useState('');
-    const [periodoPadraoInfo, setPeriodoPadraoInfo] = useState(0);
-    const [multiplicadorInfo, setMultiplicadorInfo] = useState([]);
+    const [periodoPadraoInfo, setPeriodoPadraoInfo] = useState([]);
+    const [multiplicadorInfo, setMultiplicadorInfo] = useState(0);
+    const [qtdeMinimaReferenciaInfo, setQtdeMinimaReferenciaInfo] = useState(0);
     const [tipoDistribuicaoSelected, setTipoDistribuicaoSelected] = useState([]);
 
     // ABA ANALISE
@@ -69,11 +70,14 @@ const GerarPlanoMestre = (props) => {
     const [perProcFim7Info, setPerProcFim7Info] = useState(0);
     const [perProcFim8Info, setPerProcFim8Info] = useState(0);
 
-    const [consideraDepositoSelected, setConsideraDepositoSelected] = useState(0);
-    const [mostraProdSemDepoSelected, setMostraProdSemDepoSelected] = useState(0);
-    const [mostraProdSemProcSelected, setMostraProdSemProcSelected] = useState(0);
-    const [consideraPedBloquSelected, setConsideraPedBloquSelected] = useState(0);
-    const [mostraProdSemPediSelected, setMostraProdSemPediSelected] = useState(0);
+    const [planoAcumProgInicioSelected, setPlanoAcumProgInicioSelected] = useState(1);
+    const [planoAcumProgFimSelected, setPlanoAcumProgFimSelected] = useState(8);
+
+    const [consideraDepositoSelected, setConsideraDepositoSelected] = useState(1);
+    const [mostraProdSemDepoSelected, setMostraProdSemDepoSelected] = useState(1);
+    const [mostraProdSemProcSelected, setMostraProdSemProcSelected] = useState(1);
+    const [consideraPedBloquSelected, setConsideraPedBloquSelected] = useState(1);
+    const [mostraProdSemPediSelected, setMostraProdSemPediSelected] = useState(1);
 
     const [depositosSelected, setDepositosSelected] = useState([]);
     const [pedidosSelected, setPedidosSelected] = useState([]);
@@ -163,6 +167,11 @@ const GerarPlanoMestre = (props) => {
             periodosValidos = false;
         }
 
+        if (planoAcumProgInicioSelected > planoAcumProgFimSelected) {
+            alert('Plano início do acumulado para planejamento não pode ser maior que o plano fim!');
+            periodosValidos = false;
+        }
+
         return periodosValidos
     };
 
@@ -189,6 +198,7 @@ const GerarPlanoMestre = (props) => {
             setbodyParametros({
                 descricao: descricaoInfo,
                 multiplicador: multiplicadorInfo,
+                qtdeMinimaReferencia: qtdeMinimaReferenciaInfo,
                 periodoPadrao: periodoPadraoInfo,
                 tipoDistribuicao: tipoDistribuicaoSelected,
                 colecoes: colecoesSelected,
@@ -233,6 +243,8 @@ const GerarPlanoMestre = (props) => {
                 perProcFim06: perProcFim6Info,
                 perProcFim07: perProcFim7Info,
                 perProcFim08: perProcFim8Info,
+                planoAcumProgInicio: planoAcumProgInicioSelected,
+                planoAcumProgFim: planoAcumProgFimSelected,
                 consideraDepositos: consideraDepositoSelected,
                 mostraProdSemEstoques: mostraProdSemDepoSelected,
                 mostraProdSemProcessos: mostraProdSemProcSelected,
@@ -253,7 +265,7 @@ const GerarPlanoMestre = (props) => {
         perProcFim2Info, perProcFim3Info, perProcFim4Info, perProcFim5Info, perProcFim6Info, perProcFim7Info, perProcFim8Info,
         consideraDepositoSelected, mostraProdSemDepoSelected, mostraProdSemProcSelected, consideraPedBloquSelected, mostraProdSemPediSelected,
         produtosSelected, coresSelected, origProdutoSelected, depositosSelected, nrInternoPedidoInfo, pedidosSelected, embarquesSelected,
-        periodoPadraoInfo, tipoDistribuicaoSelected, multiplicadorInfo]);
+        periodoPadraoInfo, tipoDistribuicaoSelected, multiplicadorInfo, planoAcumProgInicioSelected, planoAcumProgFimSelected, qtdeMinimaReferenciaInfo]);
 
     return (
         <div style={formStyle}>
@@ -266,6 +278,7 @@ const GerarPlanoMestre = (props) => {
                         setPeriodoPadraoInfo={setPeriodoPadraoInfo}
                         setTipoDistribuicaoSelected={setTipoDistribuicaoSelected}
                         setMultiplicadorInfo={setMultiplicadorInfo}
+                        setQtdeMinimaReferenciaInfo={setQtdeMinimaReferenciaInfo}
                         periodosProducao={props.periodosProducao}
                     />
                 </Tab>
@@ -327,6 +340,8 @@ const GerarPlanoMestre = (props) => {
                         setDepositosSelected={setDepositosSelected}
                         setNrInternoPedidoInfo={setNrInternoPedidoInfo}
                         setPedidosSelected={setPedidosSelected}
+                        setPlanoAcumProgInicioSelected={setPlanoAcumProgInicioSelected}
+                        setPlanoAcumProgFimSelected={setPlanoAcumProgFimSelected}
                         periodosDemanda={props.periodosDemanda}
                         periodosProducao={props.periodosProducao}
                     />

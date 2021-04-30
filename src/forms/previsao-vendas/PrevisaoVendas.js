@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Col, Button } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import api from '../../services/api';
 import PrevisaoVendasTable from './PrevisaoVendasTable';
 import PrevisaoVendasItens from './PrevisaoVendasItens';
@@ -37,7 +37,7 @@ const PrevisaoVendas = (props) => {
     const [previsaoSelecionada, setPrevisaoSelecionada] = useState(0);
     const [desabilitaBotoes, setDesabilitaBotoes] = useState(true);
     const [showFormPrevisaoVendasItens, setShowFormPrevisaoVendasItens] = useState(false);
-    const [edit, setEdit] = useState(false);
+    //const [edit, setEdit] = useState(false);
 
     const { currPage } = useState(0);
 
@@ -108,7 +108,7 @@ const PrevisaoVendas = (props) => {
             <PrevisaoVendasItens
                 {...props}
                 show={showFormPrevisaoVendasItens}
-                editMode={edit}
+                //editMode={edit}
                 colecoes={colecoes}
                 tabelasPreco={tabelasPreco}
                 previsaoSelecionada={previsaoSelecionada}                
