@@ -21,8 +21,8 @@ export default class PrevisaoVendasTable extends React.Component {
                 <TableHeaderColumn dataField='id' isKey={true} dataSort width='100' >Código</TableHeaderColumn>
                 <TableHeaderColumn dataField='descricao' dataSort>Descrição</TableHeaderColumn>
                 <TableHeaderColumn dataField='descricaoColecao' dataSort>Coleção</TableHeaderColumn>
-                <TableHeaderColumn dataField='descricaoTabPrecoSellIn' dataSort>Tabela de Preço Sell In</TableHeaderColumn>
-                <TableHeaderColumn dataField='descricaoTabPrecoSellOut' dataSort>Tabela de Preço Sell Out</TableHeaderColumn>
+                <TableHeaderColumn dataField='descricaoTabPrecoSellIn' dataSort>Tabela de Preço - Sell In</TableHeaderColumn>
+                <TableHeaderColumn dataField='descricaoTabPrecoSellOut' dataSort>Tabela de Preço - Sell Out</TableHeaderColumn>
             </BootstrapTable>
         );
     }

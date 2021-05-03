@@ -471,7 +471,7 @@ export default class ItensPlanoTable extends React.Component {
                     formatter: (tableData) => {
                         let label = 0;
                         for (let i = 0, tableDataLen = tableData.length; i < tableDataLen; i++) {
-                            label += tableData[i].qtdeSugestao;
+                            label += tableData[i].qtdeDemAcumProg;
                         }
                         return (
                             <strong>{label}</strong>
@@ -485,7 +485,7 @@ export default class ItensPlanoTable extends React.Component {
                     formatter: (tableData) => {
                         let label = 0;
                         for (let i = 0, tableDataLen = tableData.length; i < tableDataLen; i++) {
-                            label += tableData[i].qtdeEqualizadoSugestao;
+                            label += tableData[i].qtdeProcAcumProg;
                         }
                         return (
                             <strong>{label}</strong>
@@ -495,6 +495,50 @@ export default class ItensPlanoTable extends React.Component {
                 {
                     label: 'Total value',
                     columnIndex: 35,
+                    align: 'right',
+                    formatter: (tableData) => {
+                        let label = 0;
+                        let label2 = 0;
+                        for (let i = 0, tableDataLen = tableData.length; i < tableDataLen; i++) {
+                            if (tableData[i].qtdeSaldoAcumProg < 0) label += tableData[i].qtdeSaldoAcumProg;
+                            else label2 += tableData[i].qtdeSaldoAcumProg;
+                        }
+                        return (
+                            <strong><font color="red">{label}</font> <br></br> {label2}</strong>
+                        );
+                    }
+                }, 
+                {
+                    label: 'Total value',
+                    columnIndex: 36,
+                    align: 'right',
+                    formatter: (tableData) => {
+                        let label = 0;
+                        for (let i = 0, tableDataLen = tableData.length; i < tableDataLen; i++) {
+                            label += tableData[i].qtdeSugestao;
+                        }
+                        return (
+                            <strong>{label}</strong>
+                        );
+                    }
+                },
+                {
+                    label: 'Total value',
+                    columnIndex: 37,
+                    align: 'right',
+                    formatter: (tableData) => {
+                        let label = 0;
+                        for (let i = 0, tableDataLen = tableData.length; i < tableDataLen; i++) {
+                            label += tableData[i].qtdeEqualizadoSugestao;
+                        }
+                        return (
+                            <strong>{label}</strong>
+                        );
+                    }
+                },
+                {
+                    label: 'Total value',
+                    columnIndex: 38,
                     align: 'right',
                     formatter: (tableData) => {
                         let label = 0;
@@ -508,7 +552,7 @@ export default class ItensPlanoTable extends React.Component {
                 },
                 {
                     label: 'Total value',
-                    columnIndex: 36,
+                    columnIndex: 39,
                     align: 'right',
                     formatter: (tableData) => {
                         let label = 0;

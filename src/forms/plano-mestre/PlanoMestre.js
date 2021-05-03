@@ -10,9 +10,9 @@ import ConfirmDialog from '../../components/Alert/ConfirmDialog';
 import GerarPlanoMestre from './geracao/GerarPlanoMestre';
 import ItensPlanoMestre from './itens/ItensPlanoMestre';
 
-
 const formStyle = { marginLeft: '20px', marginTop: '20px', marginRight: '20px' };
 
+const loadPrevisoesVendas = () => api.get('previsao-vendas');
 const loadDepositos = () => api.get('depositos');
 const loadPlanoMestre = () => api.get('plano-mestre');
 const loadPeriodosDemanda = () => api.get('periodos-producao/demanda');
@@ -50,6 +50,15 @@ const normalizeDados = (dados) => {
     });
 };
 
+const normalizePrevisoes = (dados) => {
+    return dados.map((c) => {
+        return {
+            value: c.id,
+            label: `${c.id} - ${c.descricao}`
+        };
+    });
+};
+
 const normalizeDepositos = (dados) => {
     return dados.map((c) => {
         return {
@@ -78,9 +87,10 @@ const columns = [
 const PlanoMestre = (props) => {
 
     const [planosMestre, setPlanosMestre] = useState([]);
+    const [previsoesVendas, setPrevisoesVendas] = useState([]);
     const [depositos, setDepositos] = useState([]);
     const [periodosDemanda, setPeriodosDemanda] = useState([]);
-    const [periodosProducao, setPeriodosProducao] = useState([]);
+    const [periodosProducao, setPeriodosProducao] = useState([]);    
 
     const [showFormGerar, setShowFormGerar] = useState(false);
     const [showFormItens, setShowFormItens] = useState(false);
@@ -101,17 +111,20 @@ const PlanoMestre = (props) => {
     const load = () => {
 
         Promise.all([
+            loadPrevisoesVendas(),
             loadDepositos(),
             loadPlanoMestre(),
             loadPeriodosDemanda(),
             loadPeriodosProducao()
         ])
             .then(([
+                responsePrevisoesVendas,
                 responseDepositos,
                 responsePlanoMestre,
                 responsePeriodosDemanda,
                 responsePeriodosProducao
             ]) => {
+                setPrevisoesVendas(normalizePrevisoes(responsePrevisoesVendas.data));
                 setDepositos(normalizeDepositos(responseDepositos.data));
                 setPlanosMestre(normalizeDados(responsePlanoMestre.data));
                 setPeriodosDemanda(normalizePeriodos(responsePeriodosDemanda.data));
@@ -219,6 +232,7 @@ const PlanoMestre = (props) => {
                 {...props}
                 onSubmit={planos => setPlanosMestre(normalizeDados(planos))}
                 show={showFormGerar}
+                previsoesVendas={previsoesVendas}
                 periodosDemanda={periodosDemanda}
                 periodosProducao={periodosProducao}
                 onClose={() => {
@@ -231,7 +245,7 @@ const PlanoMestre = (props) => {
                 show={showFormItens}
                 idPlanoMestre={idPlanoMestre}
                 descPlanoMestre={descPlanoMestre}
-                sitPlanoMestre={sitPlanoMestre}
+                sitPlanoMestre={sitPlanoMestre}                
                 depositos={depositos}
                 periodosProducao={periodosProducao}
                 onClose={() => {

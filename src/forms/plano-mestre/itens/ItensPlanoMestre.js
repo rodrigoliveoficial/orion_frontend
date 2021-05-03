@@ -79,6 +79,7 @@ const ItensPlanoMestre = (props) => {
     const [planoProg, setPlanosProg] = useState('');
 
     const [tipoDistribuicaoParam, setTipoDistribuicaoParam] = useState('');
+    const [previsaoVendasParam, setPrevisaoVendasParam] = useState(0);
     const [multiplicadorParam, setMultiplicadorParam] = useState('');
     const [qtdeMinimaReferenciaParam, setQtdeMinimaReferenciaParam] = useState('');
     const [periodoPadraoParam, setPeriodoPadraoParam] = useState('');
@@ -168,6 +169,7 @@ const ItensPlanoMestre = (props) => {
         const loadParametros = () => {
             api.get(`plano-mestre/parametros/${idPlanoMestre}`).then((response) => {
                 setTipoDistribuicaoParam(response.data.descTipoDistribuicao);
+                setPrevisaoVendasParam(response.data.idPrevisaoVendas);
                 setMultiplicadorParam(response.data.multiplicador);
                 setQtdeMinimaReferenciaParam(response.data.qtdeMinimaReferencia);
                 setPeriodoPadraoParam(response.data.periodoPadrao);
@@ -498,6 +500,18 @@ const ItensPlanoMestre = (props) => {
                                             name="tipo-distribuicao"
                                             disabled
                                             value={tipoDistribuicaoParam}
+                                        />
+                                    </Form.Group>
+
+                                    <Form.Group as={Col} md="1" controlId="previsaoVendas">
+                                        <Form.Label>
+                                            Previsão de Vendas
+                                        </Form.Label>
+                                        <Form.Control
+                                            type="number"
+                                            name="previsaoVendas"
+                                            disabled
+                                            value={previsaoVendasParam}
                                         />
                                     </Form.Group>
 

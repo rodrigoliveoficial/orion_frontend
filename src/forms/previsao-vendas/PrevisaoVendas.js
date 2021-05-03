@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import api from '../../services/api';
+import DeleteDialog from '../../components/Alert/DeleteDialog';
 import PrevisaoVendasTable from './PrevisaoVendasTable';
 import PrevisaoVendasItens from './PrevisaoVendasItens';
 
@@ -34,23 +35,28 @@ const PrevisaoVendas = (props) => {
     const [previsoes, setPrevisoes] = useState([]);
     const [colecoes, setColecoes] = useState([]);
     const [tabelasPreco, setTabelasPreco] = useState([]);
-    const [previsaoSelecionada, setPrevisaoSelecionada] = useState(0);
+    const [idPrevisaoVendas, setIdPrevisaoVendas] = useState(0);
     const [desabilitaBotoes, setDesabilitaBotoes] = useState(true);
     const [showFormPrevisaoVendasItens, setShowFormPrevisaoVendasItens] = useState(false);
-    //const [edit, setEdit] = useState(false);
+    const [edit, setEdit] = useState(false);
+    const [waitConexao, setWaitConexao] = useState(false); 
+    const [showDeleteAlert, setShowDeleteAlert] = useState(false); 
+    const [msgDelete, setMsgDelete] = useState('');
 
     const { currPage } = useState(0);
 
     const options = {
-        sizePerPageList: [10, 20, 40, 100],
+        defaultSortName: 'id',
+        defaultSortOrder: 'desc',
+        sizePerPageList: [5, 10, 20, 40, 100],
         sizePerPage: 10,
         page: currPage,
         onRowClick: function (row) {
-            setPrevisaoSelecionada(row.id);
+            setIdPrevisaoVendas(row.id);
             setDesabilitaBotoes(false);
         },
         onPageChange: function () {
-            setPrevisaoSelecionada(0);
+            setIdPrevisaoVendas(0);
             setDesabilitaBotoes(true);
         }
     };
@@ -68,8 +74,8 @@ const PrevisaoVendas = (props) => {
                 responseTabelasPreco
             ]) => {
                 setPrevisoes(responsePrevisoes.data);
-                setColecoes(normalizeColecoes(responseColecoes));
-                setTabelasPreco(normalizeTabelasPreco(responseTabelasPreco));
+                setColecoes(normalizeColecoes(responseColecoes.data));
+                setTabelasPreco(normalizeTabelasPreco(responseTabelasPreco.data));
             })
             .catch((e) => {
                 console.log('ocorreu algum erro!');
@@ -81,22 +87,53 @@ const PrevisaoVendas = (props) => {
         load();
     }, []);
 
+    useEffect(() => {
+        setMsgDelete(`Deletar previsão de vendas: ${idPrevisaoVendas}?`);
+    }, [idPrevisaoVendas]);
+
+    const onClickAdd = () => {
+        setEdit(false);
+        setIdPrevisaoVendas(0);
+        setShowFormPrevisaoVendasItens(true);
+    }
+
+    const onClickEdit = () => {
+        setEdit(true);
+        setShowFormPrevisaoVendasItens(true);
+    }
+    
+    const onDeletePrevisao = async event => {
+        setEdit(false);
+        setWaitConexao(true);
+
+        try {
+            const response = await api.delete(`previsao-vendas/${idPrevisaoVendas}`);
+            setPrevisoes(response.data);
+        } catch (e) {
+            console.log('ocorreu algum erro!');
+            console.error(e);
+        }
+
+        setWaitConexao(false);
+        setShowDeleteAlert(false);
+    }
+
     return (
         <div style={formStyle}>
 
-            <h2><b>Previsão de Vendas (Rotina em construção - Não Utilizar)</b></h2>
+            <h2><b>Previsão de Vendas</b></h2>
             <br></br>
 
-            <Button variant="success" onClick={() => { setShowFormPrevisaoVendasItens(true) }}>
-                + Novo
+            <Button variant="success" onClick={() => { onClickAdd() }}>
+                Novo
             </Button>
 
-            <Button disabled={desabilitaBotoes}>
+            <Button disabled={desabilitaBotoes} onClick={() => { onClickEdit() }}>
                 Editar
             </Button>
 
-            <Button variant="danger" disabled={desabilitaBotoes}>
-                - Excluir
+            <Button variant="danger" disabled={desabilitaBotoes} onClick={() => {setShowDeleteAlert(true)}}>
+                Excluir
             </Button>
 
             <PrevisaoVendasTable
@@ -108,15 +145,27 @@ const PrevisaoVendas = (props) => {
             <PrevisaoVendasItens
                 {...props}
                 show={showFormPrevisaoVendasItens}
-                //editMode={edit}
+                editMode={edit}
                 colecoes={colecoes}
                 tabelasPreco={tabelasPreco}
-                previsaoSelecionada={previsaoSelecionada}                
-                onClose={() => {
+                idPrevisaoVendas={idPrevisaoVendas}                
+                onClose={() => {                    
                     setShowFormPrevisaoVendasItens(false);
+                    setDesabilitaBotoes(true);
+                    setEdit(false);                    
                     load();
                 }}
             />
+
+            {showDeleteAlert && (
+                <DeleteDialog
+                    title={msgDelete}
+                    handleCancel={() => setShowDeleteAlert(false)}
+                    handleDelete={onDeletePrevisao}
+                    desabledButtons={waitConexao}
+                    showSpinner={waitConexao}
+                />
+            )}
 
         </div>
     );

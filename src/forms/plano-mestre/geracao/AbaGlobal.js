@@ -23,18 +23,12 @@ const AbaGlobal = (props) => {
 
     const [tipoDistribuicaoParam, setTipoDistribuicaoParam] = useState([]);    
     const [periodoPadraoParam, setPeriodoPadraoParam] = useState([]);
+    const [previsaoVendasParam, setPrevisaoVendasParam] = useState([]);
     const { periodosProducao } = props;
-
-    const setParametrosGlobalDefault = () => {
-        props.setTipoDistribuicaoSelected(1);
-        props.setMultiplicadorInfo(0);
-        props.setQtdeMinimaReferenciaInfo(0);
-        props.setPeriodoPadraoInfo(0);
-    };
+    const { previsoesVendas } = props;
 
     useEffect(() => {
         setTipoDistribuicaoParam(optionsTipoDistribuicao.find(o => o.value === 1));
-        setParametrosGlobalDefault();
     }, []);
 
     const {
@@ -79,6 +73,23 @@ const AbaGlobal = (props) => {
                             onChange={(selected) => {
                                 setTipoDistribuicaoParam(selected);                                
                                 props.setTipoDistribuicaoSelected(selected.value);
+                            }}
+                        />
+                    </Form.Group>
+                </Form.Row>
+
+                <Form.Row>
+                    <Form.Group as={Col} md="2" controlId="previsaoVendas">
+                        <Form.Label>
+                            Previsão de vendas
+                        </Form.Label>
+                        <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe a previsão de vendas"
+                            name="previsaoVendas"
+                            options={previsoesVendas}
+                            value={previsaoVendasParam}
+                            onChange={(selected) => {
+                                setPrevisaoVendasParam(selected);                                
+                                props.setPrevisaoVendasSelected(selected.value);
                             }}
                         />
                     </Form.Group>
@@ -150,7 +161,8 @@ AbaGlobal.propTypes = {
     setMultiplicadorInfo: PropTypes.func,    
     setQtdeMinimaReferenciaInfo: PropTypes.func,    
     setPeriodoPadraoInfo: PropTypes.func,    
-    periodosProducao: PropTypes.object
+    periodosProducao: PropTypes.object,
+    setPrevisaoVendasSelected: PropTypes.object
 };
 
 AbaGlobal.defaultProps = {
@@ -158,7 +170,8 @@ AbaGlobal.defaultProps = {
     setTipoDistribuicaoSelected: () => { },
     setMultiplicadorInfo: () => { },
     setQtdeMinimaReferenciaInfo: () => { },
-    setPeriodoPadraoInfo: () => { }
+    setPeriodoPadraoInfo: () => { },
+    setPrevisaoVendasSelected: () => { }
 };
 
 export default AbaGlobal;

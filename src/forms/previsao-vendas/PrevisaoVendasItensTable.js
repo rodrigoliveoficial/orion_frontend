@@ -14,7 +14,7 @@ export default class PrevisaoVendasItensTable extends React.Component {
     render() {
 
         const { options } = this.props;
-        const { previsaoVendas } = this.props;
+        const { itensColecao } = this.props;
 
         const cellEditProp = {
             mode: 'click',
@@ -29,16 +29,17 @@ export default class PrevisaoVendasItensTable extends React.Component {
             [
                 {
                     label: 'Total',
-                    columnIndex: 8
+                    columnIndex:12,
+                    align: 'right'
                 },
                 {
                     label: 'Total value',
-                    columnIndex: 9,
+                    columnIndex: 13,
                     align: 'right',
                     formatter: (tableData) => {
                         let label = 0;
                         for (let i = 0, tableDataLen = tableData.length; i < tableDataLen; i++) {
-                            label += parseInt(tableData[i].qtdePrevisaoVendas);
+                            label += parseInt(tableData[i].qtdePrevisao);
                         }
                         return (
                             <strong>{label}</strong>
@@ -49,8 +50,8 @@ export default class PrevisaoVendasItensTable extends React.Component {
         ];
 
         return (
-            <BootstrapTable ref='previsao-table' data={previsaoVendas} pagination={true} options={options} striped={true} hover={true} cellEdit={cellEditProp} keyBoardNav={keyBoardNav} footerData={footerData} footer>
-                <TableHeaderColumn dataField='id' isKey={true} dataSort width='60' >ID</TableHeaderColumn>
+            <BootstrapTable ref='previsao-itens-table' data={itensColecao} pagination={true} options={options} striped={true} hover={true} cellEdit={cellEditProp} keyBoardNav={keyBoardNav} footerData={footerData} footer>
+                <TableHeaderColumn dataField='id' isKey={true} dataSort width='60' >ID</TableHeaderColumn>                
                 <TableHeaderColumn dataField='grupo' dataSort width='150' editable={false}  filter={{ type: 'TextFilter', placeholder: '' }}>Referência</TableHeaderColumn>
                 <TableHeaderColumn dataField='item' dataSort width='150' editable={false}  filter={{ type: 'TextFilter', placeholder: '' }}>Cor</TableHeaderColumn>
                 <TableHeaderColumn dataField='descricao' dataSort editable={false}  filter={{ type: 'TextFilter', placeholder: '' }}>Descrição</TableHeaderColumn>
@@ -61,9 +62,9 @@ export default class PrevisaoVendasItensTable extends React.Component {
                 <TableHeaderColumn dataField='valorSellOut' editable={false} width='200' dataAlign="right" dataSort>Sell OUT</TableHeaderColumn>                
                 <TableHeaderColumn dataField='grupoBase' width='200' dataSort>Referência (Base)</TableHeaderColumn>                
                 <TableHeaderColumn dataField='itemBase' width='200' dataSort>Cor (Base)</TableHeaderColumn>                
-                <TableHeaderColumn dataField='qtdeVendidaBase' width='200' editable={false} dataSort>Qtde Vendida (Base)</TableHeaderColumn>                
-                <TableHeaderColumn dataField='percentualAplicar' editable={{ type: 'number' }} width='200' dataAlign="right" dataSort>Percentual Aplicar</TableHeaderColumn>
-                <TableHeaderColumn dataField='qtdePrevisaoVendas' editable={{ type: 'number' }} width='200' dataAlign="right" dataSort>Previsão Vendas</TableHeaderColumn>
+                <TableHeaderColumn dataField='qtdeVendidaBase' width='200' editable={false} dataSort dataAlign="right">Qtde Vendida (Base)</TableHeaderColumn>
+                <TableHeaderColumn dataField='percAplicar' editable={{ type: 'number' }} width='200' dataAlign="right" dataSort>Percentual Aplicar</TableHeaderColumn>
+                <TableHeaderColumn dataField='qtdePrevisao' editable={{ type: 'number' }} width='200' dataAlign="right" dataSort>Previsão Vendas</TableHeaderColumn>
             </BootstrapTable>
         );
     }

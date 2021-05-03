@@ -15,10 +15,11 @@ const GerarPlanoMestre = (props) => {
 
     // ABA GLOBAL
     const [descricaoInfo, setDescricaoInfo] = useState('');
-    const [periodoPadraoInfo, setPeriodoPadraoInfo] = useState([]);
+    const [periodoPadraoInfo, setPeriodoPadraoInfo] = useState(0);
     const [multiplicadorInfo, setMultiplicadorInfo] = useState(0);
     const [qtdeMinimaReferenciaInfo, setQtdeMinimaReferenciaInfo] = useState(0);
-    const [tipoDistribuicaoSelected, setTipoDistribuicaoSelected] = useState([]);
+    const [tipoDistribuicaoSelected, setTipoDistribuicaoSelected] = useState(1);
+    const [previsaoVendasSelected, setPrevisaoVendasSelected] = useState(0);
 
     // ABA ANALISE
     const [colecoesSelected, setColecoesSelected] = useState([]);
@@ -201,6 +202,7 @@ const GerarPlanoMestre = (props) => {
                 qtdeMinimaReferencia: qtdeMinimaReferenciaInfo,
                 periodoPadrao: periodoPadraoInfo,
                 tipoDistribuicao: tipoDistribuicaoSelected,
+                idPrevisaoVendas: previsaoVendasSelected,
                 colecoes: colecoesSelected,
                 colecoesPermanentes: colecoesPermSelected,
                 linhasProduto: linhasProdutoSelected,
@@ -265,7 +267,7 @@ const GerarPlanoMestre = (props) => {
         perProcFim2Info, perProcFim3Info, perProcFim4Info, perProcFim5Info, perProcFim6Info, perProcFim7Info, perProcFim8Info,
         consideraDepositoSelected, mostraProdSemDepoSelected, mostraProdSemProcSelected, consideraPedBloquSelected, mostraProdSemPediSelected,
         produtosSelected, coresSelected, origProdutoSelected, depositosSelected, nrInternoPedidoInfo, pedidosSelected, embarquesSelected,
-        periodoPadraoInfo, tipoDistribuicaoSelected, multiplicadorInfo, planoAcumProgInicioSelected, planoAcumProgFimSelected, qtdeMinimaReferenciaInfo]);
+        periodoPadraoInfo, tipoDistribuicaoSelected, multiplicadorInfo, planoAcumProgInicioSelected, planoAcumProgFimSelected, qtdeMinimaReferenciaInfo, previsaoVendasSelected]);
 
     return (
         <div style={formStyle}>
@@ -279,6 +281,7 @@ const GerarPlanoMestre = (props) => {
                         setTipoDistribuicaoSelected={setTipoDistribuicaoSelected}
                         setMultiplicadorInfo={setMultiplicadorInfo}
                         setQtdeMinimaReferenciaInfo={setQtdeMinimaReferenciaInfo}
+                        setPrevisaoVendasSelected={setPrevisaoVendasSelected}
                         periodosProducao={props.periodosProducao}
                     />
                 </Tab>
