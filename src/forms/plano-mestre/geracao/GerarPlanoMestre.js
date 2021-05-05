@@ -190,7 +190,8 @@ const GerarPlanoMestre = (props) => {
             }
             props.setLoading(false);
             props.onClose();
-        }
+        } 
+        else return false;
     };
 
     useEffect(() => {
@@ -271,7 +272,7 @@ const GerarPlanoMestre = (props) => {
 
     return (
         <div style={formStyle}>
-            <Form id="plano-mestre-form-gerar" noValidate onSubmit={gerarPlanoMestre}></Form>            
+            <Form id="plano-mestre-form-gerar" noValidate onSubmit={gerarPlanoMestre}></Form>
             <Tabs defaultActiveKey="aba1" transition={false} id="abas-plano-mestre">
                 <Tab eventKey="aba1" title="Global" >
                     <AbaGlobal

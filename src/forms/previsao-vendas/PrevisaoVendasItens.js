@@ -49,7 +49,7 @@ const PrevisaoVendasItens = (props) => {
 
     const options = {
         sizePerPageList: [5, 10, 20, 100, 10000],
-        sizePerPage: 10,
+        sizePerPage: 10,                
         page: currPage,
         onRowClick: function (row) {
             setItemSelecionado(`${row.grupo}.${row.item}`);
