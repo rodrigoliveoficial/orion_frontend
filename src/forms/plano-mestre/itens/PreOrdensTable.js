@@ -51,15 +51,16 @@ export default class PreOrdensTable extends React.Component {
 
         return (
             <BootstrapTable ref='pre-ordens-table' data={dadosPreOrdens} selectRow={selectRowPropAux} pagination={true} options={options} striped={true} hover={true} condensed={true} footerData={footerData} footer>
-                <TableHeaderColumn dataField='id' isKey={true} dataSort width='140'>ID Pré-Ordem</TableHeaderColumn>
-                <TableHeaderColumn dataField='ordemGerada' dataSort width='140'>OP Gerada</TableHeaderColumn>
+                <TableHeaderColumn dataField='id' isKey={true} dataSort width='100'>ID</TableHeaderColumn>
+                <TableHeaderColumn dataField='ordemGerada' dataSort width='130'>OP Gerada</TableHeaderColumn>
                 <TableHeaderColumn dataField='referencia' dataSort>Referência</TableHeaderColumn>
-                <TableHeaderColumn dataField='periodo' dataSort width='140'>Período</TableHeaderColumn>
+                <TableHeaderColumn dataField='periodo' dataSort width='100'>Período</TableHeaderColumn>
                 <TableHeaderColumn dataField='alternativa' dataSort>Alternativa</TableHeaderColumn>
-                <TableHeaderColumn dataField='roteiro' dataSort width='140'>Roteiro</TableHeaderColumn>
+                <TableHeaderColumn dataField='roteiro' dataSort width='100'>Roteiro</TableHeaderColumn>
                 <TableHeaderColumn dataField='deposito' dataSort>Depósito de Entrada</TableHeaderColumn>
                 <TableHeaderColumn dataField='observacao' dataSort>Observação</TableHeaderColumn>
                 <TableHeaderColumn dataField='quantidade' dataSort width='140' dataAlign="right">Quantidade</TableHeaderColumn>
+                <TableHeaderColumn dataField='status' dataSort>Status</TableHeaderColumn>
             </BootstrapTable>
         );
     }

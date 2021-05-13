@@ -23,12 +23,13 @@ const initialValues = {
 const FormPreOrdens = (props) => {
 
     const [agrupaOpPorRefer, setAgrupaOpPorRefer] = useState(1);
-    const [loading, setLoading] = useState(false);
+    const [loadingPreOrdem, setLoadingPreOrdem] = useState(false);
+    const [loadingOrdemProd, setLoadingOrdemProd] = useState(false);
     const [dadosPreOrdens, setDadosPreOrdens] = useState([]);
     const [itensSelected, setItensSelected] = useState([]);
 
     const [depositoOP, setDepositoOP] = useState([]);
-    const [periodoOP, setPeriodoOP] = useState([]); 
+    const [periodoOP, setPeriodoOP] = useState([]);
 
     const [agruparInfo, setAgruparInfo] = useState([]);
     const [qtdeMaxInfo, setQtdeMaxInfo] = useState(999999);
@@ -44,10 +45,13 @@ const FormPreOrdens = (props) => {
     const [qtdeLoteMedioProg, setQtdeLoteMedioProg] = useState(0);
     const [detMaiorOrdemProg, setDetMaiorOrdemProg] = useState(0);
     const [detMenorOrdemProg, setDetMenorOrdemProg] = useState(0);
+    const [ordensGeradas, setOrdensGeradas] = useState(false);
+    const [desabilitaBotoes, setDesabilitaBotoes] = useState(false);
 
-    const { idPlanoMestre } = props;    
+    const { idPlanoMestre } = props;
     const { depositos } = props;
     const { periodosProducao } = props;
+    const { sitPlanoMestre } = props;
 
     const {
         handleChange,
@@ -56,6 +60,20 @@ const FormPreOrdens = (props) => {
     } = useFormik({
         initialValues: initialValues
     });
+
+    useEffect(() => {
+        if (sitPlanoMestre === 2) setOrdensGeradas(true);
+    }, [sitPlanoMestre]);
+
+    useEffect(() => {
+        if (ordensGeradas) setDesabilitaBotoes(true);
+    }, [ordensGeradas]);
+
+    useEffect(() => {        
+        if ((loadingPreOrdem)||(loadingOrdemProd))
+            setDesabilitaBotoes(true);
+        else setDesabilitaBotoes(false);    
+    }, [loadingPreOrdem, loadingOrdemProd]);
 
     useEffect(() => {
 
@@ -72,7 +90,7 @@ const FormPreOrdens = (props) => {
 
                 setAgrupaOpPorRefer(optionsAgrupaOpPorRefer.find(o => o.value === response.data.agrupaOpPorRefer));
                 setPeriodoOP(periodosProducao.find(o => o.value === response.data.periodoOP));
-                setDepositoOP(depositos.find(o => o.value === response.data.depositoOP));                
+                setDepositoOP(depositos.find(o => o.value === response.data.depositoOP));
 
                 setAgruparInfo(response.data.agrupaOpPorRefer);
                 setQtdeMaxInfo(response.data.qtdeMaximaOP);
@@ -97,6 +115,10 @@ const FormPreOrdens = (props) => {
 
         const loadPreOrdens = () => {
             api.get(`plano-mestre/pre-ordens/${idPlanoMestre}`).then((response) => {
+
+                console.log("LOAD PRE ORDENS");
+                console.log(response.data);
+
                 setDadosPreOrdens(response.data);
             }).catch((e) => {
                 console.log('ocorreu algum erro!');
@@ -136,7 +158,7 @@ const FormPreOrdens = (props) => {
 
     const gerarPreOrdens = async event => {
 
-        setLoading(true);
+        setLoadingPreOrdem(true);
         setItensSelected([]);
 
         if (validarParametros()) {
@@ -161,7 +183,33 @@ const FormPreOrdens = (props) => {
             }
         }
 
-        setLoading(false);
+        setLoadingPreOrdem(false);
+    };
+
+    const gerarOrdensProducao = async event => {
+
+        setLoadingOrdemProd(true);
+
+        const body = ({
+            idPlanoMestre: idPlanoMestre,
+            listaPreOrdens: itensSelected
+        });
+
+        console.log("GERAR ORDENS");
+        console.log(body);
+
+        try {
+            const response = await api.post('ordens-producao/gerar', body);
+            setDadosPreOrdens(response.data);
+        } catch (e) {
+            console.log('ocorreu algum erro!');
+            console.error(e);
+            setDadosPreOrdens([]);
+        }
+
+        setItensSelected([]);
+        setLoadingOrdemProd(false);
+        setDesabilitaBotoes(true);
     };
 
     useEffect(() => {
@@ -331,10 +379,10 @@ const FormPreOrdens = (props) => {
                 </Form.Row>
 
                 <Button
-                    variant="primary" disabled={loading}
+                    variant="primary" disabled={desabilitaBotoes}
                     onClick={gerarPreOrdens}
                 >
-                    {loading ?
+                    {loadingPreOrdem ?
                         <Spinner
                             show="false"
                             as="span"
@@ -346,6 +394,7 @@ const FormPreOrdens = (props) => {
 
                     Gerar Pré-Ordens
                 </Button>
+
             </Form>
 
             <br></br>
@@ -353,6 +402,26 @@ const FormPreOrdens = (props) => {
             <Tabs defaultActiveKey="aba1" transition={false} id="abas-pre-ordens">
                 <Tab eventKey="aba1" title="Pré-Ordens Geradas" >
 
+                    <br></br>
+
+                    <Button
+                        variant="success" disabled={desabilitaBotoes}
+                        onClick={gerarOrdensProducao}
+                    >
+                        {loadingOrdemProd ?
+                            <Spinner
+                                show="false"
+                                as="span"
+                                animation="grow"
+                                size="sm"
+                                role="status"
+                                aria-hidden="true"
+                            /> : ''}
+
+                        Gerar Ordens 
+                    </Button>
+
+                    <br></br>
                     <br></br>
 
                     <PreOrdensTable
@@ -456,8 +525,6 @@ const FormPreOrdens = (props) => {
                         </Form.Group>
 
                     </Form.Row>
-
-
 
                 </Tab>
             </Tabs>
