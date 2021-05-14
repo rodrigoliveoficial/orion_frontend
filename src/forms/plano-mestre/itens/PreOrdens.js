@@ -25,6 +25,7 @@ const FormPreOrdens = (props) => {
     const [agrupaOpPorRefer, setAgrupaOpPorRefer] = useState(1);
     const [loadingPreOrdem, setLoadingPreOrdem] = useState(false);
     const [loadingOrdemProd, setLoadingOrdemProd] = useState(false);
+    const [loadingOrdemExcluir, setLoadingOrdemExcluir] = useState(false);    
     const [dadosPreOrdens, setDadosPreOrdens] = useState([]);
     const [itensSelected, setItensSelected] = useState([]);
 
@@ -47,6 +48,7 @@ const FormPreOrdens = (props) => {
     const [detMenorOrdemProg, setDetMenorOrdemProg] = useState(0);
     const [ordensGeradas, setOrdensGeradas] = useState(false);
     const [desabilitaBotoes, setDesabilitaBotoes] = useState(false);
+    const [desabilitaBotaoExclusao, setDesabilitaBotaoExclusao] = useState(true);
 
     const { idPlanoMestre } = props;
     const { depositos } = props;
@@ -66,13 +68,16 @@ const FormPreOrdens = (props) => {
     }, [sitPlanoMestre]);
 
     useEffect(() => {
-        if (ordensGeradas) setDesabilitaBotoes(true);
+        if (ordensGeradas) {
+            setDesabilitaBotoes(true); 
+            setDesabilitaBotaoExclusao(false);
+        }
     }, [ordensGeradas]);
 
     useEffect(() => {        
         if ((loadingPreOrdem)||(loadingOrdemProd))
             setDesabilitaBotoes(true);
-        else setDesabilitaBotoes(false);    
+        else setDesabilitaBotoes(false);  // RODRIGO - TRATAR NO RETORNO DA GRAVACAO
     }, [loadingPreOrdem, loadingOrdemProd]);
 
     useEffect(() => {
@@ -419,6 +424,23 @@ const FormPreOrdens = (props) => {
                             /> : ''}
 
                         Gerar Ordens 
+                    </Button>
+
+                    <Button
+                        variant="danger" disabled={desabilitaBotaoExclusao}
+                        onClick={gerarOrdensProducao}
+                    >
+                        {loadingOrdemExcluir ?
+                            <Spinner
+                                show="false"
+                                as="span"
+                                animation="grow"
+                                size="sm"
+                                role="status"
+                                aria-hidden="true"
+                            /> : ''}
+
+                        Excluir Ordens 
                     </Button>
 
                     <br></br>
