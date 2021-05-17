@@ -25,7 +25,7 @@ const FormPreOrdens = (props) => {
     const [agrupaOpPorRefer, setAgrupaOpPorRefer] = useState(1);
     const [loadingPreOrdem, setLoadingPreOrdem] = useState(false);
     const [loadingOrdemProd, setLoadingOrdemProd] = useState(false);
-    const [loadingOrdemExcluir, setLoadingOrdemExcluir] = useState(false);    
+    const [loadingOrdemExcluir, setLoadingOrdemExcluir] = useState(false);
     const [dadosPreOrdens, setDadosPreOrdens] = useState([]);
     const [itensSelected, setItensSelected] = useState([]);
 
@@ -50,6 +50,9 @@ const FormPreOrdens = (props) => {
     const [desabilitaBotoes, setDesabilitaBotoes] = useState(false);
     const [desabilitaBotaoExclusao, setDesabilitaBotaoExclusao] = useState(true);
 
+    const [showConfirmaOrdens, setShowConfirmaOrdens] = useState(false);
+    const [showConfirmaExclusaoOrdens, setShowConfirmaExclusaoOrdens] = useState(false);
+
     const { idPlanoMestre } = props;
     const { depositos } = props;
     const { periodosProducao } = props;
@@ -68,17 +71,15 @@ const FormPreOrdens = (props) => {
     }, [sitPlanoMestre]);
 
     useEffect(() => {
+        if ((loadingPreOrdem) || (loadingOrdemProd))
+            setDesabilitaBotoes(true);
+        else setDesabilitaBotoes(false); 
+
         if (ordensGeradas) {
-            setDesabilitaBotoes(true); 
+            setDesabilitaBotoes(true);
             setDesabilitaBotaoExclusao(false);
         }
-    }, [ordensGeradas]);
-
-    useEffect(() => {        
-        if ((loadingPreOrdem)||(loadingOrdemProd))
-            setDesabilitaBotoes(true);
-        else setDesabilitaBotoes(false);  // RODRIGO - TRATAR NO RETORNO DA GRAVACAO
-    }, [loadingPreOrdem, loadingOrdemProd]);
+    }, [loadingPreOrdem, loadingOrdemProd, ordensGeradas]);
 
     useEffect(() => {
 
@@ -120,10 +121,6 @@ const FormPreOrdens = (props) => {
 
         const loadPreOrdens = () => {
             api.get(`plano-mestre/pre-ordens/${idPlanoMestre}`).then((response) => {
-
-                console.log("LOAD PRE ORDENS");
-                console.log(response.data);
-
                 setDadosPreOrdens(response.data);
             }).catch((e) => {
                 console.log('ocorreu algum erro!');
@@ -200,11 +197,32 @@ const FormPreOrdens = (props) => {
             listaPreOrdens: itensSelected
         });
 
-        console.log("GERAR ORDENS");
-        console.log(body);
-
         try {
             const response = await api.post('ordens-producao/gerar', body);
+            setDadosPreOrdens(response.data.listaConsPreOrdens);
+            if (response.data.sitPlanoMestre === 2) setOrdensGeradas(true);
+        } catch (e) {
+            console.log('ocorreu algum erro!');
+            console.error(e);
+            setDadosPreOrdens([]);
+        }
+
+        setItensSelected([]);
+        setLoadingOrdemProd(false);        
+        setShowConfirmaOrdens(false);
+    };
+
+    const excluirOrdensProducao = async event => {
+
+        setLoadingOrdemExcluir(true);
+
+        const body = ({
+            idPlanoMestre: idPlanoMestre,
+            listaPreOrdens: itensSelected
+        });
+
+        try {
+            const response = await api.post('ordens-producao/excluir', body);
             setDadosPreOrdens(response.data);
         } catch (e) {
             console.log('ocorreu algum erro!');
@@ -213,8 +231,8 @@ const FormPreOrdens = (props) => {
         }
 
         setItensSelected([]);
-        setLoadingOrdemProd(false);
-        setDesabilitaBotoes(true);
+        setLoadingOrdemExcluir(false);
+        setShowConfirmaExclusaoOrdens(false);
     };
 
     useEffect(() => {
@@ -407,50 +425,93 @@ const FormPreOrdens = (props) => {
             <Tabs defaultActiveKey="aba1" transition={false} id="abas-pre-ordens">
                 <Tab eventKey="aba1" title="Pré-Ordens Geradas" >
 
-                    <br></br>
+                    {(!showConfirmaOrdens&&!showConfirmaExclusaoOrdens) && (
+                        <div>
+                            <br></br>
 
-                    <Button
-                        variant="success" disabled={desabilitaBotoes}
-                        onClick={gerarOrdensProducao}
-                    >
-                        {loadingOrdemProd ?
-                            <Spinner
-                                show="false"
-                                as="span"
-                                animation="grow"
-                                size="sm"
-                                role="status"
-                                aria-hidden="true"
-                            /> : ''}
+                            <Button
+                                variant="success" disabled={desabilitaBotoes}
+                                onClick={() => { setShowConfirmaOrdens(true) }}
+                            >                                
+                                Gerar Ordens
+                            </Button>
 
-                        Gerar Ordens 
-                    </Button>
+                            <Button
+                                variant="danger" disabled={desabilitaBotaoExclusao}
+                                onClick={() => {setShowConfirmaExclusaoOrdens(true) }}
+                            >
+                                Excluir Ordens
+                            </Button>
 
-                    <Button
-                        variant="danger" disabled={desabilitaBotaoExclusao}
-                        onClick={gerarOrdensProducao}
-                    >
-                        {loadingOrdemExcluir ?
-                            <Spinner
-                                show="false"
-                                as="span"
-                                animation="grow"
-                                size="sm"
-                                role="status"
-                                aria-hidden="true"
-                            /> : ''}
+                            <br></br>
+                            <br></br>
 
-                        Excluir Ordens 
-                    </Button>
+                            <PreOrdensTable
+                                {...props}
+                                dadosPreOrdens={dadosPreOrdens}
+                                selectRowPropAux={selectRowPropAux}
+                            />
 
-                    <br></br>
-                    <br></br>
+                        </div>
+                    )}
 
-                    <PreOrdensTable
-                        {...props}
-                        dadosPreOrdens={dadosPreOrdens}
-                        selectRowPropAux={selectRowPropAux}
-                    />
+                    {showConfirmaOrdens && (
+                        <div>
+                            <br></br>
+                            <h3> Confirma a geração das ordens selecionadas? </h3>
+                            <br></br>
+                            <h5> Após a confirmação não será mais possível fazer ajustes nas pré-ordens e nem gerar novas ordens de produção! </h5>
+                            <br></br>
+
+                            <Button variant="outline-dark" onClick={() => { setShowConfirmaOrdens(false) }} disabled={loadingOrdemProd}>
+                                Cancelar
+                            </Button>
+
+                            <Button variant="outline-success" onClick={gerarOrdensProducao} disabled={loadingOrdemProd}>
+                            
+                            {loadingOrdemProd ?
+                                    <Spinner
+                                        show="false"
+                                        as="span"
+                                        animation="grow"
+                                        size="sm"
+                                        role="status"
+                                        aria-hidden="true"
+                                    /> : ''}
+                                Confirmar
+                            </Button>
+
+                        </div>
+                    )}                    
+
+                    {showConfirmaExclusaoOrdens && (
+                        <div>
+                            <br></br>
+                            <h3> Confirma a exclusão das ordens selecionadas? </h3>
+                            <br></br>
+                            <h5> Após a confirmação as ordens serão excluídas no ERP Systêxtil! </h5>
+                            <br></br>
+
+                            <Button variant="outline-dark" onClick={() => { setShowConfirmaExclusaoOrdens(false) }} disabled={loadingOrdemExcluir}>
+                                Cancelar
+                            </Button>
+
+                            <Button variant="outline-success" onClick={excluirOrdensProducao} disabled={loadingOrdemExcluir}>
+                                {loadingOrdemExcluir ?
+                                    <Spinner
+                                        show="false"
+                                        as="span"
+                                        animation="grow"
+                                        size="sm"
+                                        role="status"
+                                        aria-hidden="true"
+                                    /> : ''}
+                                Confirmar
+                            </Button>
+
+                        </div>
+                    )}                    
+
                 </Tab>
                 <Tab eventKey="aba2" title="Indicadores" >
 
