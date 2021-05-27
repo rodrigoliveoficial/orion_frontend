@@ -158,6 +158,10 @@ const ItensPlanoMestre = (props) => {
 
         const loadItensPlanoMestre = () => {
             api.get(`plano-mestre/produtos/${idPlanoMestre}`).then((response) => {
+                
+                console.log("RETORNO DE ITENS");
+                console.log(response.data);
+                
                 setItens(response.data);
             }).catch((e) => {
                 console.log('ocorreu algum erro!');
