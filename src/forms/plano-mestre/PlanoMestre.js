@@ -45,7 +45,8 @@ const normalizeDados = (dados) => {
             id: c.id,
             descricao: c.descricao,
             data: format(parseISO(c.data), 'dd/MM/yyyy HH:mm:ss'),
-            situacao: `${c.situacao}-${getDescSituacao(c.situacao)}`
+            situacao: `${c.situacao}-${getDescSituacao(c.situacao)}`,
+            usuario: c.usuario
         };
     });
 };
@@ -81,7 +82,8 @@ const columns = [
     { key: 'id', name: 'Numero' },
     { key: 'descricao', name: 'Descrição' },
     { key: 'data', name: 'Data Geração' },
-    { key: 'situacao', name: 'Situação' }
+    { key: 'situacao', name: 'Situação' },
+    { key: 'usuario', name: 'Usuário' }
 ];
 
 const PlanoMestre = (props) => {
@@ -90,7 +92,7 @@ const PlanoMestre = (props) => {
     const [previsoesVendas, setPrevisoesVendas] = useState([]);
     const [depositos, setDepositos] = useState([]);
     const [periodosDemanda, setPeriodosDemanda] = useState([]);
-    const [periodosProducao, setPeriodosProducao] = useState([]);    
+    const [periodosProducao, setPeriodosProducao] = useState([]);
 
     const [showFormGerar, setShowFormGerar] = useState(false);
     const [showFormItens, setShowFormItens] = useState(false);

@@ -194,11 +194,14 @@ const GerarPlanoMestre = (props) => {
         else return false;
     };
 
+    const nomeUsuario = localStorage.getItem('usuario-logado');
+
     useEffect(() => {
 
         const obterParametros = () => {
             setbodyParametros({
                 descricao: descricaoInfo,
+                usuario: nomeUsuario,
                 multiplicador: multiplicadorInfo,
                 qtdeMinimaReferencia: qtdeMinimaReferenciaInfo,
                 periodoPadrao: periodoPadraoInfo,
@@ -261,7 +264,7 @@ const GerarPlanoMestre = (props) => {
 
         obterParametros();
 
-    }, [descricaoInfo, colecoesSelected, colecoesPermSelected, linhasProdutoSelected, artigosProdutoSelected, artigosCotasSelected, publicoAlvoSelected,
+    }, [descricaoInfo, nomeUsuario, colecoesSelected, colecoesPermSelected, linhasProdutoSelected, artigosProdutoSelected, artigosCotasSelected, publicoAlvoSelected,
         perDemInico1Info, perDemInico2Info, perDemInico3Info, perDemInico4Info, perDemInico5Info, perDemInico6Info, perDemInico7Info, perDemInico8Info,
         perDemFim1Info, perDemFim2Info, perDemFim3Info, perDemFim4Info, perDemFim5Info, perDemFim6Info, perDemFim7Info, perDemFim8Info, perProcInico1Info,
         perProcInico2Info, perProcInico3Info, perProcInico4Info, perProcInico5Info, perProcInico6Info, perProcInico7Info, perProcInico8Info, perProcFim1Info,

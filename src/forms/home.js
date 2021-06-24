@@ -4,13 +4,15 @@ import Jumbotron from 'react-bootstrap/Jumbotron'
 const Home = (props) => {
 
     return (
-        <Jumbotron > 
+        <div>
+            <Jumbotron >
             <br></br>
             <br></br>
-            <center><img src="ORION.jpg" /></center>
+            <center><img src="orion_new.jpg" alt="ORION"/></center>
             <br></br>
             <br></br>
-        </Jumbotron>
+            </Jumbotron>
+        </div>
     );
 }
 
