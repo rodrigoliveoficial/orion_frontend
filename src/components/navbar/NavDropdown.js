@@ -40,7 +40,6 @@ const NavBarDrop = () => {
         load();
     }, []);
 
-
     return (
         <Nav className="mr-auto">
             {modulos.map((dados) => {

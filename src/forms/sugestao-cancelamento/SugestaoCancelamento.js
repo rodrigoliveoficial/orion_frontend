@@ -5,6 +5,7 @@ import Select from 'react-select';
 import api from '../../services/api';
 import ItensTable from './ItensTable';
 import ConfirmDialog from '../../components/Alert/ConfirmDialog';
+import Ajuda from '../../components/Modal/Modal';
 
 const formStyle = { marginLeft: '20px', marginTop: '20px', marginRight: '20px' };
 
@@ -333,6 +334,11 @@ const SugestaoCancelamento = (props) => {
             <Button onClick={() => { setShowConfirmaRemoverSugestaoAlert(true) }} variant="danger" disabled={disabledButtons}>
                 Remover Sugestão
             </Button>
+
+            <Ajuda
+                {...props}
+                idPrograma={3}
+            />
 
             <br></br>
             <br></br>

@@ -9,6 +9,7 @@ import DeleteDialog from '../../components/Alert/DeleteDialog';
 import ConfirmDialog from '../../components/Alert/ConfirmDialog';
 import GerarPlanoMestre from './geracao/GerarPlanoMestre';
 import ItensPlanoMestre from './itens/ItensPlanoMestre';
+import Ajuda from '../../components/Modal/Modal';
 
 const formStyle = { marginLeft: '20px', marginTop: '20px', marginRight: '20px' };
 
@@ -219,6 +220,11 @@ const PlanoMestre = (props) => {
             <Button onClick={() => { setShowDeleteAlert(true) }} variant="danger" disabled={disabledButton}>
                 Excluir
             </Button>
+
+            <Ajuda
+                {...props}
+                idPrograma={4}
+            />
 
             <h2><b></b></h2>
 

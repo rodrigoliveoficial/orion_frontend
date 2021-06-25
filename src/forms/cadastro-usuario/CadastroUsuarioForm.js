@@ -71,6 +71,8 @@ const CadastroUsuarioForm = (props) => {
         
         if (editMode) {
             obterProgramasUsuario()
+        } else{
+            setSituacao(arraySituacao.find(o => o.value === 1))
         }
 
     }, [idUsuario, editMode, setFieldValue]);

@@ -11,6 +11,7 @@ import Login from '../../forms/login/login';
 import {history} from './history'
 import PrivateRoute from './PrivateRoute';
 import RedefinirSenha from '../../forms/redefinir-senha/RedefinirSenha';
+import CadastroHelp from '../../forms/cadastro-help/CadastroHelp'
 
 
 const Routes = () => (
@@ -25,6 +26,7 @@ const Routes = () => (
             <PrivateRoute component={SugestaoCancelamento} exact path="/sugestao-cancelamento"/>
             <PrivateRoute component={PlanoMestre} exact path="/plano-mestre"/>
             <PrivateRoute component={CadastroUsuario} exact path="/cadastro-usuario"/>
+            <PrivateRoute component={CadastroHelp} exact path="/cadastro-help"/>
         </Switch>
     </Router>
 )

@@ -4,6 +4,7 @@ import api from '../../services/api';
 import DeleteDialog from '../../components/Alert/DeleteDialog';
 import PrevisaoVendasTable from './PrevisaoVendasTable';
 import PrevisaoVendasItens from './PrevisaoVendasItens';
+import Ajuda from '../../components/Modal/Modal';
 
 const formStyle = { marginLeft: '20px', marginTop: '20px', marginRight: '20px' };
 
@@ -135,6 +136,11 @@ const PrevisaoVendas = (props) => {
             <Button variant="danger" disabled={desabilitaBotoes} onClick={() => {setShowDeleteAlert(true)}}>
                 Excluir
             </Button>
+
+            <Ajuda
+                {...props}
+                idPrograma={1}
+            />
 
             <PrevisaoVendasTable
                 {...props}
