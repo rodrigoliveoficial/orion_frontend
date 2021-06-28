@@ -1,6 +1,5 @@
 import React from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { common, grey } from '@material-ui/core/colors';
@@ -68,10 +67,7 @@ export default function Login() {
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        <img src="orion_new.jpg" className={classes.image} alt="ORION"/>
-        <Typography component="h1" variant="h5">
-          ORION
-        </Typography>
+        <img src="Orion_logo.png" className={classes.image} alt="ORION"/>
 
         <Formik
           initialValues={{}}

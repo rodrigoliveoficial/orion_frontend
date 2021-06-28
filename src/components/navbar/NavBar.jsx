@@ -33,10 +33,10 @@ class NavBar extends Component {
 
     render() {
         return (
-            <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+            <Navbar sticky="top" collapseOnSelect expand="lg" bg="dark" variant="dark">
                 <Navbar.Brand href="/">
                     <img
-                        src="/orion_new.jpg"
+                        src="/Orion_logo.png"
                         width="30"
                         height="30"
                         className="d-inline-block align-top"

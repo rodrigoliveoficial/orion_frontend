@@ -19,6 +19,7 @@ export default class CadastroHelpTable extends React.Component {
         return (
             <BootstrapTable ref='help-table' data={programas} pagination={true} options={options} striped={true} hover={true} keyBoardNav>
                 <TableHeaderColumn dataField='id' isKey={true} dataSort width='100' >Código</TableHeaderColumn>
+                <TableHeaderColumn dataField='modulo' dataSort>Módulo</TableHeaderColumn>
                 <TableHeaderColumn dataField='descricao' dataSort>Programa</TableHeaderColumn>
                 <TableHeaderColumn dataField='help' dataSort>Help</TableHeaderColumn>
             </BootstrapTable>

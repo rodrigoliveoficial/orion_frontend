@@ -70,7 +70,7 @@ const CadastroUsuarioForm = (props) => {
         setidUsuarioAux(idUsuario);
         
         if (editMode) {
-            obterProgramasUsuario()
+            obterProgramasUsuario();
         } else{
             setSituacao(arraySituacao.find(o => o.value === 1))
         }

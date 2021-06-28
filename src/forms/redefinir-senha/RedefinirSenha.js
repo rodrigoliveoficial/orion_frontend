@@ -67,7 +67,7 @@ export default function RedefinirSenha() {
         <Container component="main" maxWidth="xs">
             <CssBaseline />
             <div className={classes.paper}>
-                <img src="orion_new.jpg" className={classes.image} alt="ORION"/>
+                <img src="Orion_logo.png" className={classes.image} alt="ORION"/>
                 <Typography component="h1" variant="h5">
                     Redefinir Senha
                 </Typography>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Modal, Form} from "react-bootstrap";
+import { Modal, Form } from "react-bootstrap";
 import api from '../../services/api';
 import { Button } from 'react-bootstrap';
 
@@ -67,20 +67,20 @@ const CustomModal = (props) => {
 
 function Ajuda(props) {
     const [modalShow, setModalShow] = useState(false);
-  
+
     return (
-      <>
-        <Button variant="info" onClick={() => setModalShow(true)}>
-          Ajuda
-        </Button>
-  
-        <CustomModal
-          {...props}
-          show={modalShow}
-          onHide={() => setModalShow(false)}
-        />
-      </>
+        <>
+            <Button variant="info" onClick={() => setModalShow(true)}>
+                Ajuda
+            </Button>
+
+            <CustomModal
+                {...props}
+                show={modalShow}
+                onHide={() => setModalShow(false)}
+            />
+        </>
     );
-  }
+}
 
 export default Ajuda;
