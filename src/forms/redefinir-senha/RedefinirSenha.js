@@ -7,7 +7,7 @@ import { common, grey } from '@material-ui/core/colors';
 import { history } from '../../components/Routes/history'
 import { Formik, Form, Field } from 'formik'
 import api from '../../services/api';
-import '../login/Login.css'
+import '../../css/Login.css'
 
 const useStyles = makeStyles((theme) => ({
     paper: {

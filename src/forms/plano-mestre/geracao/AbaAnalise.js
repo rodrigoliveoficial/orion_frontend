@@ -5,6 +5,8 @@ import {
 } from 'react-bootstrap';
 import Select from 'react-select';
 import api from '../../../services/api';
+import { parseISO } from 'date-fns';
+import { format } from 'date-fns-tz';
 
 const loadColecoes = () => api.get('colecoes');
 const loadColecoesPermanentes = () => api.get('colecoes/permanentes');
@@ -45,7 +47,7 @@ const normalizeEmbarques = (dados) => {
     return dados.map((c) => {
         return {
             value: c.id,
-            label: c.descricao
+            label: `${c.id} - ${format(parseISO(c.descricao), 'dd/MM/yyyy')}`
         };
     });
 };
@@ -281,6 +283,7 @@ const AbaAnalise = (props) => {
                         value={embarquesParam}
                         isMulti
                         onChange={(selected) => {
+                            console.log(selected)
                             setEmbarquesParam(selected);
                             props.setEmbarquesSelected(selected);
                         }}

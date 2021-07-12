@@ -14,8 +14,8 @@ const initialValues = {
     id: 0,
     descricao: '',
     colecao: 0,
-    tabelaSellIn: '',
-    tabelaSellOut: ''
+    tabelaSellIn: '0.0.0',
+    tabelaSellOut: '0.0.0'
 }
 
 const PrevisaoVendasItens = (props) => {
@@ -70,10 +70,12 @@ const PrevisaoVendasItens = (props) => {
 
     useEffect(() => {
 
-        let tabSellIn = 0;
-        let tabSellOut = 0;
+        let tabSellIn = '0.0.0';
+        let tabSellOut = '0.0.0';
 
         setIdPrevisaoVendasAux(idPrevisaoVendas);
+        setTabelaSellIn(tabelasPreco.find(o => o.value === tabSellIn));
+        setTabelaSellOut(tabelasPreco.find(o => o.value === tabSellOut));
 
         if (editMode) {
             api.get(`previsao-vendas/${idPrevisaoVendas}`).then((response) => {
@@ -151,8 +153,8 @@ const PrevisaoVendasItens = (props) => {
 
     useEffect(() => {
         setDesabilitarBotoes(true);
-        if ((colecaoInfo !== 0) && (tabelaSellInInfo !== '') && (tabelaSellOutInfo !== '')) setDesabilitarBotoes(false);
-    }, [colecaoInfo, tabelaSellInInfo, tabelaSellOutInfo]);
+        if ((colecaoInfo !== 0)) setDesabilitarBotoes(false);
+    }, [colecaoInfo]);
 
     const consultaItensColecao = (idPrevisao, colecao) => {
         api.get(`previsao-vendas/${idPrevisao}/${colecao}`).then((response) => {

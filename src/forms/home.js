@@ -1,4 +1,5 @@
 import React from "react";
+import { Image } from "react-bootstrap";
 import Jumbotron from 'react-bootstrap/Jumbotron'
 
 const Home = (props) => {
@@ -8,7 +9,7 @@ const Home = (props) => {
             <Jumbotron >
             <br></br>
             <br></br>
-            <center><img src="Orion_logo.png" alt="ORION"/></center>
+            <center> <Image src="Orion_logo.png" alt="ORION" roundedCircle/></center>
             <br></br>
             <br></br>
             </Jumbotron>

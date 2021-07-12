@@ -7,7 +7,7 @@ import { history } from '../../components/Routes/history'
 import { ErrorMessage, Formik, Form, Field } from 'formik'
 import api from '../../services/api';
 
-import './Login.css'
+import '../../css/Login.css'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -23,9 +23,9 @@ const useStyles = makeStyles((theme) => ({
   },
 
   image: {
-    borderRadius: '40px',
-    width: '40%',
-    marginBottom: theme.spacing(2)
+    width: '75%',
+    marginBottom: theme.spacing(2),
+    marginTop: theme.spacing(5)
   },
 
   button: {
@@ -49,7 +49,7 @@ export default function Login() {
   localStorage.setItem('id-usuario-logado', '')
 
   const handleSubmit = values => {
-    api.get(`http://localhost:8081/usuarios/${values.usuario}/${values.senha}`, values)
+    api.get(`usuarios/${values.usuario}/${values.senha}`, values)
       .then(resp => {
         const { data } = resp
         if (data) {
@@ -67,7 +67,7 @@ export default function Login() {
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        <img src="Orion_logo.png" className={classes.image} alt="ORION"/>
+        <img src="Orion LIVE!-03.png" className={classes.image} alt="ORION"/>
 
         <Formik
           initialValues={{}}

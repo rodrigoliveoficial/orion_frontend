@@ -304,7 +304,7 @@ const FormPreOrdens = (props) => {
                 <Form.Row>
                     <Form.Group as={Col} md="1" controlId="cor">
                         <Form.Label>
-                            Agrupar por Referência
+                            Agrupar por Cor
                         </Form.Label>
                         <Select className="basic-multi-select" classNamePrefix="select"
                             name="agrupaOpPorRefer"

@@ -36,14 +36,13 @@ class NavBar extends Component {
             <Navbar sticky="top" collapseOnSelect expand="lg" bg="dark" variant="dark">
                 <Navbar.Brand href="/">
                     <img
-                        src="/Orion_logo.png"
-                        width="30"
-                        height="30"
+                        src="/Orion LIVE!-02.png"
+                        width="200"
+                        height="32"
                         className="d-inline-block align-top"
                         alt="React Bootstrap logo"
                     />
                     {' '}
-                    ORION
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">

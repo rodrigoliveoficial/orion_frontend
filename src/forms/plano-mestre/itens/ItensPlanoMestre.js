@@ -79,7 +79,7 @@ const ItensPlanoMestre = (props) => {
     const [planoProg, setPlanosProg] = useState('');
 
     const [tipoDistribuicaoParam, setTipoDistribuicaoParam] = useState('');
-    const [previsaoVendasParam, setPrevisaoVendasParam] = useState(0);
+    const [previsaoVendasParam, setPrevisaoVendasParam] = useState('');
     const [multiplicadorParam, setMultiplicadorParam] = useState('');
     const [qtdeMinimaReferenciaParam, setQtdeMinimaReferenciaParam] = useState('');
     const [periodoPadraoParam, setPeriodoPadraoParam] = useState('');
@@ -163,6 +163,7 @@ const ItensPlanoMestre = (props) => {
                 console.log(response.data);
                 
                 setItens(response.data);
+
             }).catch((e) => {
                 console.log('ocorreu algum erro!');
                 console.error(e);
@@ -173,7 +174,7 @@ const ItensPlanoMestre = (props) => {
         const loadParametros = () => {
             api.get(`plano-mestre/parametros/${idPlanoMestre}`).then((response) => {
                 setTipoDistribuicaoParam(response.data.descTipoDistribuicao);
-                setPrevisaoVendasParam(response.data.idPrevisaoVendas);
+                setPrevisaoVendasParam(response.data.previsoes);
                 setMultiplicadorParam(response.data.multiplicador);
                 setQtdeMinimaReferenciaParam(response.data.qtdeMinimaReferencia);
                 setPeriodoPadraoParam(response.data.periodoPadrao);
@@ -507,12 +508,12 @@ const ItensPlanoMestre = (props) => {
                                         />
                                     </Form.Group>
 
-                                    <Form.Group as={Col} md="1" controlId="previsaoVendas">
+                                    <Form.Group as={Col} md="3" controlId="previsaoVendas">
                                         <Form.Label>
-                                            Previsão de Vendas
+                                            Previsões de Vendas
                                         </Form.Label>
                                         <Form.Control
-                                            type="number"
+                                            type="text"
                                             name="previsaoVendas"
                                             disabled
                                             value={previsaoVendasParam}
