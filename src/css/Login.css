@@ -26,7 +26,7 @@
 }
 
 .Login-Btn {
-    background: #000000;
+    background: #b7a696;
     color: #fdfdfd;
     padding: .5rem 2rem;
     border: none;
@@ -39,7 +39,7 @@
 .Login-Btn:hover {
     cursor: pointer;
     color:black;
-    background-color:gray;
+    background-color:#d3cac5;
 }
 
 .Link-Redefinir {

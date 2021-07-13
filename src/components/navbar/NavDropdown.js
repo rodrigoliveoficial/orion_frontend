@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Nav, NavDropdown } from "react-bootstrap";
 import api from '../../services/api';
+import '../../css/Navbar.css'
 
 const NavBarDrop = () => {
 

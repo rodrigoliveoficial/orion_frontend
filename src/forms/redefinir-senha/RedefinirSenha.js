@@ -1,6 +1,5 @@
 import React from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { common, grey } from '@material-ui/core/colors';
@@ -23,8 +22,8 @@ const useStyles = makeStyles((theme) => ({
     },
 
     image: {
-        borderRadius: '40px',
-        width: '40%',
+        width: '75%',
+        height: '50%',
         marginBottom: theme.spacing(2)
     },
 
@@ -67,10 +66,7 @@ export default function RedefinirSenha() {
         <Container component="main" maxWidth="xs">
             <CssBaseline />
             <div className={classes.paper}>
-                <img src="Orion_logo.png" className={classes.image} alt="ORION"/>
-                <Typography component="h1" variant="h5">
-                    Redefinir Senha
-                </Typography>
+                <img src="Orion LIVE!-03.png" className={classes.image} alt="ORION"/>
 
                 <Formik
                     initialValues={{}}

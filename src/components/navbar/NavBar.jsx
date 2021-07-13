@@ -4,6 +4,7 @@ import '../../css/style.scss';
 import NavBarDrop from "./NavDropdown";
 import api from "../../services/api";
 import { history } from "../Routes/history";
+import '../../css/Navbar.css'
 
 class NavBar extends Component {
     constructor(props) {
@@ -33,7 +34,7 @@ class NavBar extends Component {
 
     render() {
         return (
-            <Navbar sticky="top" collapseOnSelect expand="lg" bg="dark" variant="dark">
+            <Navbar sticky="top" collapseOnSelect expand="lg" className="Navbar-color">
                 <Navbar.Brand href="/">
                     <img
                         src="/Orion LIVE!-02.png"
@@ -49,13 +50,13 @@ class NavBar extends Component {
                     <NavBarDrop />
                     <Form inline onSubmit={this.handleSubmit}>
                         <FormControl type="text" placeholder="Pesquisar programa" className="mr-sm-2" value={this.state.value} onChange={this.handleChange}/>
-                        <Button type="submit" variant="outline-secondary">Pesquisar</Button>
+                        <Button type="submit" variant="outline-light">Pesquisar</Button>
                     </Form>
                     <Nav>
                         <Nav.Link href="#" disabled>
                             {localStorage.getItem("usuario-logado")}
                         </Nav.Link>
-                        <Nav.Link href="/login">Sair</Nav.Link>
+                        <Nav.Link href="/login" >Sair</Nav.Link>
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>

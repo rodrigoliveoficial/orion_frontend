@@ -1,18 +1,22 @@
 import React from "react";
 import { Image } from "react-bootstrap";
-import Jumbotron from 'react-bootstrap/Jumbotron'
+import '../css/Home.css'
 
 const Home = (props) => {
 
     return (
         <div>
-            <Jumbotron >
             <br></br>
             <br></br>
-            <center> <Image src="Orion_logo.png" alt="ORION" roundedCircle/></center>
             <br></br>
             <br></br>
-            </Jumbotron>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <center> <Image src="Orion LIVE!-01.png" alt="ORION" width="500px "/></center>
+            <br></br>
+            <br></br>
         </div>
     );
 }
