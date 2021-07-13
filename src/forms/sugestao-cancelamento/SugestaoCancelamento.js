@@ -42,10 +42,11 @@ const normalizeCores = (dados) => {
 const normalizeDadosConsulta = (dados) => {
     return dados.map((c) => {
         return {
-            id: `${c.grupo}.${c.item}`,
+            id: `${c.grupo}.${c.item}.${c.colecao}`,
             grupo: c.grupo,
             item: c.item,
             descricao: c.descricao,
+            colecao: `${c.colecao} - ${c.descColecao}`,
             situacao: c.sugCancelProducao === 'S' ? "Sugerido cancelamento" : "Disponível para planejamento"
         };
     });
@@ -162,7 +163,7 @@ const SugestaoCancelamento = (props) => {
         setItensSelected([]);
 
         try {
-            const response = await api.post('produtos/itens-colecoes', bodyParamAgrupadores);
+            const response = await api.post('produtos/itens-sug-cancelamento', bodyParamAgrupadores);
             setDadosConsulta(normalizeDadosConsulta(response.data));
         } catch (e) {
             console.log('ocorreu algum erro!');
@@ -198,7 +199,7 @@ const SugestaoCancelamento = (props) => {
 
             setItensSelected([]);
 
-            api.post('produtos/itens-colecoes', bodyParamAgrupadores).then((response) => {                
+            api.post('produtos/itens-sug-cancelamento', bodyParamAgrupadores).then((response) => {                
                 setDadosConsulta(normalizeDadosConsulta(response.data));
             }).catch((e) => {
                 console.log('ocorreu algum erro!');
@@ -218,7 +219,7 @@ const SugestaoCancelamento = (props) => {
 
             setItensSelected([]);
 
-            api.post('produtos/itens-colecoes', bodyParamAgrupadores).then((response) => {                
+            api.post('produtos/itens-sug-cancelamento', bodyParamAgrupadores).then((response) => {                
                 setDadosConsulta(normalizeDadosConsulta(response.data));
             }).catch((e) => {
                 console.log('ocorreu algum erro!');
