@@ -338,7 +338,7 @@ const SugestaoCancelamento = (props) => {
 
             <Ajuda
                 {...props}
-                idPrograma={3}
+                path="sugestao-cancelamento"
             />
 
             <br></br>

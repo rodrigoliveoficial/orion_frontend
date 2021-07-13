@@ -139,7 +139,7 @@ const PrevisaoVendas = (props) => {
 
             <Ajuda
                 {...props}
-                idPrograma={1}
+                path="previsao-vendas"
             />
 
             <PrevisaoVendasTable

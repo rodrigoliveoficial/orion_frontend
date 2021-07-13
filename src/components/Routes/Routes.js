@@ -7,10 +7,10 @@ import CapacidadeProducao from '../../forms/capacidade-producao/CapacidadeProduc
 import SugestaoCancelamento from '../../forms/sugestao-cancelamento/SugestaoCancelamento';
 import PlanoMestre from '../../forms/plano-mestre/PlanoMestre';
 import Home from '../../forms/home';
-import Login from '../../forms/login/login';
+import Login from '../login/login';
+import RedefinirSenha from '../login/RedefinirSenha'
 import {history} from './history'
 import PrivateRoute from './PrivateRoute';
-import RedefinirSenha from '../../forms/redefinir-senha/RedefinirSenha';
 import CadastroHelp from '../../forms/cadastro-help/CadastroHelp'
 
 

@@ -76,6 +76,8 @@ const PrevisaoVendasItens = (props) => {
         setIdPrevisaoVendasAux(idPrevisaoVendas);
         setTabelaSellIn(tabelasPreco.find(o => o.value === tabSellIn));
         setTabelaSellOut(tabelasPreco.find(o => o.value === tabSellOut));
+        setTabelaSellInInfo(tabSellIn);
+        setTabelaSellOutInfo(tabSellOut);
 
         if (editMode) {
             api.get(`previsao-vendas/${idPrevisaoVendas}`).then((response) => {

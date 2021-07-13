@@ -146,7 +146,7 @@ const CapacidadeProducao = (props) => {
 
             <Ajuda
                 {...props}
-                idPrograma={2}
+                path="capacidade-producao"
             />
 
             <EstagiosTable

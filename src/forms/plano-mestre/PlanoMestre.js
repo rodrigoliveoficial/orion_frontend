@@ -223,7 +223,7 @@ const PlanoMestre = (props) => {
 
             <Ajuda
                 {...props}
-                idPrograma={4}
+                path="plano-mestre"
             />
 
             <h2><b></b></h2>

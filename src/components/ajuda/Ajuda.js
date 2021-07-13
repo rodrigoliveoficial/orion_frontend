@@ -7,10 +7,10 @@ const CustomModal = (props) => {
 
     const [programas, setProgramas] = useState([]);
 
-    const { idPrograma } = props;
+    const { path } = props;
 
     const obterDadosProgramas = () => {
-        api.get(`programas/${idPrograma}`).then((response) => {
+        api.get(`programas/path/${path}`).then((response) => {
             setProgramas(response.data);
         }).catch((e) => {
             console.log('ocorreu algum erro!');
