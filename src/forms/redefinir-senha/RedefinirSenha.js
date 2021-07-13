@@ -3,7 +3,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { common, grey } from '@material-ui/core/colors';
-import { history } from '../../components/Routes/history'
+import { history } from '../../components/routes/history'
 import { Formik, Form, Field } from 'formik'
 import api from '../../services/api';
 import '../../css/Login.css'

@@ -4,8 +4,8 @@ import Spinner from 'react-bootstrap/Spinner'
 import Select from 'react-select';
 import api from '../../services/api';
 import ItensTable from './ItensTable';
-import ConfirmDialog from '../../components/Alert/ConfirmDialog';
-import Ajuda from '../../components/Modal/Modal';
+import ConfirmDialog from '../../components/alert/ConfirmDialog';
+import Ajuda from '../../components/ajuda/Ajuda';
 
 const formStyle = { marginLeft: '20px', marginTop: '20px', marginRight: '20px' };
 

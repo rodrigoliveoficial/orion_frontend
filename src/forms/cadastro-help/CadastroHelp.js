@@ -3,7 +3,6 @@ import { Button } from 'react-bootstrap';
 import api from '../../services/api';
 import CadastroHelpTable from './CadastroHelpTable';
 import CadastroHelpForm from './CadastroHelpForm';
-import Ajuda from '../../components/Modal/Modal';
 
 const formStyle = { marginLeft: '20px', marginTop: '20px', marginRight: '20px' };
 
@@ -73,11 +72,6 @@ const CadastroHelp = (props) => {
             <Button disabled={desabilitaBotoes} onClick={() => { onClickEdit() }}>
                 Editar
             </Button>
-
-            <Ajuda
-                {...props}
-                idPrograma={8}
-            />
 
             <br></br>
 

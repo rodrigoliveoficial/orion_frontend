@@ -5,11 +5,11 @@ import { Button } from 'react-bootstrap';
 import { parseISO } from 'date-fns';
 import { format } from 'date-fns-tz';
 import api from '../../services/api';
-import DeleteDialog from '../../components/Alert/DeleteDialog';
-import ConfirmDialog from '../../components/Alert/ConfirmDialog';
+import DeleteDialog from '../../components/alert/DeleteDialog';
+import ConfirmDialog from '../../components/alert/ConfirmDialog';
 import GerarPlanoMestre from './geracao/GerarPlanoMestre';
 import ItensPlanoMestre from './itens/ItensPlanoMestre';
-import Ajuda from '../../components/Modal/Modal';
+import Ajuda from '../../components/ajuda/Ajuda';
 
 const formStyle = { marginLeft: '20px', marginTop: '20px', marginRight: '20px' };
 

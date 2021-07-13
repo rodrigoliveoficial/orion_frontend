@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Routes from './components/Routes/Routes'
+import Routes from './components/routes/Routes'
 
 const App = () => (
     <main className="App">

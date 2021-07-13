@@ -3,7 +3,7 @@ import { Nav, Navbar, Form, FormControl, Button } from "react-bootstrap";
 import '../../css/style.scss';
 import NavBarDrop from "./NavDropdown";
 import api from "../../services/api";
-import { history } from "../Routes/history";
+import { history } from "../routes/history";
 import '../../css/Navbar.css'
 
 class NavBar extends Component {

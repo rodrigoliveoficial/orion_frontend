@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import api from '../../services/api';
-import DeleteDialog from '../../components/Alert/DeleteDialog';
+import DeleteDialog from '../../components/alert/DeleteDialog';
 import CadastroUsuarioTable from './CadastroUsuarioTable';
 import CadastroUsuarioForm from './CadastroUsuarioForm';
-import Ajuda from '../../components/Modal/Modal';
 
 const formStyle = { marginLeft: '20px', marginTop: '20px', marginRight: '20px' };
 
@@ -134,11 +133,6 @@ const CadastroUsuario = (props) => {
             <Button variant="danger" disabled={desabilitaBotoes} onClick={() => {setShowDeleteAlert(true)}}>
                 Excluir
             </Button>
-
-            <Ajuda
-                {...props}
-                idPrograma={7}
-            />
 
             <br></br>
 

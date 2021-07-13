@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import api from '../../services/api';
-import DeleteDialog from '../../components/Alert/DeleteDialog';
+import DeleteDialog from '../../components/alert/DeleteDialog';
 import PrevisaoVendasTable from './PrevisaoVendasTable';
 import PrevisaoVendasItens from './PrevisaoVendasItens';
-import Ajuda from '../../components/Modal/Modal';
+import Ajuda from '../../components/ajuda/Ajuda';
 
 const formStyle = { marginLeft: '20px', marginTop: '20px', marginRight: '20px' };
 
