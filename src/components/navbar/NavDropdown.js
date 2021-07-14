@@ -13,7 +13,6 @@ const NavBarDrop = () => {
         api.get(`usuarios/programas-navbar/${idUsuario}`).then((response) => {
             setProgramas(response.data.programas);
             setModulos(response.data.modulos);
-            console.log(response.data.modulos)
         }).catch((e) => {
             console.log('ocorreu algum erro!');
             console.error(e);

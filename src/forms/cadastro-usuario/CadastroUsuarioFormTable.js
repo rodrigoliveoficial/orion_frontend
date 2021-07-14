@@ -21,7 +21,7 @@ export default class CadastroUsuarioFormTable extends React.Component {
             <BootstrapTable ref='programas-table' data={programas} selectRow={selectRowPropAux} pagination={true} options={options} striped={true} hover={true} keyBoardNav>
                 <TableHeaderColumn dataField='id' isKey={true} dataSort width='100' >Código</TableHeaderColumn>
                 <TableHeaderColumn dataField='modulo' dataSort width='100' >Módulo</TableHeaderColumn>
-                <TableHeaderColumn dataField='descricao' dataSort>Nome do Programa</TableHeaderColumn>
+                <TableHeaderColumn dataField='descricao' dataSort filter={{ type: 'TextFilter', placeholder: 'Nome do Programa' }}>Nome do Programa</TableHeaderColumn>
             </BootstrapTable>
         );
     }
