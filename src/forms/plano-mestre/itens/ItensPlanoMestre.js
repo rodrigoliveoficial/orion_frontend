@@ -137,6 +137,7 @@ const ItensPlanoMestre = (props) => {
         sizePerPageList: [5, 10, 20, 100, 10000],
         sizePerPage: 10,
         page: currPage,
+        expandBy: 'column',
         onRowClick: function (row) {
             setItemSelecionado(row.codigo);
         },
