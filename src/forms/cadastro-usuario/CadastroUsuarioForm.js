@@ -86,8 +86,6 @@ const CadastroUsuarioForm = (props) => {
 
         setLoading(true);
 
-        console.log(values.senha)
-
         const body = ({
             id: idUsuarioAux,
             nome: values.nome,

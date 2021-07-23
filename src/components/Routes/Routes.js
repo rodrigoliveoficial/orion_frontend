@@ -12,6 +12,7 @@ import RedefinirSenha from '../login/RedefinirSenha'
 import {history} from './history'
 import PrivateRoute from './PrivateRoute';
 import CadastroHelp from '../../forms/cadastro-help/CadastroHelp'
+import CapacidadeCotasVendas from '../../forms/capacidade-cotas-vendas/CapacidadeCotasVendas';
 
 
 const Routes = () => (
@@ -27,6 +28,7 @@ const Routes = () => (
             <PrivateRoute component={PlanoMestre} exact path="/plano-mestre"/>
             <PrivateRoute component={CadastroUsuario} exact path="/cadastro-usuario"/>
             <PrivateRoute component={CadastroHelp} exact path="/cadastro-help"/>
+            <PrivateRoute component={CapacidadeCotasVendas} exact path="/capacidade-cotas-vendas"/>
         </Switch>
     </Router>
 )
