@@ -7,6 +7,7 @@ import CapacidadeProducaoItens from './CapacidadeCotasVendasItens';
 import CapacidadeProducaoTable from './CapacidadeCotasVendasTable';
 import { parseISO } from 'date-fns';
 import { format } from 'date-fns-tz';
+import { set } from 'immutable';
 
 const formStyle = { marginLeft: '20px', marginTop: '20px', marginRight: '20px' };
 
@@ -171,6 +172,7 @@ const CapacidadeCotasVendas = (props) => {
                 periodos={periodos}
                 idCapacidade={idCapacidade}
                 colecoes={colecoes}
+                setEditMode={setEdit}
                 onClose={() => {                    
                     setShowFormCapacidadeProd(false);
                     setDesabilitaBotoes(true);

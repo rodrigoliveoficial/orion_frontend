@@ -6,6 +6,7 @@ import api from '../../services/api';
 import PropTypes from 'prop-types';
 import CapacidadeProducaoItensTable from './CapacidadeCotasVendasItensTable';
 import { useFormik } from 'formik';
+import { Alert } from 'react-bootstrap';
 
 const formStyle = { marginLeft: '20px', marginTop: '20px', marginRight: '20px' };
 
@@ -130,11 +131,12 @@ const CapacidadeProducaoItens = (props) => {
             const response = await api.post('cotas-vendas', body);
             setCapacidadesItens(normalizeGrid(response.data));
         } catch (e) {
+            alert("teste")
             console.log('ocorreu algum erro!');
             console.error(e);
             setCapacidadesItens();
         }
-
+        props.setEditMode(true);
         setLoading(false);
     };
 
