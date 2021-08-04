@@ -39,7 +39,7 @@ const normalizeDados = (dados) => {
             periodo: `${c.periodo} - ${format(parseISO(c.dataInicial), 'dd/MM/yyyy')} até ${format(parseISO(c.dataFinal), 'dd/MM/yyyy')}`,
             linha: `${c.linha} - ${c.descLinha}`,
             colecao: `${c.colecao} - ${c.descColecao}`,
-            minutos: c.minutos,
+            minutos: `${c.minutos.toFixed(4)}`,
             pecas: c.pecas
         };
     });

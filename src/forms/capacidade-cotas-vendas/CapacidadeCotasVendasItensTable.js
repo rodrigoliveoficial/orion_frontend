@@ -3,10 +3,6 @@ import React from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import '../../css/CapacidadeCotasVendas.css'
 
-function columnClassChangeColor(fieldValue, row, rowIdx, colIdx) {
-    return row.modelo === '00000' ? 'modelo-generico-style' : '';
-}
-
 export default class CapacidadeProducaoItensTable extends React.Component {
 
     constructor(props) {
@@ -36,10 +32,10 @@ export default class CapacidadeProducaoItensTable extends React.Component {
                     formatter: (tableData) => {
                         let label = 0;
                         for (let i = 0, tableDataLen = tableData.length; i < tableDataLen; i++) {
-                            label += parseInt(tableData[i].minutos);
+                            label += parseFloat(tableData[i].minutos);
                         }
                         return (
-                            <strong>{label}</strong>
+                            <strong>{label.toFixed(4)}</strong>
                         );
                     }
                 },

@@ -21,6 +21,20 @@ const initialValues = {
     minutos: 0
 }
 
+const normalizeGrid = (dados) => {
+    return dados.map((c) => {
+        return {
+            modelo: c.modelo,
+            descricao: c.descricao,
+            categoria: c.categoria,
+            colecao: `${c.colecao} - ${c.descColecao}`,
+            tempoUnitario: `${c.tempoUnitario.toFixed(4)}`,
+            minutos: `${c.minutos.toFixed(4)}`,
+            pecas: c.pecas
+        };
+    });
+};
+
 const CapacidadeProducaoItens = (props) => {
 
     const [periodo, setPeriodo] = useState([]);
@@ -55,7 +69,7 @@ const CapacidadeProducaoItens = (props) => {
 
     const obterItens = (linha, colecao, periodo, listarComQtde) => {
         api.get(`cotas-vendas/itens/${colecao}/${linha}/${periodo}/${listarComQtde}`).then((response) => {
-            setCapacidadesItens(response.data);
+            setCapacidadesItens(normalizeGrid(response.data));
         }).catch((e) => {
             console.log('ocorreu algum erro!');
             console.error(e);
@@ -83,7 +97,7 @@ const CapacidadeProducaoItens = (props) => {
             setFieldValue('minutos', response.data.minDistribuir)
 
             const responseCapacidades = await api.get(`cotas-vendas/itens/${response.data.colecao}/${response.data.linha}/${response.data.periodo}/${listarComQtde}`)
-            setCapacidadesItens(responseCapacidades.data);
+            setCapacidadesItens(normalizeGrid(responseCapacidades.data));
 
         } catch (e) {
             console.log('ocorreu algum erro!');
@@ -112,7 +126,7 @@ const CapacidadeProducaoItens = (props) => {
 
         try {
             const response = await api.post('cotas-vendas', body);
-            setCapacidadesItens(response.data);
+            setCapacidadesItens(normalizeGrid(response.data));
         } catch (e) {
             console.log('ocorreu algum erro!');
             console.error(e);
@@ -199,7 +213,7 @@ const CapacidadeProducaoItens = (props) => {
 
             <Form.Row>
                 <Form.Group className="mb-3" md="2" controlId="listarComQtde">
-                    <Form.Check type="checkbox" label="Listar apenas com capacidades informadas"
+                    <Form.Check type="checkbox" label="Listar apenas com quantidade de peças informadas"
                         name="listarComQtde"
                         checked={listarComQtde}
                         onChange={() => { onChecked(listarComQtde) }}
