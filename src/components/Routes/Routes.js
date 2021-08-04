@@ -28,7 +28,7 @@ const Routes = () => (
             <PrivateRoute component={PlanoMestre} exact path="/plano-mestre"/>
             <PrivateRoute component={CadastroUsuario} exact path="/cadastro-usuario"/>
             <PrivateRoute component={CadastroHelp} exact path="/cadastro-help"/>
-            <PrivateRoute component={CapacidadeCotasVendas} exact path="/capacidade-cotas-vendas"/>
+            <PrivateRoute component={CapacidadeCotasVendas} exact path="/cotas-vendas"/>
         </Switch>
     </Router>
 )

@@ -154,7 +154,7 @@ const CapacidadeCotasVendas = (props) => {
 
             <Ajuda
                 {...props}
-                path="capacidade-cotas-vendas"
+                path="cotas-vendas"
             />
 
             <br></br>
