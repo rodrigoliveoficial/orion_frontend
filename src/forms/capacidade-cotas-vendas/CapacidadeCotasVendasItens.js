@@ -43,6 +43,7 @@ const CapacidadeProducaoItens = (props) => {
     const [linha, setLinha] = useState([]);
     const [loading, setLoading] = useState(false);
     const [listarComQtde, setListarComQtde] = useState(false);
+    const [listarTempUnit, setListarTempUnit] = useState(false);
 
     const { idCapacidade } = props;
     const { editMode } = props;
@@ -67,8 +68,8 @@ const CapacidadeProducaoItens = (props) => {
         initialValues: initialValues
     });
 
-    const obterItens = (linha, colecao, periodo, listarComQtde) => {
-        api.get(`cotas-vendas/itens/${colecao}/${linha}/${periodo}/${listarComQtde}`).then((response) => {
+    const obterItens = (linha, colecao, periodo, listarComQtde, listarTempUnit) => {
+        api.get(`cotas-vendas/itens/${colecao}/${linha}/${periodo}/${listarComQtde}/${listarTempUnit}`).then((response) => {
             setCapacidadesItens(normalizeGrid(response.data));
         }).catch((e) => {
             console.log('ocorreu algum erro!');
@@ -79,9 +80,9 @@ const CapacidadeProducaoItens = (props) => {
 
     useEffect(() => {
         if ((values.periodo > 0) && (values.linha > 0) && (values.colecao > 0)) {
-            obterItens(values.linha, values.colecao, values.periodo, listarComQtde);
+            obterItens(values.linha, values.colecao, values.periodo, listarComQtde, listarTempUnit);
         }
-    }, [values, listarComQtde]);
+    }, [values, listarComQtde, listarTempUnit]);
 
     const obterCapacidades = async event => {
         try {
@@ -96,7 +97,7 @@ const CapacidadeProducaoItens = (props) => {
             setFieldValue('colecao', response.data.colecao)
             setFieldValue('minutos', response.data.minDistribuir)
 
-            const responseCapacidades = await api.get(`cotas-vendas/itens/${response.data.colecao}/${response.data.linha}/${response.data.periodo}/${listarComQtde}`)
+            const responseCapacidades = await api.get(`cotas-vendas/itens/${response.data.colecao}/${response.data.linha}/${response.data.periodo}/${listarComQtde}/${listarTempUnit}`)
             setCapacidadesItens(normalizeGrid(responseCapacidades.data));
 
         } catch (e) {
@@ -121,7 +122,8 @@ const CapacidadeProducaoItens = (props) => {
             linha: values.linha,
             modelos: capacidadesItens,
             listarComQtde: listarComQtde,
-            minDistribuir: values.minutos
+            minDistribuir: values.minutos,
+            listarTempUnit: listarTempUnit
         });
 
         try {
@@ -140,6 +142,12 @@ const CapacidadeProducaoItens = (props) => {
 
         if (isChecked) setListarComQtde(false);
         else setListarComQtde(true);
+    }
+
+    const onCheckedTemp = (isChecked) => {
+
+        if (isChecked) setListarTempUnit(false);
+        else setListarTempUnit(true);
     }
 
     return (
@@ -201,7 +209,7 @@ const CapacidadeProducaoItens = (props) => {
                     </Form.Label>
                     <Form.Control
                         type="number"
-                        maxLength="100"
+                        maxLength="2"
                         name="minutos"
                         autoComplete="off"
                         value={values.minutos}
@@ -213,10 +221,20 @@ const CapacidadeProducaoItens = (props) => {
 
             <Form.Row>
                 <Form.Group className="mb-3" md="2" controlId="listarComQtde">
-                    <Form.Check type="checkbox" label="Listar apenas com quantidade de peças informadas"
+                    <Form.Check type="checkbox" label="Listar somente com quantidade de peças informadas"
                         name="listarComQtde"
                         checked={listarComQtde}
                         onChange={() => { onChecked(listarComQtde) }}
+                    />
+                </Form.Group>
+            </Form.Row>
+
+            <Form.Row>
+                <Form.Group className="mb-3" md="2" controlId="listarTempUnit">
+                    <Form.Check type="checkbox" label="Listar somente referências com tempo unitário"
+                        name="listarTempUnit"
+                        checked={listarTempUnit}
+                        onChange={() => { onCheckedTemp(listarTempUnit) }}
                     />
                 </Form.Group>
             </Form.Row>
@@ -252,7 +270,7 @@ const FormModal = (props) => {
     return (
         <Modal dialogClassName="modal-full" show={props.show} onHide={props.onClose} animation={true}>
             <Modal.Header>
-                <Modal.Title>{`Capacidade de Cotas de Vendas: ${props.editMode ? 'Edição' : 'Inserção'}`}</Modal.Title>
+                <Modal.Title>{`Cotas de Vendas: ${props.editMode ? 'Edição' : 'Inserção'}`}</Modal.Title>
                 <div>
                     <Button
                         variant="secondary"

@@ -136,7 +136,7 @@ const CapacidadeCotasVendas = (props) => {
     return (
         <div style={formStyle}>
             
-            <h2><b>Capacidade de Cotas de Vendas</b></h2>
+            <h2><b>Cotas de Vendas</b></h2>
             <br></br>
 
             <Button variant="success" onClick={() => { onClickAdd() }}>
