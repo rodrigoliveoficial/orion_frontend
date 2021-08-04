@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Modal, Form, Col, Button } from 'react-bootstrap';
 import Select from 'react-select';
 import Spinner from 'react-bootstrap/Spinner'
@@ -17,13 +17,14 @@ const linhas = [
 const initialValues = {
     periodo: 0,
     linha: 0,
-    categoria: 0,
+    colecao: 0,
+    minutos: 0
 }
 
 const CapacidadeProducaoItens = (props) => {
 
     const [periodo, setPeriodo] = useState([]);
-    const [categoria, setCategoria] = useState([]);
+    const [colecao, setColecao] = useState([]);
     const [capacidadesItens, setCapacidadesItens] = useState([]);
     const [linha, setLinha] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -32,7 +33,7 @@ const CapacidadeProducaoItens = (props) => {
     const { idCapacidade } = props;
     const { editMode } = props;
     const { periodos } = props;
-    const { categorias } = props;
+    const { colecoes } = props;
 
     const { currPage } = useState(1);
 
@@ -52,8 +53,8 @@ const CapacidadeProducaoItens = (props) => {
         initialValues: initialValues
     });
 
-    const obterItens = (linha, categoria, periodo, listarComQtde) => {
-        api.get(`cotas-vendas/itens/${categoria}/${linha}/${periodo}/${listarComQtde}`).then((response) => {
+    const obterItens = (linha, colecao, periodo, listarComQtde) => {
+        api.get(`cotas-vendas/itens/${colecao}/${linha}/${periodo}/${listarComQtde}`).then((response) => {
             setCapacidadesItens(response.data);
         }).catch((e) => {
             console.log('ocorreu algum erro!');
@@ -63,10 +64,10 @@ const CapacidadeProducaoItens = (props) => {
     }
 
     useEffect(() => {
-        if ((values.periodo > 0) && (values.linha > 0) && (values.categoria > 0)) {
-            obterItens(values.linha, values.categoria, values.periodo, listarComQtde);
+        if ((values.periodo > 0) && (values.linha > 0) && (values.colecao > 0)) {
+            obterItens(values.linha, values.colecao, values.periodo, listarComQtde);
         }
-    }, [values,listarComQtde]);
+    }, [values, listarComQtde]);
 
     const obterCapacidades = async event => {
         try {
@@ -74,13 +75,14 @@ const CapacidadeProducaoItens = (props) => {
 
             setPeriodo(periodos.find(o => o.value === response.data.periodo))
             setLinha(linhas.find(o => o.value === response.data.linha))
-            setCategoria(categorias.find(o => o.value === response.data.categoria))
+            setColecao(colecoes.find(o => o.value === response.data.colecao))
 
             setFieldValue('periodo', response.data.periodo)
             setFieldValue('linha', response.data.linha)
-            setFieldValue('categoria', response.data.categoria)
+            setFieldValue('colecao', response.data.colecao)
+            setFieldValue('minutos', response.data.minDistribuir)
 
-            const responseCapacidades = await api.get(`cotas-vendas/itens/${response.data.categoria}/${response.data.linha}/${response.data.periodo}/${listarComQtde}`)
+            const responseCapacidades = await api.get(`cotas-vendas/itens/${response.data.colecao}/${response.data.linha}/${response.data.periodo}/${listarComQtde}`)
             setCapacidadesItens(responseCapacidades.data);
 
         } catch (e) {
@@ -101,14 +103,14 @@ const CapacidadeProducaoItens = (props) => {
 
         const body = ({
             periodo: values.periodo,
-            categoria: values.categoria,
+            colecao: values.colecao,
             linha: values.linha,
             modelos: capacidadesItens,
-            listarComQtde: listarComQtde
+            listarComQtde: listarComQtde,
+            minDistribuir: values.minutos
         });
 
         try {
-            console.log(body)
             const response = await api.post('cotas-vendas', body);
             setCapacidadesItens(response.data);
         } catch (e) {
@@ -117,14 +119,13 @@ const CapacidadeProducaoItens = (props) => {
             setCapacidadesItens();
         }
 
-        setLoading(false);  
+        setLoading(false);
     };
 
     const onChecked = (isChecked) => {
 
         if (isChecked) setListarComQtde(false);
         else setListarComQtde(true);
-
     }
 
     return (
@@ -135,7 +136,7 @@ const CapacidadeProducaoItens = (props) => {
                     <Form.Label>
                         Período
                     </Form.Label>
-                    <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o período."
+                    <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe o período..."
                         name="periodo"
                         options={periodos}
                         value={periodo}
@@ -148,11 +149,27 @@ const CapacidadeProducaoItens = (props) => {
                     />
                 </Form.Group>
 
+                <Form.Group as={Col} md="2" controlId="colecao">
+                    <Form.Label>
+                        Coleção
+                    </Form.Label>
+                    <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe a coleção..."
+                        name="colecao"
+                        options={colecoes}
+                        value={colecao}
+                        isDisabled={editMode}
+                        onChange={(selected) => {
+                            setColecao(selected);
+                            setFieldValue('colecao', selected.value);
+                        }}
+                    />
+                </Form.Group>
+
                 <Form.Group as={Col} md="2" controlId="linha">
                     <Form.Label>
                         Linha
                     </Form.Label>
-                    <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe a linha."
+                    <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe a linha..."
                         name="linha"
                         options={linhas}
                         value={linha}
@@ -164,21 +181,20 @@ const CapacidadeProducaoItens = (props) => {
                     />
                 </Form.Group>
 
-                <Form.Group as={Col} md="2" controlId="categoria">
+                <Form.Group>
                     <Form.Label>
-                        Categoria
+                        Minutos a Distribuir
                     </Form.Label>
-                    <Select className="basic-multi-select" classNamePrefix="select" placeholder="Informe a categoria."
-                        name="categoria"
-                        options={categorias}
-                        value={categoria}
-                        isDisabled={editMode}
-                        onChange={(selected) => {
-                            setCategoria(selected);
-                            setFieldValue('categoria', selected.value);
-                        }}
+                    <Form.Control
+                        type="number"
+                        maxLength="100"
+                        name="minutos"
+                        autoComplete="off"
+                        value={values.minutos}
+                        onChange={handleChange}
                     />
                 </Form.Group>
+
             </Form.Row>
 
             <Form.Row>

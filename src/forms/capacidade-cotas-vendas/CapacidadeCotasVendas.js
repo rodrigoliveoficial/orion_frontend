@@ -12,7 +12,16 @@ const formStyle = { marginLeft: '20px', marginTop: '20px', marginRight: '20px' }
 
 const loadCapacidadeCapa = () => api.get('cotas-vendas/all');
 const loadPeriodos = () => api.get('periodos-producao/producao');
-const loadCategorias = () => api.get('cotas-vendas/categorias');
+const loadColecoes = () => api.get('colecoes');
+
+const normalizeColecoes = (dados) => {
+    return dados.map((c) => {
+        return {
+            value: c.id,
+            label: `${c.id} - ${c.descricao}`
+        };
+    });
+};
 
 const normalizePeriodos = (dados) => {
     return dados.map((c) => {
@@ -23,22 +32,13 @@ const normalizePeriodos = (dados) => {
     });
 };
 
-const normalizeCategorias = (dados) => {
-    return dados.map((c) => {
-        return {
-            value: c.codigo,
-            label: `${c.codigo} - ${c.descricao}`
-        };
-    });
-};
-
 const normalizeDados = (dados) => {
     return dados.map((c) => {
         return {
             id: c.id,
             periodo: `${c.periodo} - ${format(parseISO(c.dataInicial), 'dd/MM/yyyy')} até ${format(parseISO(c.dataFinal), 'dd/MM/yyyy')}`,
             linha: `${c.linha} - ${c.descLinha}`,
-            categoria: `${c.categoria} - ${c.descCategoria}`,
+            colecao: `${c.colecao} - ${c.descColecao}`,
             minutos: c.minutos,
             pecas: c.pecas
         };
@@ -56,8 +56,8 @@ const CapacidadeCotasVendas = (props) => {
     const [showDeleteAlert, setShowDeleteAlert] = useState(false); 
     const [msgDelete, setMsgDelete] = useState('');
     const [periodos, setPeriodos] = useState([]);
-    const [categorias, setCategorias] = useState([]);
-    
+    const [colecoes, setColecoes] = useState([]);
+     
     const { currPage } = useState(0);
 
     const options = {
@@ -81,16 +81,16 @@ const CapacidadeCotasVendas = (props) => {
         Promise.all([
             loadCapacidadeCapa(),
             loadPeriodos(),
-            loadCategorias()
+            loadColecoes()
         ])
             .then(([
                 responseCapacidade,
                 responsePeriodos,
-                responseCategorias
+                responseColecoes
             ]) => {
                 setCapacidades(normalizeDados(responseCapacidade.data));
                 setPeriodos(normalizePeriodos(responsePeriodos.data));
-                setCategorias(normalizeCategorias(responseCategorias.data));
+                setColecoes(normalizeColecoes(responseColecoes.data));
             })
             .catch((e) => {
                 console.log('ocorreu algum erro!');
@@ -169,8 +169,8 @@ const CapacidadeCotasVendas = (props) => {
                 show={showFormCapacidadeProd}
                 editMode={edit}
                 periodos={periodos}
-                categorias={categorias}
                 idCapacidade={idCapacidade}
+                colecoes={colecoes}
                 onClose={() => {                    
                     setShowFormCapacidadeProd(false);
                     setDesabilitaBotoes(true);

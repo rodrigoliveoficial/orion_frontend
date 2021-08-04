@@ -22,8 +22,8 @@ export default class CapacidadeProducaoTable extends React.Component {
                 
                 <TableHeaderColumn dataField='id' isKey={true} hidden width='50'>Id</TableHeaderColumn>
                 <TableHeaderColumn dataField='periodo' filter={{ type: 'TextFilter', placeholder: 'Periodo' }} width='300'>Período</TableHeaderColumn>
+                <TableHeaderColumn dataField='colecao' filter={{ type: 'TextFilter', placeholder: 'Coleção' }} width='250'>Coleção</TableHeaderColumn>
                 <TableHeaderColumn dataField='linha' filter={{ type: 'TextFilter', placeholder: 'Linha' }} width='150'>Linha</TableHeaderColumn>                
-                <TableHeaderColumn dataField='categoria' filter={{ type: 'TextFilter', placeholder: 'Categoria' }} width='250'>Categoria</TableHeaderColumn>
                 <TableHeaderColumn dataField='minutos' dataAlign="right" width='300'>Quantidade Minutos</TableHeaderColumn>
                 <TableHeaderColumn dataField='pecas' dataAlign="right" width='300'>Quantidade Peças</TableHeaderColumn>
 
