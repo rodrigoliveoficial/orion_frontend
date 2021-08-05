@@ -25,6 +25,7 @@ const getDescSituacao = (situacao) => {
 
     if (situacao === 1) descricao = "Plano Confirmado"
     if (situacao === 2) descricao = "Ordens Geradas"
+    if (situacao === 3) descricao = "Ordens Excluidas"
 
     return descricao;
 }

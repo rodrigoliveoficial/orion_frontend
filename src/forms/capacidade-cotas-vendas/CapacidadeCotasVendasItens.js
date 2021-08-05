@@ -46,6 +46,7 @@ const CapacidadeProducaoItens = (props) => {
     const [listarComQtde, setListarComQtde] = useState(false);
     const [listarTempUnit, setListarTempUnit] = useState(false);
     const [desabilitarCampos, setDesabilitarCampos] = useState(false);
+    const [disableSalvar, setDisableSalvar] = useState(true);
 
     const { idCapacidade } = props;
     const { editMode } = props;
@@ -84,6 +85,10 @@ const CapacidadeProducaoItens = (props) => {
         if ((values.periodo > 0) && (values.linha > 0) && (values.colecao > 0)) {
             obterItens(values.linha, values.colecao, values.periodo, listarComQtde, listarTempUnit);
         }
+        if ((values.periodo > 0) && (values.linha > 0) && (values.colecao > 0) && (values.minutos > 0)) {
+            setDisableSalvar(false);
+        }
+
     }, [values, listarComQtde, listarTempUnit]);
 
     const obterCapacidades = async event => {
@@ -258,7 +263,7 @@ const CapacidadeProducaoItens = (props) => {
 
             <br></br>
 
-            <Button onClick={onClickSalvar} variant="success" disabled={loading}
+            <Button onClick={onClickSalvar} variant="success" disabled={disableSalvar}
             >
                 {loading ?
                     <Spinner

@@ -7,12 +7,11 @@ import CapacidadeProducaoItens from './CapacidadeCotasVendasItens';
 import CapacidadeProducaoTable from './CapacidadeCotasVendasTable';
 import { parseISO } from 'date-fns';
 import { format } from 'date-fns-tz';
-import { set } from 'immutable';
 
 const formStyle = { marginLeft: '20px', marginTop: '20px', marginRight: '20px' };
 
 const loadCapacidadeCapa = () => api.get('cotas-vendas/all');
-const loadPeriodos = () => api.get('periodos-producao/producao');
+const loadPeriodos = () => api.get('periodos-producao/demanda');
 const loadColecoes = () => api.get('colecoes');
 
 const normalizeColecoes = (dados) => {
