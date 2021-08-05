@@ -6,7 +6,7 @@ import api from '../../services/api';
 import PropTypes from 'prop-types';
 import CapacidadeProducaoItensTable from './CapacidadeCotasVendasItensTable';
 import { useFormik } from 'formik';
-import { Alert } from 'react-bootstrap';
+import { OverlayTrigger, Popover } from 'react-bootstrap';
 
 const formStyle = { marginLeft: '20px', marginTop: '20px', marginRight: '20px' };
 
@@ -45,6 +45,7 @@ const CapacidadeProducaoItens = (props) => {
     const [loading, setLoading] = useState(false);
     const [listarComQtde, setListarComQtde] = useState(false);
     const [listarTempUnit, setListarTempUnit] = useState(false);
+    const [desabilitarCampos, setDesabilitarCampos] = useState(false);
 
     const { idCapacidade } = props;
     const { editMode } = props;
@@ -110,6 +111,7 @@ const CapacidadeProducaoItens = (props) => {
     useEffect(() => {
         if (editMode) {
             obterCapacidades();
+            setDesabilitarCampos(true);
         }
     }, [idCapacidade, editMode]);
 
@@ -127,16 +129,17 @@ const CapacidadeProducaoItens = (props) => {
             listarTempUnit: listarTempUnit
         });
 
+        console.log(body)
         try {
             const response = await api.post('cotas-vendas', body);
             setCapacidadesItens(normalizeGrid(response.data));
         } catch (e) {
-            alert("teste")
             console.log('ocorreu algum erro!');
             console.error(e);
             setCapacidadesItens();
         }
-        props.setEditMode(true);
+
+        setDesabilitarCampos(true);
         setLoading(false);
     };
 
@@ -152,6 +155,16 @@ const CapacidadeProducaoItens = (props) => {
         else setListarTempUnit(true);
     }
 
+    const helpMinutos = (
+        <Popover id="popover-basic">
+            <Popover.Title as="h3">Minutos à Distribuir</Popover.Title>
+            <Popover.Content>
+                Os minutos informados neste campo serão distribuídos igualmente para todos os modelos listados no grid (exceto para os que não possuem tempo unitário no roteiro de produção).
+                Com base nessa informação, serão calculadas as quantidades de peças que serão produzidas para cada modelo.
+            </Popover.Content>
+        </Popover>
+    );
+
     return (
         <div style={formStyle}>
 
@@ -164,7 +177,7 @@ const CapacidadeProducaoItens = (props) => {
                         name="periodo"
                         options={periodos}
                         value={periodo}
-                        isDisabled={editMode}
+                        isDisabled={desabilitarCampos}
                         onChange={(selected) => {
                             setPeriodo(selected);
                             setFieldValue('periodo', selected.value);
@@ -181,7 +194,7 @@ const CapacidadeProducaoItens = (props) => {
                         name="colecao"
                         options={colecoes}
                         value={colecao}
-                        isDisabled={editMode}
+                        isDisabled={desabilitarCampos}
                         onChange={(selected) => {
                             setColecao(selected);
                             setFieldValue('colecao', selected.value);
@@ -197,7 +210,7 @@ const CapacidadeProducaoItens = (props) => {
                         name="linha"
                         options={linhas}
                         value={linha}
-                        isDisabled={editMode}
+                        isDisabled={desabilitarCampos}
                         onChange={(selected) => {
                             setLinha(selected);
                             setFieldValue('linha', selected.value);
@@ -207,16 +220,18 @@ const CapacidadeProducaoItens = (props) => {
 
                 <Form.Group>
                     <Form.Label>
-                        Minutos a Distribuir
+                        Minutos à Distribuir
                     </Form.Label>
-                    <Form.Control
-                        type="number"
-                        maxLength="2"
-                        name="minutos"
-                        autoComplete="off"
-                        value={values.minutos}
-                        onChange={handleChange}
-                    />
+                    <OverlayTrigger placement="right" overlay={helpMinutos}>
+                        <Form.Control
+                            type="number"
+                            maxLength="2"
+                            name="minutos"
+                            autoComplete="off"
+                            value={values.minutos}
+                            onChange={handleChange}
+                        />
+                    </OverlayTrigger>
                 </Form.Group>
 
             </Form.Row>
