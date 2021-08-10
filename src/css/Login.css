@@ -1,0 +1,47 @@
+.Login-Field {
+    border: none;
+    background: #fdfdfd(0, 0, 0, .25);
+    color:#000000;
+    margin-top: 1rem;
+    padding: 1rem;
+    font-size: 1rem;
+    border-radius: 7px;
+    width: 400px;
+    transition: all .1s linear;
+    align-items: center;
+}
+
+.Login-Field:focus {
+    box-shadow: 0 4px 4px rgba(1, 2, 4, .5);
+    outline: none;
+}
+
+.Login-Field:hover {
+    background-color:lightgray;
+    outline: none;
+}
+
+.Login-Error {
+    color: #ff8080;
+}
+
+.Login-Btn {
+    background: #b7a696;
+    color: #fdfdfd;
+    padding: .5rem 2rem;
+    border: none;
+    border-radius: 5px;
+    margin-top: 2rem;
+    width: 400px;
+    align-items: center;
+}
+
+.Login-Btn:hover {
+    cursor: pointer;
+    color:black;
+    background-color:#d3cac5;
+}
+
+.Link-Redefinir {
+    padding-left: 9.5rem;
+}

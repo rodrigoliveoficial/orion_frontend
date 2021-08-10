@@ -79,7 +79,7 @@ const AbaGlobal = (props) => {
                 </Form.Row>
 
                 <Form.Row>
-                    <Form.Group as={Col} md="2" controlId="previsaoVendas">
+                    <Form.Group as={Col} md="6" controlId="previsaoVendas">
                         <Form.Label>
                             Previsão de vendas
                         </Form.Label>
@@ -87,9 +87,10 @@ const AbaGlobal = (props) => {
                             name="previsaoVendas"
                             options={previsoesVendas}
                             value={previsaoVendasParam}
+                            isMulti
                             onChange={(selected) => {
                                 setPrevisaoVendasParam(selected);                                
-                                props.setPrevisaoVendasSelected(selected.value);
+                                props.setPrevisaoVendasSelected(selected);
                             }}
                         />
                     </Form.Group>

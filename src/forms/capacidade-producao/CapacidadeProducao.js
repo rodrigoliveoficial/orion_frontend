@@ -5,6 +5,7 @@ import Spinner from 'react-bootstrap/Spinner'
 import api from '../../services/api';
 import EstagiosTable from './EstagiosTable';
 import CapacidadeArtigo from './artigos/CapacidadeArtigo';
+import Ajuda from '../../components/ajuda/Ajuda';
 
 const formStyle = { marginLeft: '20px', marginTop: '20px', marginRight: '20px' };
 
@@ -142,6 +143,11 @@ const CapacidadeProducao = (props) => {
             <Button onClick={onClickFormArtigos} variant="secondary" disabled={disabledArtigo}>
                 Artigos
             </Button>
+
+            <Ajuda
+                {...props}
+                path="capacidade-producao"
+            />
 
             <EstagiosTable
                 {...props}

@@ -1,6 +1,15 @@
 /* eslint max-len: 0 */
 import React from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
+import '../../../css/ItensPlanoMestre.css'
+
+function columnClassChangeColor(fieldValue) {
+    return fieldValue === 'S' ? 'nao-sug-cancelamento-style' : 'sug-cancelamento-style';
+}
+
+function columnClassChangeColorSaldo(fieldValue) {
+    return fieldValue < 0 ? 'nao-sug-cancelamento-style' : '';
+}
 
 export default class ItensPlanoTable extends React.Component {
 
@@ -11,7 +20,7 @@ export default class ItensPlanoTable extends React.Component {
 
         };
     }
-
+    
     render() {
 
         const { itens } = this.props;
@@ -612,51 +621,51 @@ export default class ItensPlanoTable extends React.Component {
                 <TableHeaderColumn row='2' rowSpan='1' colSpan='3' headerAlign="center">{planoProg}</TableHeaderColumn>
 
                 <TableHeaderColumn row='3' dataField='codigo' width='140' dataSort isKey={true} filter={{ type: 'TextFilter', placeholder: 'Código' }}>Ref . Cor</TableHeaderColumn>
-                <TableHeaderColumn row='3' dataField='embarque' editable={false} width='130' dataSort filter={{ type: 'TextFilter', placeholder: 'Embarque' }}>Emb</TableHeaderColumn>                
-                <TableHeaderColumn row='3' dataField='sugCancelProducao' editable={false} width='60' dataSort filter={{ type: 'TextFilter', placeholder: 'Sugestão' }}>S.C</TableHeaderColumn>
+                <TableHeaderColumn row='3' dataField='embarque' editable={false} width='130' dataSort filter={{ type: 'TextFilter', placeholder: 'Embarque' }}>Embarque</TableHeaderColumn>                
+                <TableHeaderColumn row='3' dataField='sugCancelProducao' columnClassName={ columnClassChangeColor }  editable={false} width='60' dataSort filter={{ type: 'TextFilter', placeholder: 'Sugestão' }}>S.C</TableHeaderColumn>
                 <TableHeaderColumn row='3' dataField='rank' editable={false} dataAlign="right" dataSort>Rank</TableHeaderColumn>
                 <TableHeaderColumn row='3' dataField='qtdePrevisao' editable={false} dataAlign="right" dataSort>Prev</TableHeaderColumn>
                 <TableHeaderColumn row='3' dataField='qtdeEstoque' editable={false} dataAlign="right" dataSort>Estq</TableHeaderColumn>
 
                 <TableHeaderColumn row='3' dataField='qtdeDemPlano1' editable={false} dataAlign="right" dataSort>Dem</TableHeaderColumn>
                 <TableHeaderColumn row='3' dataField='qtdeProcPlano1' editable={false} dataAlign="right" dataSort>Proc</TableHeaderColumn>
-                <TableHeaderColumn row='3' dataField='qtdeSaldoPlano1' editable={false} dataAlign="right" dataSort>Saldo</TableHeaderColumn>
+                <TableHeaderColumn row='3' dataField='qtdeSaldoPlano1' expandable={ true } columnClassName={ columnClassChangeColorSaldo } editable={false} dataAlign="right" dataSort>Saldo</TableHeaderColumn>
 
                 <TableHeaderColumn row='3' dataField='qtdeDemPlano2' editable={false} dataAlign="right" dataSort>Dem</TableHeaderColumn>
                 <TableHeaderColumn row='3' dataField='qtdeProcPlano2' editable={false} dataAlign="right" dataSort>Proc</TableHeaderColumn>
-                <TableHeaderColumn row='3' dataField='qtdeSaldoPlano2' editable={false} dataAlign="right" dataSort>Saldo</TableHeaderColumn>
+                <TableHeaderColumn row='3' dataField='qtdeSaldoPlano2' expandable={ true } columnClassName={ columnClassChangeColorSaldo } editable={false} dataAlign="right" dataSort>Saldo</TableHeaderColumn>
 
                 <TableHeaderColumn row='3' dataField='qtdeDemPlano3' editable={false} dataAlign="right" dataSort>Dem</TableHeaderColumn>
                 <TableHeaderColumn row='3' dataField='qtdeProcPlano3' editable={false} dataAlign="right" dataSort>Proc</TableHeaderColumn>
-                <TableHeaderColumn row='3' dataField='qtdeSaldoPlano3' editable={false} dataAlign="right" dataSort>Saldo</TableHeaderColumn>
+                <TableHeaderColumn row='3' dataField='qtdeSaldoPlano3' expandable={ true } columnClassName={ columnClassChangeColorSaldo } editable={false} dataAlign="right" dataSort>Saldo</TableHeaderColumn>
 
                 <TableHeaderColumn row='3' dataField='qtdeDemPlano4' editable={false} dataAlign="right" dataSort>Dem</TableHeaderColumn>
                 <TableHeaderColumn row='3' dataField='qtdeProcPlano4' editable={false} dataAlign="right" dataSort>Proc</TableHeaderColumn>
-                <TableHeaderColumn row='3' dataField='qtdeSaldoPlano4' editable={false} dataAlign="right" dataSort>Saldo</TableHeaderColumn>
+                <TableHeaderColumn row='3' dataField='qtdeSaldoPlano4' expandable={ true } columnClassName={ columnClassChangeColorSaldo } editable={false} dataAlign="right" dataSort>Saldo</TableHeaderColumn>
 
                 <TableHeaderColumn row='3' dataField='qtdeDemPlano5' editable={false} dataAlign="right" dataSort>Dem</TableHeaderColumn>
                 <TableHeaderColumn row='3' dataField='qtdeProcPlano5' editable={false} dataAlign="right" dataSort>Proc</TableHeaderColumn>
-                <TableHeaderColumn row='3' dataField='qtdeSaldoPlano5' editable={false} dataAlign="right" dataSort>Saldo</TableHeaderColumn>
+                <TableHeaderColumn row='3' dataField='qtdeSaldoPlano5' expandable={ true } columnClassName={ columnClassChangeColorSaldo } editable={false} dataAlign="right" dataSort>Saldo</TableHeaderColumn>
 
                 <TableHeaderColumn row='3' dataField='qtdeDemPlano6' editable={false} dataAlign="right" dataSort>Dem</TableHeaderColumn>
                 <TableHeaderColumn row='3' dataField='qtdeProcPlano6' editable={false} dataAlign="right" dataSort>Proc</TableHeaderColumn>
-                <TableHeaderColumn row='3' dataField='qtdeSaldoPlano6' editable={false} dataAlign="right" dataSort>Saldo</TableHeaderColumn>
+                <TableHeaderColumn row='3' dataField='qtdeSaldoPlano6' expandable={ true } columnClassName={ columnClassChangeColorSaldo } editable={false} dataAlign="right" dataSort>Saldo</TableHeaderColumn>
 
                 <TableHeaderColumn row='3' dataField='qtdeDemPlano7' editable={false} dataAlign="right" dataSort>Dem</TableHeaderColumn>
                 <TableHeaderColumn row='3' dataField='qtdeProcPlano7' editable={false} dataAlign="right" dataSort>Proc</TableHeaderColumn>
-                <TableHeaderColumn row='3' dataField='qtdeSaldoPlano7' editable={false} dataAlign="right" dataSort>Saldo</TableHeaderColumn>
+                <TableHeaderColumn row='3' dataField='qtdeSaldoPlano7' expandable={ true } columnClassName={ columnClassChangeColorSaldo } editable={false} dataAlign="right" dataSort>Saldo</TableHeaderColumn>
 
                 <TableHeaderColumn row='3' dataField='qtdeDemPlano8' editable={false} dataAlign="right" dataSort>Dem</TableHeaderColumn>
                 <TableHeaderColumn row='3' dataField='qtdeProcPlano8' editable={false} dataAlign="right" dataSort>Proc</TableHeaderColumn>
-                <TableHeaderColumn row='3' dataField='qtdeSaldoPlano8' editable={false} dataAlign="right" dataSort>Saldo</TableHeaderColumn>
+                <TableHeaderColumn row='3' dataField='qtdeSaldoPlano8' expandable={ true } columnClassName={ columnClassChangeColorSaldo } editable={false} dataAlign="right" dataSort>Saldo</TableHeaderColumn>
 
                 <TableHeaderColumn row='3' dataField='qtdeDemAcumulado' editable={false} dataAlign="right" dataSort>Dem</TableHeaderColumn>
                 <TableHeaderColumn row='3' dataField='qtdeProcAcumulado' editable={false} dataAlign="right" dataSort>Proc</TableHeaderColumn>
-                <TableHeaderColumn row='3' dataField='qtdeSaldoAcumulado' editable={false} dataAlign="right" dataSort>Saldo</TableHeaderColumn>
+                <TableHeaderColumn row='3' dataField='qtdeSaldoAcumulado' expandable={ true } columnClassName={ columnClassChangeColorSaldo } editable={false} dataAlign="right" dataSort>Saldo</TableHeaderColumn>
 
                 <TableHeaderColumn row='3' dataField='qtdeDemAcumProg' editable={false} dataAlign="right" dataSort>Dem</TableHeaderColumn>
                 <TableHeaderColumn row='3' dataField='qtdeProcAcumProg' editable={false} dataAlign="right" dataSort>Proc</TableHeaderColumn>
-                <TableHeaderColumn row='3' dataField='qtdeSaldoAcumProg' editable={false} dataAlign="right" dataSort>Saldo</TableHeaderColumn>
+                <TableHeaderColumn row='3' dataField='qtdeSaldoAcumProg' expandable={ true } columnClassName={ columnClassChangeColorSaldo } editable={false} dataAlign="right" dataSort>Saldo</TableHeaderColumn>
 
                 <TableHeaderColumn row='3' dataField='qtdeSugestao' editable={false} dataAlign="right" dataSort>Sug</TableHeaderColumn>
                 <TableHeaderColumn row='3' dataField='qtdeEqualizadoSugestao' editable={false} dataAlign="right" dataSort>Equal</TableHeaderColumn>

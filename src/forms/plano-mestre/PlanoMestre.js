@@ -5,10 +5,11 @@ import { Button } from 'react-bootstrap';
 import { parseISO } from 'date-fns';
 import { format } from 'date-fns-tz';
 import api from '../../services/api';
-import DeleteDialog from '../../components/Alert/DeleteDialog';
-import ConfirmDialog from '../../components/Alert/ConfirmDialog';
+import DeleteDialog from '../../components/alert/DeleteDialog';
+import ConfirmDialog from '../../components/alert/ConfirmDialog';
 import GerarPlanoMestre from './geracao/GerarPlanoMestre';
 import ItensPlanoMestre from './itens/ItensPlanoMestre';
+import Ajuda from '../../components/ajuda/Ajuda';
 
 const formStyle = { marginLeft: '20px', marginTop: '20px', marginRight: '20px' };
 
@@ -24,6 +25,7 @@ const getDescSituacao = (situacao) => {
 
     if (situacao === 1) descricao = "Plano Confirmado"
     if (situacao === 2) descricao = "Ordens Geradas"
+    if (situacao === 3) descricao = "Ordens Excluidas"
 
     return descricao;
 }
@@ -45,7 +47,8 @@ const normalizeDados = (dados) => {
             id: c.id,
             descricao: c.descricao,
             data: format(parseISO(c.data), 'dd/MM/yyyy HH:mm:ss'),
-            situacao: `${c.situacao}-${getDescSituacao(c.situacao)}`
+            situacao: `${c.situacao}-${getDescSituacao(c.situacao)}`,
+            usuario: c.usuario
         };
     });
 };
@@ -81,7 +84,8 @@ const columns = [
     { key: 'id', name: 'Numero' },
     { key: 'descricao', name: 'Descrição' },
     { key: 'data', name: 'Data Geração' },
-    { key: 'situacao', name: 'Situação' }
+    { key: 'situacao', name: 'Situação' },
+    { key: 'usuario', name: 'Usuário' }
 ];
 
 const PlanoMestre = (props) => {
@@ -90,7 +94,7 @@ const PlanoMestre = (props) => {
     const [previsoesVendas, setPrevisoesVendas] = useState([]);
     const [depositos, setDepositos] = useState([]);
     const [periodosDemanda, setPeriodosDemanda] = useState([]);
-    const [periodosProducao, setPeriodosProducao] = useState([]);    
+    const [periodosProducao, setPeriodosProducao] = useState([]);
 
     const [showFormGerar, setShowFormGerar] = useState(false);
     const [showFormItens, setShowFormItens] = useState(false);
@@ -217,6 +221,11 @@ const PlanoMestre = (props) => {
             <Button onClick={() => { setShowDeleteAlert(true) }} variant="danger" disabled={disabledButton}>
                 Excluir
             </Button>
+
+            <Ajuda
+                {...props}
+                path="plano-mestre"
+            />
 
             <h2><b></b></h2>
 

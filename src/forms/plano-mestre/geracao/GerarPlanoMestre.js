@@ -19,7 +19,7 @@ const GerarPlanoMestre = (props) => {
     const [multiplicadorInfo, setMultiplicadorInfo] = useState(0);
     const [qtdeMinimaReferenciaInfo, setQtdeMinimaReferenciaInfo] = useState(0);
     const [tipoDistribuicaoSelected, setTipoDistribuicaoSelected] = useState(1);
-    const [previsaoVendasSelected, setPrevisaoVendasSelected] = useState(0);
+    const [previsaoVendasSelected, setPrevisaoVendasSelected] = useState([]);
 
     // ABA ANALISE
     const [colecoesSelected, setColecoesSelected] = useState([]);
@@ -84,101 +84,106 @@ const GerarPlanoMestre = (props) => {
     const [pedidosSelected, setPedidosSelected] = useState([]);
     const [nrInternoPedidoInfo, setNrInternoPedidoInfo] = useState(0);
 
-    const validarPeriodos = () => {
+    const validarParametros = () => {
 
-        let periodosValidos = true;
+        let parametrosValidos = true;
 
         if (perDemInico1Info > perDemFim1Info) {
             alert('Plano 1: Período de demanda inicial não pode ser maior que o final!');
-            periodosValidos = false;
+            parametrosValidos = false;
         }
 
         if (perProcInico1Info > perProcFim1Info) {
             alert('Plano 1: Período de processo inicial não pode ser maior que o final!');
-            periodosValidos = false;
+            parametrosValidos = false;
         }
 
         if (perDemInico2Info > perDemFim2Info) {
             alert('Plano 2: Período de demanda inicial não pode ser maior que o final!');
-            periodosValidos = false;
+            parametrosValidos = false;
         }
 
         if (perProcInico2Info > perProcFim2Info) {
             alert('Plano 2: Período de processo inicial não pode ser maior que o final!');
-            periodosValidos = false;
+            parametrosValidos = false;
         }
 
         if (perDemInico3Info > perDemFim3Info) {
             alert('Plano 3: Período de demanda inicial não pode ser maior que o final!');
-            periodosValidos = false;
+            parametrosValidos = false;
         }
 
         if (perProcInico3Info > perProcFim3Info) {
             alert('Plano 3: Período de processo inicial não pode ser maior que o final!');
-            periodosValidos = false;
+            parametrosValidos = false;
         }
 
         if (perDemInico4Info > perDemFim4Info) {
             alert('Plano 4: Período de demanda inicial não pode ser maior que o final!');
-            periodosValidos = false;
+            parametrosValidos = false;
         }
 
         if (perProcInico4Info > perProcFim4Info) {
             alert('Plano 4: Período de processo inicial não pode ser maior que o final!');
-            periodosValidos = false;
+            parametrosValidos = false;
         }
 
         if (perDemInico5Info > perDemFim5Info) {
             alert('Plano 5: Período de demanda inicial não pode ser maior que o final!');
-            periodosValidos = false;
+            parametrosValidos = false;
         }
 
         if (perProcInico5Info > perProcFim5Info) {
             alert('Plano 5: Período de processo inicial não pode ser maior que o final!');
-            periodosValidos = false;
+            parametrosValidos = false;
         }
 
         if (perDemInico6Info > perDemFim6Info) {
             alert('Plano 6: Período de demanda inicial não pode ser maior que o final!');
-            periodosValidos = false;
+            parametrosValidos = false;
         }
 
         if (perProcInico6Info > perProcFim6Info) {
             alert('Plano 6: Período de processo inicial não pode ser maior que o final!');
-            periodosValidos = false;
+            parametrosValidos = false;
         }
 
         if (perDemInico7Info > perDemFim7Info) {
             alert('Plano 7: Período de demanda inicial não pode ser maior que o final!');
-            periodosValidos = false;
+            parametrosValidos = false;
         }
 
         if (perProcInico7Info > perProcFim7Info) {
             alert('Plano 7: Período de processo inicial não pode ser maior que o final!');
-            periodosValidos = false;
+            parametrosValidos = false;
         }
 
         if (perDemInico8Info > perDemFim8Info) {
             alert('Plano 8: Período de demanda inicial não pode ser maior que o final!');
-            periodosValidos = false;
+            parametrosValidos = false;
         }
 
         if (perProcInico8Info > perProcFim8Info) {
             alert('Plano 8: Período de processo inicial não pode ser maior que o final!');
-            periodosValidos = false;
+            parametrosValidos = false;
         }
 
         if (planoAcumProgInicioSelected > planoAcumProgFimSelected) {
             alert('Plano início do acumulado para planejamento não pode ser maior que o plano fim!');
-            periodosValidos = false;
+            parametrosValidos = false;
         }
 
-        return periodosValidos
+        if ((colecoesSelected.length === 0)&&(colecoesPermSelected.length === 0)&&(previsaoVendasSelected.length === 0)) {
+            alert('É necessário informar ao menos os parametros: Coleções, Coleções Permanentes ou Previsão de Vendas!');
+            parametrosValidos = false;
+        }
+
+        return parametrosValidos
     };
 
     const gerarPlanoMestre = async event => {
 
-        if (validarPeriodos()) {
+        if (validarParametros()) {
             event.preventDefault();
             props.setLoading(true);
             try {
@@ -194,16 +199,19 @@ const GerarPlanoMestre = (props) => {
         else return false;
     };
 
+    const nomeUsuario = localStorage.getItem('usuario-logado');
+
     useEffect(() => {
 
         const obterParametros = () => {
             setbodyParametros({
                 descricao: descricaoInfo,
+                usuario: nomeUsuario,
                 multiplicador: multiplicadorInfo,
                 qtdeMinimaReferencia: qtdeMinimaReferenciaInfo,
                 periodoPadrao: periodoPadraoInfo,
                 tipoDistribuicao: tipoDistribuicaoSelected,
-                idPrevisaoVendas: previsaoVendasSelected,
+                previsoes: previsaoVendasSelected,
                 colecoes: colecoesSelected,
                 colecoesPermanentes: colecoesPermSelected,
                 linhasProduto: linhasProdutoSelected,
@@ -261,7 +269,7 @@ const GerarPlanoMestre = (props) => {
 
         obterParametros();
 
-    }, [descricaoInfo, colecoesSelected, colecoesPermSelected, linhasProdutoSelected, artigosProdutoSelected, artigosCotasSelected, publicoAlvoSelected,
+    }, [descricaoInfo, nomeUsuario, colecoesSelected, colecoesPermSelected, linhasProdutoSelected, artigosProdutoSelected, artigosCotasSelected, publicoAlvoSelected,
         perDemInico1Info, perDemInico2Info, perDemInico3Info, perDemInico4Info, perDemInico5Info, perDemInico6Info, perDemInico7Info, perDemInico8Info,
         perDemFim1Info, perDemFim2Info, perDemFim3Info, perDemFim4Info, perDemFim5Info, perDemFim6Info, perDemFim7Info, perDemFim8Info, perProcInico1Info,
         perProcInico2Info, perProcInico3Info, perProcInico4Info, perProcInico5Info, perProcInico6Info, perProcInico7Info, perProcInico8Info, perProcFim1Info,

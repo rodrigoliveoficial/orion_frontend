@@ -4,7 +4,8 @@ import Spinner from 'react-bootstrap/Spinner'
 import Select from 'react-select';
 import api from '../../services/api';
 import ItensTable from './ItensTable';
-import ConfirmDialog from '../../components/Alert/ConfirmDialog';
+import ConfirmDialog from '../../components/alert/ConfirmDialog';
+import Ajuda from '../../components/ajuda/Ajuda';
 
 const formStyle = { marginLeft: '20px', marginTop: '20px', marginRight: '20px' };
 
@@ -41,10 +42,11 @@ const normalizeCores = (dados) => {
 const normalizeDadosConsulta = (dados) => {
     return dados.map((c) => {
         return {
-            id: `${c.grupo}.${c.item}`,
+            id: `${c.grupo}.${c.item}.${c.colecao}`,
             grupo: c.grupo,
             item: c.item,
             descricao: c.descricao,
+            colecao: `${c.colecao} - ${c.descColecao}`,
             situacao: c.sugCancelProducao === 'S' ? "Sugerido cancelamento" : "Disponível para planejamento"
         };
     });
@@ -161,7 +163,7 @@ const SugestaoCancelamento = (props) => {
         setItensSelected([]);
 
         try {
-            const response = await api.post('produtos/itens-colecoes', bodyParamAgrupadores);
+            const response = await api.post('produtos/itens-sug-cancelamento', bodyParamAgrupadores);
             setDadosConsulta(normalizeDadosConsulta(response.data));
         } catch (e) {
             console.log('ocorreu algum erro!');
@@ -197,7 +199,7 @@ const SugestaoCancelamento = (props) => {
 
             setItensSelected([]);
 
-            api.post('produtos/itens-colecoes', bodyParamAgrupadores).then((response) => {                
+            api.post('produtos/itens-sug-cancelamento', bodyParamAgrupadores).then((response) => {                
                 setDadosConsulta(normalizeDadosConsulta(response.data));
             }).catch((e) => {
                 console.log('ocorreu algum erro!');
@@ -217,7 +219,7 @@ const SugestaoCancelamento = (props) => {
 
             setItensSelected([]);
 
-            api.post('produtos/itens-colecoes', bodyParamAgrupadores).then((response) => {                
+            api.post('produtos/itens-sug-cancelamento', bodyParamAgrupadores).then((response) => {                
                 setDadosConsulta(normalizeDadosConsulta(response.data));
             }).catch((e) => {
                 console.log('ocorreu algum erro!');
@@ -333,6 +335,11 @@ const SugestaoCancelamento = (props) => {
             <Button onClick={() => { setShowConfirmaRemoverSugestaoAlert(true) }} variant="danger" disabled={disabledButtons}>
                 Remover Sugestão
             </Button>
+
+            <Ajuda
+                {...props}
+                path="sugestao-cancelamento"
+            />
 
             <br></br>
             <br></br>

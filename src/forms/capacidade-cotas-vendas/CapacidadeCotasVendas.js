@@ -2,15 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import api from '../../services/api';
 import DeleteDialog from '../../components/alert/DeleteDialog';
-import PrevisaoVendasTable from './PrevisaoVendasTable';
-import PrevisaoVendasItens from './PrevisaoVendasItens';
-import Ajuda from '../../components/ajuda/Ajuda';
+import Ajuda from '../../components/ajuda/Ajuda'
+import CapacidadeProducaoItens from './CapacidadeCotasVendasItens';
+import CapacidadeProducaoTable from './CapacidadeCotasVendasTable';
+import { parseISO } from 'date-fns';
+import { format } from 'date-fns-tz';
 
 const formStyle = { marginLeft: '20px', marginTop: '20px', marginRight: '20px' };
 
-const loadPrevisoes = () => api.get('previsao-vendas');
+const loadCapacidadeCapa = () => api.get('cotas-vendas/all');
+const loadPeriodos = () => api.get('periodos-producao/demanda');
 const loadColecoes = () => api.get('colecoes');
-const loadTabelasPreco = () => api.get('tabelas-preco');
 
 const normalizeColecoes = (dados) => {
     return dados.map((c) => {
@@ -21,43 +23,55 @@ const normalizeColecoes = (dados) => {
     });
 };
 
-const normalizeTabelasPreco = (dados) => {
+const normalizePeriodos = (dados) => {
     return dados.map((c) => {
         return {
-            value: c.id,
-            label: `${c.colecao} . ${c.mes} . ${c.sequencia} - ${c.descricao}`
+            value: c.periodo,
+            label: `${c.periodo} - ${c.dataIniPeriodo} até ${c.dataFimPeriodo}`
         };
     });
 };
 
+const normalizeDados = (dados) => {
+    return dados.map((c) => {
+        return {
+            id: c.id,
+            periodo: `${c.periodo} - ${format(parseISO(c.dataInicial), 'dd/MM/yyyy')} até ${format(parseISO(c.dataFinal), 'dd/MM/yyyy')}`,
+            linha: `${c.linha} - ${c.descLinha}`,
+            colecao: `${c.colecao} - ${c.descColecao}`,
+            minutos: `${c.minutos.toFixed(4)}`,
+            pecas: c.pecas
+        };
+    });
+};
 
-const PrevisaoVendas = (props) => {
+const CapacidadeCotasVendas = (props) => {
 
-    const [previsoes, setPrevisoes] = useState([]);
-    const [colecoes, setColecoes] = useState([]);
-    const [tabelasPreco, setTabelasPreco] = useState([]);
-    const [idPrevisaoVendas, setIdPrevisaoVendas] = useState(0);
+    const [capacidades, setCapacidades] = useState([]);
+    const [idCapacidade, setIdCapacidade] = useState(0);
     const [desabilitaBotoes, setDesabilitaBotoes] = useState(true);
-    const [showFormPrevisaoVendasItens, setShowFormPrevisaoVendasItens] = useState(false);
+    const [showFormCapacidadeProd, setShowFormCapacidadeProd] = useState(false);
     const [edit, setEdit] = useState(false);
     const [waitConexao, setWaitConexao] = useState(false); 
     const [showDeleteAlert, setShowDeleteAlert] = useState(false); 
     const [msgDelete, setMsgDelete] = useState('');
-
+    const [periodos, setPeriodos] = useState([]);
+    const [colecoes, setColecoes] = useState([]);
+     
     const { currPage } = useState(0);
 
     const options = {
-        defaultSortName: 'id',
+        defaultSortName: 'periodo',
         defaultSortOrder: 'desc',
         sizePerPageList: [5, 10, 20, 40, 100],
         sizePerPage: 10,
         page: currPage,
         onRowClick: function (row) {
-            setIdPrevisaoVendas(row.id);
+            setIdCapacidade(row.id)
             setDesabilitaBotoes(false);
         },
         onPageChange: function () {
-            setIdPrevisaoVendas(0);
+            setIdCapacidade(0)
             setDesabilitaBotoes(true);
         }
     };
@@ -65,18 +79,18 @@ const PrevisaoVendas = (props) => {
     const load = () => {
 
         Promise.all([
-            loadPrevisoes(),
-            loadColecoes(),
-            loadTabelasPreco()
+            loadCapacidadeCapa(),
+            loadPeriodos(),
+            loadColecoes()
         ])
             .then(([
-                responsePrevisoes,
-                responseColecoes,
-                responseTabelasPreco
+                responseCapacidade,
+                responsePeriodos,
+                responseColecoes
             ]) => {
-                setPrevisoes(responsePrevisoes.data);
+                setCapacidades(normalizeDados(responseCapacidade.data));
+                setPeriodos(normalizePeriodos(responsePeriodos.data));
                 setColecoes(normalizeColecoes(responseColecoes.data));
-                setTabelasPreco(normalizeTabelasPreco(responseTabelasPreco.data));
             })
             .catch((e) => {
                 console.log('ocorreu algum erro!');
@@ -89,27 +103,27 @@ const PrevisaoVendas = (props) => {
     }, []);
 
     useEffect(() => {
-        setMsgDelete(`Deletar previsão de vendas: ${idPrevisaoVendas}?`);
-    }, [idPrevisaoVendas]);
+        setMsgDelete(`Excluir Capacidade: ${idCapacidade}?`);
+    }, [idCapacidade]);
 
     const onClickAdd = () => {
         setEdit(false);
-        setIdPrevisaoVendas(0);
-        setShowFormPrevisaoVendasItens(true);
+        setIdCapacidade(0);
+        setShowFormCapacidadeProd(true);
     }
 
     const onClickEdit = () => {
         setEdit(true);
-        setShowFormPrevisaoVendasItens(true);
+        setShowFormCapacidadeProd(true);
     }
     
-    const onDeletePrevisao = async event => {
+    const onDeleteCapacidade = async event => {
         setEdit(false);
         setWaitConexao(true);
 
         try {
-            const response = await api.delete(`previsao-vendas/${idPrevisaoVendas}`);
-            setPrevisoes(response.data);
+            const response = await api.delete(`cotas-vendas/${idCapacidade}`);
+            setCapacidades(normalizeDados(response.data));
         } catch (e) {
             console.log('ocorreu algum erro!');
             console.error(e);
@@ -121,8 +135,8 @@ const PrevisaoVendas = (props) => {
 
     return (
         <div style={formStyle}>
-
-            <h2><b>Previsão de Vendas</b></h2>
+            
+            <h2><b>Cotas de Vendas</b></h2>
             <br></br>
 
             <Button variant="success" onClick={() => { onClickAdd() }}>
@@ -139,24 +153,27 @@ const PrevisaoVendas = (props) => {
 
             <Ajuda
                 {...props}
-                path="previsao-vendas"
+                path="cotas-vendas"
             />
 
-            <PrevisaoVendasTable
+            <br></br>
+
+            <CapacidadeProducaoTable
                 {...props}
                 options={options}
-                previsoes={previsoes}
+                capacidades={capacidades}
             />
 
-            <PrevisaoVendasItens
+            <CapacidadeProducaoItens
                 {...props}
-                show={showFormPrevisaoVendasItens}
+                show={showFormCapacidadeProd}
                 editMode={edit}
+                periodos={periodos}
+                idCapacidade={idCapacidade}
                 colecoes={colecoes}
-                tabelasPreco={tabelasPreco}
-                idPrevisaoVendas={idPrevisaoVendas}                
+                setEditMode={setEdit}
                 onClose={() => {                    
-                    setShowFormPrevisaoVendasItens(false);
+                    setShowFormCapacidadeProd(false);
                     setDesabilitaBotoes(true);
                     setEdit(false);                    
                     load();
@@ -167,7 +184,7 @@ const PrevisaoVendas = (props) => {
                 <DeleteDialog
                     title={msgDelete}
                     handleCancel={() => setShowDeleteAlert(false)}
-                    handleDelete={onDeletePrevisao}
+                    handleDelete={onDeleteCapacidade}
                     desabledButtons={waitConexao}
                     showSpinner={waitConexao}
                 />
@@ -177,4 +194,4 @@ const PrevisaoVendas = (props) => {
     );
 }
 
-export default PrevisaoVendas;
+export default CapacidadeCotasVendas;

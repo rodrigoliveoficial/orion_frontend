@@ -29,12 +29,12 @@ export default class PrevisaoVendasItensTable extends React.Component {
             [
                 {
                     label: 'Total',
-                    columnIndex:12,
+                    columnIndex:13,
                     align: 'right'
                 },
                 {
                     label: 'Total value',
-                    columnIndex: 13,
+                    columnIndex: 14,
                     align: 'right',
                     formatter: (tableData) => {
                         let label = 0;
