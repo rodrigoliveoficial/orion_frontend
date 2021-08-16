@@ -1,18 +1,19 @@
 import React from 'react'
 
 import { Router, Switch, Route } from 'react-router'
-import CadastroUsuario from '../../forms/cadastro-usuario/CadastroUsuario';
-import PrevisaoVendas from '../../forms/previsao-vendas/PrevisaoVendas';
-import CapacidadeProducao from '../../forms/capacidade-producao/CapacidadeProducao';
-import SugestaoCancelamento from '../../forms/sugestao-cancelamento/SugestaoCancelamento';
-import PlanoMestre from '../../forms/plano-mestre/PlanoMestre';
+import CadastroUsuario from '../../forms/administrativo/cadastro-usuario/CadastroUsuario';
+import PrevisaoVendas from '../../forms/comercial/previsao-vendas/PrevisaoVendas';
+import CapacidadeProducao from  '../../forms/confeccao/capacidade-producao/CapacidadeProducao';
+import SugestaoCancelamento from '../../forms/comercial/sugestao-cancelamento/SugestaoCancelamento';
+import PlanoMestre from '../../forms/confeccao/plano-mestre/PlanoMestre';
 import Home from '../../forms/home';
 import Login from '../login/login';
 import RedefinirSenha from '../login/RedefinirSenha'
 import {history} from './history'
 import PrivateRoute from './PrivateRoute';
-import CadastroHelp from '../../forms/cadastro-help/CadastroHelp'
-import CapacidadeCotasVendas from '../../forms/capacidade-cotas-vendas/CapacidadeCotasVendas';
+import CadastroHelp from  '../../forms/administrativo/cadastro-help/CadastroHelp';
+import CapacidadeCotasVendas from '../../forms/comercial/capacidade-cotas-vendas/CapacidadeCotasVendas';
+import BiPrograma from '../../forms/bi/programa/Programa';
 
 
 const Routes = () => (
@@ -29,6 +30,7 @@ const Routes = () => (
             <PrivateRoute component={CadastroUsuario} exact path="/cadastro-usuario"/>
             <PrivateRoute component={CadastroHelp} exact path="/cadastro-help"/>
             <PrivateRoute component={CapacidadeCotasVendas} exact path="/cotas-vendas"/>
+            <PrivateRoute component={BiPrograma} exact path="/bi-programas"/>
         </Switch>
     </Router>
 )
