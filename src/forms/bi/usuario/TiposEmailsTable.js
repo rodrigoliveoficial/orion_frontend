@@ -19,7 +19,8 @@ export default class UsuarioFormTable extends React.Component {
 
         return (
             <BootstrapTable ref='tiposEmails-table' data={tiposEmails} selectRow={selectRowPropAux} pagination={false} options={options} striped={true}>
-                <TableHeaderColumn dataField='id' isKey={true} dataSort width='100' >Código</TableHeaderColumn>
+                <TableHeaderColumn dataField='id' hidden={true} isKey={true} dataSort width='100' >Código</TableHeaderColumn>
+                <TableHeaderColumn dataField='codTipoEmail' dataSort width='100' >Código</TableHeaderColumn>
                 <TableHeaderColumn dataField='descricao' dataSort >Descrição</TableHeaderColumn>
             </BootstrapTable>
         );
