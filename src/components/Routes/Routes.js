@@ -14,6 +14,7 @@ import PrivateRoute from './PrivateRoute';
 import CadastroHelp from  '../../forms/administrativo/cadastro-help/CadastroHelp';
 import CapacidadeCotasVendas from '../../forms/comercial/capacidade-cotas-vendas/CapacidadeCotasVendas';
 import BiPrograma from '../../forms/bi/programa/Programa';
+import BiUsuario from '../../forms/bi/usuario/Usuario';
 
 
 const Routes = () => (
@@ -31,6 +32,7 @@ const Routes = () => (
             <PrivateRoute component={CadastroHelp} exact path="/cadastro-help"/>
             <PrivateRoute component={CapacidadeCotasVendas} exact path="/cotas-vendas"/>
             <PrivateRoute component={BiPrograma} exact path="/bi-programas"/>
+            <PrivateRoute component={BiUsuario} exact path="/bi-usuarios"/>
         </Switch>
     </Router>
 )

@@ -1,38 +1,72 @@
 import React, { useEffect, useState } from 'react';
-import { Accordion, Button } from 'react-bootstrap';
+import { Button, Accordion } from 'react-bootstrap';
 import api from '../../../services/api';
 import DeleteDialog from '../../../components/alert/DeleteDialog';
-import ProgramaTable from './ProgramaTable';
-import ProgramaForm from './ProgramaForm';
-import normalizeProgramas from './NormalizeProgramas';
+import UsuarioTable from './UsuarioTable';
+import UsuarioForm from './UsuarioForm';
+import normalizeProgramas from '../programa/NormalizeProgramas';
 
 const formStyle = { marginLeft: '20px', marginTop: '20px', marginRight: '20px' };
 
-const loadProgramas = () => api.get('programas-bi');
+const loadUsuarios = () => api.get('usuarios-bi');
 
-const Programa = (props) => {
-    const [programas, setProgramas] = useState([]);
-    const [idPrograma, setidPrograma] = useState("");
+const getDescSituacao = (situacao) => {
+
+    let descricao = "Inativo"
+
+    if (situacao === 1) descricao = "Ativo"
+
+    return descricao;
+}
+
+const getDescAdmin = (administrador) => {
+
+    let descricao = "Não"
+
+    if (administrador === 1) descricao = "Sim"
+
+    return descricao;
+}
+
+const normalizeDados = (dados) => {
+    return dados.map((c) => {
+        return {
+            id: c.codUsuario,
+            nome: c.nome,
+            usuario: c.usuario,
+            senha: c.senha,
+            email: c.email,
+            situacao: `${getDescSituacao(c.situacao)}`,
+            administrador: `${getDescAdmin(c.administrador)}`,
+        };
+    });
+};
+
+const CadastroUsuario = (props) => {
+
+    const [usuarios, setUsuarios] = useState([]);
+    const [idUsuario, setIdUsuario] = useState(0);
     const [desabilitaBotoes, setDesabilitaBotoes] = useState(true);
-    const [showFormPrograma, setShowFormPrograma] = useState(false);
+    const [showFormCadastroUsuario, setShowFormCadastroUsuario] = useState(false);
     const [edit, setEdit] = useState(false);
     const [waitConexao, setWaitConexao] = useState(false);
     const [showDeleteAlert, setShowDeleteAlert] = useState(false);
     const [msgDelete, setMsgDelete] = useState('');
+
     const { currPage } = useState(0);
 
     const options = {
         defaultSortName: 'id',
         defaultSortOrder: 'desc',
-        sizePerPageList: [5, 10, 20, 50, 100],
+        sizePerPageList: [5, 10, 20, 40, 100],
         sizePerPage: 10,
         page: currPage,
         onRowClick: function (row) {
-            setidPrograma(row.id);
+            setIdUsuario(row.id);
             setDesabilitaBotoes(false);
         },
         onPageChange: function () {
-            setidPrograma("");
+            setIdUsuario(0);
             setDesabilitaBotoes(true);
         }
     };
@@ -40,12 +74,12 @@ const Programa = (props) => {
     const load = () => {
 
         Promise.all([
-            loadProgramas()
+            loadUsuarios()
         ])
             .then(([
-                responseProgramas
+                responseUsuarios
             ]) => {
-                setProgramas(normalizeProgramas(responseProgramas.data));
+                setUsuarios(normalizeDados(responseUsuarios.data));
             })
             .catch((e) => {
                 console.log('ocorreu algum erro!');
@@ -58,27 +92,27 @@ const Programa = (props) => {
     }, []);
 
     useEffect(() => {
-        setMsgDelete(`Deletar Programa: ${idPrograma}?`);
-    }, [idPrograma]);
+        setMsgDelete(`Deletar Usuário: ${idUsuario}?`);
+    }, [idUsuario]);
 
     const onClickAdd = () => {
         setEdit(false);
-        setidPrograma("");
-        setShowFormPrograma(true);
+        setIdUsuario(0);
+        setShowFormCadastroUsuario(true);
     }
 
     const onClickEdit = () => {
         setEdit(true);
-        setShowFormPrograma(true);
+        setShowFormCadastroUsuario(true);
     }
 
-    const onDeletePrograma = async event => {
+    const onDeleteUsuario = async event => {
         setEdit(false);
         setWaitConexao(true);
 
         try {
-            const response = await api.delete(`programas-bi/${idPrograma}`);
-            setProgramas(response.data);
+            const response = await api.delete(`usuarios-bi/${idUsuario}`);
+            setUsuarios(normalizeDados(response.data));
         } catch (e) {
             console.log('ocorreu algum erro!');
             console.error(e);
@@ -91,9 +125,9 @@ const Programa = (props) => {
     return (
         <div style={formStyle}>
 
-            <h2><b>Cadastro de Programas - B.I</b></h2>
-
-            {!showFormPrograma && (
+            <h2><b>Cadastro de Usuários - B.I</b></h2>
+            
+            {!showFormCadastroUsuario && (
                 <div>
                     <Button variant="success" onClick={() => { onClickAdd() }}>
                         Novo
@@ -109,8 +143,9 @@ const Programa = (props) => {
                 </div>
             )}
 
+            <br></br>
 
-            {showFormPrograma && (
+            {showFormCadastroUsuario && (
                 <div>
                     <Accordion defaultActiveKey="0">
                         <Accordion.Toggle
@@ -127,14 +162,13 @@ const Programa = (props) => {
                                 );
                             }}
                         />
-
                         <Accordion.Collapse eventKey="0">
-                            <ProgramaForm
+                            <UsuarioForm
                                 {...props}
+                                setShowFormCadastroUsuario={setShowFormCadastroUsuario}
+                                setUsuarios={setUsuarios}
                                 editMode={edit}
-                                idPrograma={idPrograma}
-                                setShowFormPrograma={setShowFormPrograma}
-                                setProgramas={setProgramas}
+                                idUsuario={idUsuario}
                             />
                         </Accordion.Collapse>
                     </Accordion>
@@ -142,22 +176,23 @@ const Programa = (props) => {
                 </div>
             )}
 
-            {!showFormPrograma && (
+            {!showFormCadastroUsuario && (
+
                 <div>
-                    <ProgramaTable
+                    <UsuarioTable
                         {...props}
                         options={options}
-                        programas={programas}
+                        usuarios={usuarios}
                     />
                 </div>
-            )}
 
+            )}
 
             {showDeleteAlert && (
                 <DeleteDialog
                     title={msgDelete}
                     handleCancel={() => setShowDeleteAlert(false)}
-                    handleDelete={onDeletePrograma}
+                    handleDelete={onDeleteUsuario}
                     desabledButtons={waitConexao}
                     showSpinner={waitConexao}
                 />
@@ -167,4 +202,4 @@ const Programa = (props) => {
     );
 }
 
-export default Programa;
+export default CadastroUsuario;

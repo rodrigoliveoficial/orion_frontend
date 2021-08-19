@@ -6,6 +6,7 @@ import Spinner from 'react-bootstrap/Spinner'
 import api from '../../../services/api';
 import ProgramaFormTable from './ProgramaFormTable';
 import Select from 'react-select';
+import normalizeProgramas from './NormalizeProgramas';
 
 const arrayAreaModulo = [
     { value: "A1", label: "A - Administrativa / 1 - Contabilidade/Custos" },
@@ -127,7 +128,7 @@ const ProgramaForm = (props) => {
 
         try {
             const response = await api.post('programas-bi', body);
-            props.setProgramas(response.data);
+            props.setProgramas(normalizeProgramas(response.data));
         } catch (e) {
             console.log('ocorreu algum erro!');
             console.error(e);

@@ -18,9 +18,8 @@ export default class ProgramaTable extends React.Component {
         return (
             <BootstrapTable ref='usuarios-table' data={programas} pagination={true} options={options} striped={true} hover={true} keyBoardNav>
                 <TableHeaderColumn dataField='id' isKey={true} dataSort width='100' >Código</TableHeaderColumn>
-                <TableHeaderColumn dataField='areaModulo' dataSort>Área/Módulo</TableHeaderColumn>
-                <TableHeaderColumn dataField='atividade' dataSort>Atividade</TableHeaderColumn>
-                <TableHeaderColumn dataField='descricao' dataSort>Descrição</TableHeaderColumn>
+                <TableHeaderColumn dataField='areaModulo'width='400' dataSort>Área/Módulo</TableHeaderColumn>
+                <TableHeaderColumn dataField='descricao' width='600' dataSort>Descrição</TableHeaderColumn>
                 <TableHeaderColumn dataField='ferramenta' dataSort>Ferramenta</TableHeaderColumn>
                 <TableHeaderColumn dataField='frequencia' dataSort>Frequência</TableHeaderColumn>
                 <TableHeaderColumn dataField='planilha' dataSort>Planilha</TableHeaderColumn>
