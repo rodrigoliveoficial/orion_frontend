@@ -4,6 +4,7 @@ import { Router, Switch, Route } from 'react-router'
 import CadastroUsuario from '../../forms/administrativo/cadastro-usuario/CadastroUsuario';
 import PrevisaoVendas from '../../forms/comercial/previsao-vendas/PrevisaoVendas';
 import CapacidadeProducao from  '../../forms/confeccao/capacidade-producao/CapacidadeProducao';
+import InspecaoQualidade from '../../forms/confeccao/inspecao-qualidade/InspecaoQualidade';
 import SugestaoCancelamento from '../../forms/comercial/sugestao-cancelamento/SugestaoCancelamento';
 import PlanoMestre from '../../forms/confeccao/plano-mestre/PlanoMestre';
 import Home from '../../forms/home';
@@ -28,6 +29,7 @@ const Routes = () => (
             <PrivateRoute component={CapacidadeProducao} exact path="/capacidade-producao"/>
             <PrivateRoute component={SugestaoCancelamento} exact path="/sugestao-cancelamento"/>
             <PrivateRoute component={PlanoMestre} exact path="/plano-mestre"/>
+            <PrivateRoute component={InspecaoQualidade} exact path="/inspecao-qualidade"/>
             <PrivateRoute component={CadastroUsuario} exact path="/cadastro-usuario"/>
             <PrivateRoute component={CadastroHelp} exact path="/cadastro-help"/>
             <PrivateRoute component={CapacidadeCotasVendas} exact path="/cotas-vendas"/>
