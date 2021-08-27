@@ -34,9 +34,12 @@ export default class ProgramaFormTable extends React.Component {
 
             tiposEmail.push({
                 codTipoEmail: row.codTipoEmail,
-                descricao: row.descricao
+                descricao: row.descricao,
+                permRelacUsuarios: row.permRelacUsuarios 
             })
         }
+
+        const simNao = [ 'Sim', 'Não' ];
 
         const onAfterDeleteRow = (rowKeys, row) => {
 
@@ -63,6 +66,7 @@ export default class ProgramaFormTable extends React.Component {
             <BootstrapTable ref='tiposEmail-table' data={tiposEmail} pagination={true} selectRow={selectRow} cellEdit={cellEditProp} options={options} striped={true} hover={true} keyBoardNav insertRow={true} deleteRow>
                 <TableHeaderColumn isKey={true} dataField='codTipoEmail' dataSort>Cód. Tipo de E-mail</TableHeaderColumn>
                 <TableHeaderColumn editable={{ type: 'text' }} dataField='descricao' dataSort>Descrição</TableHeaderColumn>
+                <TableHeaderColumn editable={{ type: 'select', options: { values: simNao } }} dataField='permRelacUsuarios' dataSort>Permite Relacionar Usuários</TableHeaderColumn>
             </BootstrapTable>
         );
     }

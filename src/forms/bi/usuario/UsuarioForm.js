@@ -165,29 +165,34 @@ const UsuarioForm = (props) => {
 
     const salvarUsuario = async event => {
 
-        setLoading(true);
+        if (await existsUsuario() === false) {
 
-        const body = ({
-            id: idUsuarioAux,
-            nome: values.nome,
-            usuario: values.usuario,
-            senha: values.senha,
-            situacao: values.situacao,
-            administrador: values.admin,
-            email: values.email
-        });
+            setLoading(true);
 
-        try {
-            const responseUser = await api.post('usuarios-bi', body);
-            const responseAll = await api.get('usuarios-bi')
+            const body = ({
+                id: idUsuarioAux,
+                nome: values.nome,
+                usuario: values.usuario,
+                senha: values.senha,
+                situacao: values.situacao,
+                administrador: values.admin,
+                email: values.email
+            });
 
-            setidUsuarioAux(responseUser.data.codUsuario);
-            props.setUsuarios(normalizeDadosRetorno(responseAll.data));
-        } catch (e) {
-            console.log('ocorreu algum erro!');
-            console.error(e);
+            try {
+                const responseUser = await api.post('usuarios-bi', body);
+                const responseAll = await api.get('usuarios-bi')
+
+                setidUsuarioAux(responseUser.data.codUsuario);
+                props.setUsuarios(normalizeDadosRetorno(responseAll.data));
+            } catch (e) {
+                console.log('ocorreu algum erro!');
+                console.error(e);
+            }
+            setLoading(false);
+        } else {
+            alert(`Nome de Usuário ${values.usuario}, já está sendo utilizado!`)
         }
-        setLoading(false);
     };
 
     const cancelarAcao = () => {
@@ -196,6 +201,23 @@ const UsuarioForm = (props) => {
 
     const definirPrograma = () => {
         setShowDefinirprogramas(true);
+    }
+
+    const existsUsuario = async event =>{
+
+        let existsUsuario = false;
+
+        try {
+            const response = await api.get(`/usuarios-bi/validar-usuario/${idUsuarioAux}/${values.usuario}`)
+            existsUsuario = response.data;
+        } catch (e) {
+            console.log('ocorreu algum erro!');
+            console.error(e);
+        }
+
+        console.log(`existsUsuario: ${existsUsuario}`)
+
+        return existsUsuario;
     }
 
     const onRowSelect = ({ id }, isSelected) => {

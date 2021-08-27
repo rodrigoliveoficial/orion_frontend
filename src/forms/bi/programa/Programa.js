@@ -78,7 +78,7 @@ const Programa = (props) => {
 
         try {
             const response = await api.delete(`programas-bi/${idPrograma}`);
-            setProgramas(response.data);
+            setProgramas(normalizeProgramas(response.data));
         } catch (e) {
             console.log('ocorreu algum erro!');
             console.error(e);

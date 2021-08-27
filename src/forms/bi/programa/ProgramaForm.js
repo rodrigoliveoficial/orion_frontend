@@ -42,6 +42,16 @@ const initialValues = {
     help: ''
 }
 
+const normalizeTiposEmail = (dados) => {
+    return dados.map((c) => {
+        return {
+            codTipoEmail: c.codTipoEmail,
+            descricao: c.descricao,
+            permRelacUsuarios: c.permRelacUsuarios ? 'Sim' : 'Não',
+        };
+    });
+};
+
 const ProgramaForm = (props) => {
 
     const [idProgramaAux, setidProgramaAux] = useState(0);
@@ -86,7 +96,7 @@ const ProgramaForm = (props) => {
             setFieldValue('help', response.data.help);
 
             const responseTiposEmail = await api.get(`programas-bi/tipos-email/${idPrograma}`)
-            setTiposEmail(responseTiposEmail.data);
+            setTiposEmail(normalizeTiposEmail(responseTiposEmail.data));
 
         } catch (e) {
             console.log('ocorreu algum erro!');
@@ -125,6 +135,8 @@ const ProgramaForm = (props) => {
             help: values.help,
             tiposEmail: tiposEmail
         });
+
+        console.log(body)
 
         try {
             const response = await api.post('programas-bi', body);

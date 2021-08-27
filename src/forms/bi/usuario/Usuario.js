@@ -4,7 +4,6 @@ import api from '../../../services/api';
 import DeleteDialog from '../../../components/alert/DeleteDialog';
 import UsuarioTable from './UsuarioTable';
 import UsuarioForm from './UsuarioForm';
-import normalizeProgramas from '../programa/NormalizeProgramas';
 
 const formStyle = { marginLeft: '20px', marginTop: '20px', marginRight: '20px' };
 
