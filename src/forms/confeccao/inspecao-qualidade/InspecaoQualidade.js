@@ -111,7 +111,7 @@ const InspecaoQualidade = (props) => {
                     setQtdeOrdemConfeccao={setQtdeOrdemConfeccao}
                     setReferencia={setReferencia}
                     setTamanho={setTamanho}
-                    setCor={setCor}
+                    setCor={setCor}                    
                     />
                 </Tab>
                 <Tab eventKey="aba2" title="Inspeção de Peças / Páines" >
@@ -120,9 +120,9 @@ const InspecaoQualidade = (props) => {
                     motivos={motivos}
                     estagiosMotivos={estagiosMotivos}
                     nomeUsuario={nomeUsuario}
-                    data={data}  
-                    turno={turno}  
-                    estagio={estagio}                
+                    data={data}
+                    turno={turno}
+                    estagio={estagio}
                     periodo={periodo}
                     ordemProducao={ordemProducao}
                     qtdeOrdemProducao={qtdeOrdemProducao}

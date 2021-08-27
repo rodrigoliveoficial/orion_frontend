@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { Form, Col } from 'react-bootstrap';
 import Select from 'react-select';
 import PropTypes from 'prop-types';
@@ -82,7 +82,7 @@ const AbaDadosGerais = (props) => {
                             type="date"
                             row="1"                                                            
                             value={props.data}                                                        
-                            onChange={(e) => {                                
+                            onChange={(e) => {                                                                 
                                 props.setData(e.target.value);
                             }}
                         />
@@ -272,7 +272,7 @@ AbaDadosGerais.propTypes = {
     setQtdeOrdemConfeccao: PropTypes.func,
     setReferencia: PropTypes.func,
     setTamanho: PropTypes.func,
-    setCor: PropTypes.func
+    setCor: PropTypes.func    
 };
 
 AbaDadosGerais.defaultProps = {
@@ -286,7 +286,7 @@ AbaDadosGerais.defaultProps = {
     setQtdeOrdemConfeccao: () => { },
     setReferencia: () => { },
     setTamanho: () => { },
-    setCor: () => { }
+    setCor: () => { }    
 };
 
 export default AbaDadosGerais;
